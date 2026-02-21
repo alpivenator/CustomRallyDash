@@ -12,7 +12,7 @@ sock.settimeout(0.01)
 
 # --- 2. PYGAME ARAYÜZ VE RENK AYARLARI ---
 pygame.init()
-WIDTH, HEIGHT = 800, 480 
+WIDTH, HEIGHT = 800, 440 
 ekran = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("MODERN RALLİ TELEMETRİSİ")
 
@@ -83,12 +83,12 @@ while True:
     ekran.fill(ARKA_PLAN) 
     
     # 1. Hız ve Vites (Sol Orta)
-    yazi_vites_etiket = font_kucuk.render("GEAR", True, METIN_PASIF)
+    yazi_vites_etiket = font_kucuk.render("VİTES", True, METIN_PASIF)
     yazi_vites = font_dev.render(vites_str, True, METIN_ANA)
     ekran.blit(yazi_vites_etiket, (50, 100))
     ekran.blit(yazi_vites, (50, 120))
 
-    yazi_hiz_etiket = font_kucuk.render("SPEED (KM/H)", True, METIN_PASIF)
+    yazi_hiz_etiket = font_kucuk.render("HIZ (KM/H)", True, METIN_PASIF)
     yazi_hiz = font_dev.render(f"{teker_hizi_kmh:03d}", True, METIN_ANA)
     ekran.blit(yazi_hiz_etiket, (250, 100))
     ekran.blit(yazi_hiz, (250, 120))
@@ -112,8 +112,8 @@ while True:
 
     # 3. Gaz ve Fren Çubukları (Sağ Alt - Dikey)
     pedal_w, pedal_max_h = 40, 150
-    fren_x, fren_y = 600, 280
-    gaz_x, gaz_y = 670, 280
+    fren_x, fren_y = 600, 150
+    gaz_x, gaz_y = 670, 150
     
     # Veri sapmalarını engellemek için sınırlandırma
     if gaz_pedal > 1.0: gaz_pedal = 1.0
@@ -129,12 +129,12 @@ while True:
     # Fren Çizimi
     pygame.draw.rect(ekran, FREN_RENK, (fren_x, fren_y + (pedal_max_h - fren_h), pedal_w, fren_h))
     pygame.draw.rect(ekran, CERCEVE, (fren_x, fren_y, pedal_w, pedal_max_h), 2)
-    ekran.blit(font_kucuk.render("BRK", True, METIN_PASIF), (fren_x, fren_y + pedal_max_h + 10))
+    ekran.blit(font_kucuk.render("FRN", True, METIN_PASIF), (fren_x, fren_y + pedal_max_h + 10))
 
     # Gaz Çizimi
     pygame.draw.rect(ekran, GAZ_RENK, (gaz_x, gaz_y + (pedal_max_h - gaz_h), pedal_w, gaz_h))
     pygame.draw.rect(ekran, CERCEVE, (gaz_x, gaz_y, pedal_w, pedal_max_h), 2)
-    ekran.blit(font_kucuk.render("THR", True, METIN_PASIF), (gaz_x, gaz_y + pedal_max_h + 10))
+    ekran.blit(font_kucuk.render("GAZ", True, METIN_PASIF), (gaz_x, gaz_y + pedal_max_h + 10))
 
     pygame.display.flip() 
     saat.tick(60)
