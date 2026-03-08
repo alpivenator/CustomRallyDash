@@ -1,0 +1,1 @@
+This project is a custom-built telemetry analysis tool and dashboard for DiRT Rally 2.0. It intercepts raw UDP packets (Extradata=3 format) broadcasted by the game engine at 60Hz and decodes them in real-time.
