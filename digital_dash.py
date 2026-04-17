@@ -15,7 +15,7 @@ sock.settimeout(0.01)
 pygame.init()
 WIDTH, HEIGHT = 800, 400 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("MODERN RALLY TELEMETRY")
+pygame.display.set_caption("MODERN RALLY DASHBOARD")
 
 # Color Palette (RGB)
 BG_COLOR = (25, 25, 30)

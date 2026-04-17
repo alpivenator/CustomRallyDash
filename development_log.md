@@ -1,42 +1,50 @@
 # Geliştirme Günlüğü (Development Log) - Dirt Rally Projesi
-*Son Güncelleme: [17.04.2026]*
+*Son Güncelleme: 17.04.2026*
 
+# YZ talimatlarım
+YZ modeli, bu metni otomatik güncellerken "Hedefler" kısmına rastgele yeni hedefler ekleme. O kısmı ben güncelleyeceğim.
 
 Bu dosya, DiRT Rally 2.0 özel telemetri analiz aracı ve gösterge paneli projesinin gelişim sürecini takip etmek amacıyla oluşturulmuştur.
 
 ## 🏁 Mevcut Durum Özeti
-Proje, oyun motoru tarafından 60Hz hızında yayınlanan ham UDP paketlerini (Extradata=3 formatı) yakalayıp gerçek zamanlı olarak işleyebilecek seviyeye gelmiştir. Hem yazılımsal arayüzler hem de donanımsal geri bildirim (LED) mekanizmaları kurulmuştur. Oyun Windows 11 üzerinde çalışıyor, göstergeyi ise RPi5'ten çizdiriyoruz.
+Proje, oyun motoru tarafından 60Hz hızında yayınlanan ham UDP paketlerini (Extradata=3 formatı) yakalayıp gerçek zamanlı olarak işleyebilecek seviyeye gelmiştir. Oyun Windows 11 üzerinde çalışırken, gösterge paneli bir Raspberry Pi 5 üzerinden çizdirilmektedir.
+
 
 ---
 
-## 🛠 Tamamlanan Çalışmalar
+## 🛠 Tamamlanan ve Tamamlanacak Çalışmalar
 
 ### 1. Veri Altyapısı ve İletişim
-- **UDP Dinleyici:** `socket` kütüphanesi kullanılarak oyunun gönderdiği 264 bytelık paketleri yakalayan yapı kuruldu.
-- **Veri Ayrıştırma (Parsing):** `struct.unpack` ile ham veriler; hız, RPM, vites, pedal basınçları ve tekerlek hızları gibi anlamlı değişkenlere dönüştürüldü.
-- **Konfigürasyon Sistemi:** `config.py` üzerinden IP, port ve LED aktivasyon ayarları merkezi hale getirildi.
+- [x] **UDP Dinleyici:** `socket` kütüphanesi ile 264 bytelık paketleri yakalayan altyapı.
+- [x] **Veri Ayrıştırma (Parsing):** `struct.unpack` ile hız, RPM, vites ve pedal verilerinin decode edilmesi.
+- [x] **Konfigürasyon Sistemi:** `config.py` ile merkezi IP/Port ve donanım ayarları.
 
-### 2. Dijital Gösterge Paneli (digital_dash.py) - *En Kararlı Sürüm*
-- **Arayüz Tasarımı:** Modern, koyu temalı bir dashboard oluşturuldu.
-- **RPM Çubuğu:** RPM oranına göre renk değiştiren (normal/uyarı) dinamik bir bar yapıldı.
-- **Çekiş Kaybı (Traction Loss) Uyarı Sistemi:** Tekerlek hızı ile araç hızı arasındaki fark hesaplanarak "SLIP" uyarısı veren bir algoritma eklendi.
-- **Pedal Takibi:** Gaz ve fren girişleri için dikey görsel barlar eklendi.
+### 2. Dijital Gösterge Paneli (digital_dash.py)
+- [x] **Arayüz Tasarımı:** Modern ve okunaklı koyu tema tasarımı.
+- [x] **Dinamik RPM Barı:** Devir oranına göre renk değiştiren gösterge.
+- [x] **SLIP Uyarı Sistemi:** Tekerlek ve araç hızı farkına dayalı çekiş kaybı algoritması.
+- [x] **Pedal Takibi:** Gaz ve fren girişleri için anlık dikey barlar.
 
 ### 3. Donanım Entegrasyonu (led_controller.py)
-- **Raspberry Pi Desteği:** `gpiozero` kütüphanesi kullanılarak fiziksel LED'lerin (Yeşil, Mavi, Kırmızı) RPM oranına göre yanması sağlandı.
-- **Geri Bildirim:** Yazılımdaki devir bilgisiyle senkronize çalışan bir vites değişim ışığı (Shift Light) sistemi simüle edildi.
+- [x] **RPi GPIO Desteği:** `gpiozero` ile fiziksel LED kontrolü.
+- [x] **Shift Light Sistemi:** RPM oranına bağlı Yeşil-Mavi-Kırmızı vites değişim ışıkları.
 
-### 4. Analog Gösterge Paneli (analog_dash.py) - *İlk Aşama*
-- **Geometrik Hesaplamalar:** Trigonometrik fonksiyonlar (`math.sin`, `math.cos`) kullanılarak analog bir devir saati ve hareketli ibne mekanizması oluşturuldu.
-- **Merkezi Vites Göstergesi:** Kadranın ortasına büyük bir vites göstergesi yerleştirildi.
+### 4. Analog Gösterge Paneli (analog_dash.py) 
+- [x] **Geometrik İğne Mekanizması:** Trigonometrik hesaplamalarla çalışan analog kadran.
+- [x] **İğne Yumuşatma (Smoothing):** Linear interpolation ile akıcı iğne hareketi.
+- [x] **Detaylı Kadran Tasarımı:** Ana ve ara RPM işaretçileri (Ticks).
+- [x] **Redline Vurgusu:** Yarı saydam kırmızı tehlike bölgesi tasarımı.
+- [ ] **Devir Okunurluğunu Artırma:** Numerik RPM etiketleri ve dijital RPM göstergesi eklenmesi.
+- [ ] **Güzel ve Çekici Görünüm Verme:** Estetik pivot noktası, geliştirilmiş renk paleti ve merkezi vites dairesi.
+
+---
+
+## 🚀 Diğer Hedefler ve İyileştirmeler
+
+- [ ] **Yerel Çalışan Gösterge:** Windows üzerinde oyun açıkken ekranın altında çalışacak overlay modu. **[Önem: 5/5]**
+- [ ] **Performans Optimizasyonu:** UDP paket işleme gecikmelerini (latency) düşürmek için buffer yönetimi. **[Önem: 5/5]**
+- [ ] **Özelleştirilebilirlik:** Modüler kod yapısı ile kullanıcı dostu arayüz ayarları. **[Önem: 4/5]**
+- [ ] **Günlükleme Sistemi:** Analiz için telemetri verilerinin CSV/JSON formatında kaydedilmesi. **[Önem: 2/5]**
 
 ---
 
-## 🚀 Gelecek Hedefler ve İyileştirmeler
-
-- **Analog Gösterge İyileştirmesi:** Şu an temel seviyede olan analog göstergenin görsel kalitesi artırılacak. İğne hareketi daha akıcı (smooth) hale getirilecek ve kadran üzerine numerik RPM değerleri eklenecek.
-- **Loglama Sistemi:** Telemetri verilerinin analiz için bir dosyaya (CSV veya JSON) kaydedilmesi sağlanacak.
-- **Yerel Çalışan Gösterge:** Oyunun çalıştığı bilgisayarda oyun pencere modunda açıkken ekranın alt kısmında çalışacak bir gösterge oluşturulacak (Windows ve Linux için).
-- **Performans Optimizasyonu:** UDP paket işleme sırasındaki gecikmeleri (latency) minimize etmek için tampon bellek yönetimi geliştirilecek.
-
----
