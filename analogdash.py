@@ -28,12 +28,10 @@ THR_COLOR = (40, 220, 100)
 BRK_COLOR = (255, 60, 60)
 FRAME_COLOR = (80, 80, 90)
 REDLINE_COLOR = (255, 40, 40, 100)  # Semi-transparent red for redline zone
-TICK_COLOR = (180, 180, 190)    
 
 # Fonts
 font_huge = pygame.font.SysFont("arial", 96, bold=True)
 font_large = pygame.font.SysFont("arial", 48, bold=True)
-font_medium = pygame.font.SysFont("arial", 28)
 font_small = pygame.font.SysFont("arial", 20)
 font_tiny = pygame.font.SysFont("arial", 16)
 
@@ -66,12 +64,12 @@ def draw_gauge_markings(surface, center_x, center_y, radius, start_angle, sweep_
         outer_y = center_y + (radius - 10) * math.sin(angle_rad)
         
         # Draw tick line
-        pygame.draw.line(surface, TICK_COLOR, (inner_x, inner_y), (outer_x, outer_y), 3)
+        pygame.draw.line(surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 3)
         
-        # Draw RPM label
+        # Draw RPM label (WHITE for better visibility)
         rpm_value = i * max_rpm // 4
         if rpm_value <= max_rpm:
-            label = font_tiny.render(f"{rpm_value//1000}k", True, TEXT_DIM)
+            label = font_tiny.render(f"{rpm_value//1000}k", True, TEXT_MAIN)
             
             # Position label slightly outside the tick
             label_x = center_x + (radius - 40) * math.cos(angle_rad)
@@ -92,7 +90,7 @@ def draw_gauge_markings(surface, center_x, center_y, radius, start_angle, sweep_
         outer_x = center_x + (radius - 10) * math.cos(angle_rad)
         outer_y = center_y + (radius - 10) * math.sin(angle_rad)
         
-        pygame.draw.line(surface, TICK_COLOR, (inner_x, inner_y), (outer_x, outer_y), 1)
+        pygame.draw.line(surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 1)
 
 def draw_redline_zone(surface, center_x, center_y, radius, start_angle, sweep_angle):
     """Draw a red warning zone for the last 10% of the gauge."""
@@ -209,19 +207,14 @@ try:
         pygame.draw.circle(screen, needle_color, (center_x, center_y), 8)
         pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), 4)
         
-        # Draw the Gear in the exact center of the gauge
-        text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
-        gear_rect = text_rect = text_gear.get_rect(center=(center_x, center_y))
-        
-        # Draw a small background circle for the gear text to make it readable
+        # Draw gear background circle FIRST (so it's behind the text)
         pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), 50)
         pygame.draw.circle(screen, needle_color, (center_x, center_y), 50, 2)
-        screen.blit(text_gear, gear_rect)
         
-        # Draw current RPM value below the gauge
-        text_rpm = font_medium.render(f"{rpm} RPM", True, TEXT_MAIN)
-        rpm_rect = text_rpm.get_rect(center=(center_x, center_y + radius + 30))
-        screen.blit(text_rpm, rpm_rect)
+        # Draw the Gear text - centered properly within the circle
+        text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
+        screen.blit(text_gear, (center_x - text_gear.get_width() // 2, 
+                                center_y - text_gear.get_height() // 2.1))
 
         # --- RIGHT SIDE: SPEED AND PEDALS ---
         # Speedometer Text
@@ -231,8 +224,6 @@ try:
         screen.blit(text_speed, (550, 80))
 
         # Pedals
-        bar_w, max_h = 150, 40 # Inverted w/h variables conceptually, but lets keep the logic straight
-        # To avoid confusion: the original code used bar_w=40, max_h=150
         bar_w, max_h = 40, 150
         brk_x, brk_y = 550, 180
         thr_x, thr_y = 620, 180

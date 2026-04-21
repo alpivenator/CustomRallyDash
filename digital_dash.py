@@ -13,7 +13,7 @@ sock.settimeout(0.01)
 
 # --- 2. PYGAME UI SETUP ---
 pygame.init()
-WIDTH, HEIGHT = 800, 400 
+WIDTH, HEIGHT = 600, 200
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("MODERN RALLY DASHBOARD")
 
@@ -26,13 +26,13 @@ RPM_WARNING = (255, 40, 40)
 THR_COLOR = (40, 220, 100)
 BRK_COLOR = (255, 60, 60)
 FRAME_COLOR = (80, 80, 90)
-TRACTION_LOSS_COLOR = (255, 200, 0)
 
-# Fonts
-font_huge = pygame.font.SysFont("arial", 72, bold=True)
-font_large = pygame.font.SysFont("arial", 48, bold=True)
-font_medium = pygame.font.SysFont("arial", 32, bold=True)
-font_small = pygame.font.SysFont("arial", 20)
+# Fonts - optimized
+font_huge = pygame.font.SysFont("arial", 64, bold=True)      # Large for gear
+font_large = pygame.font.SysFont("arial", 48, bold=True)     # Large for speed
+font_medium = pygame.font.SysFont("arial", 20, bold=True)    # RPM value (REDUCED)
+font_small = pygame.font.SysFont("arial", 18)                # For labels
+font_tiny = pygame.font.SysFont("arial", 14)                 # Small labels
 
 # Telemetry Variables
 wheel_speed_kmh = 0
@@ -89,21 +89,9 @@ try:
         # --- GRAPHICS DRAWING ---
         screen.fill(BG_COLOR) 
         
-        # Gear
-        text_gear_lbl = font_small.render("GEAR", True, TEXT_DIM)
-        text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
-        screen.blit(text_gear_lbl, (50, 100))
-        screen.blit(text_gear, (50, 120))
-
-        # Speed
-        text_speed_lbl = font_small.render("SPEED (KM/H)", True, TEXT_DIM)
-        text_speed = font_huge.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
-        screen.blit(text_speed_lbl, (250, 100))
-        screen.blit(text_speed, (250, 120))
-
-        # RPM Bar
-        bar_x, bar_y = 50, 40
-        bar_max_w, bar_h = 700, 30
+        # 1. TOP: RPM BAR - PRIORITY AND LONG
+        bar_x, bar_y = 30, 20
+        bar_max_w, bar_h = 540, 25
         
         rpm_ratio = max(0.0, min(1.0, rpm / max_rpm))
         bar_current_w = int(bar_max_w * rpm_ratio)
@@ -119,30 +107,52 @@ try:
         pygame.draw.rect(screen, bar_color, (bar_x, bar_y, bar_current_w, bar_h))
         pygame.draw.rect(screen, FRAME_COLOR, (bar_x, bar_y, bar_max_w, bar_h), 2)
         
+        # RPM value - BOTTOM RIGHT OF THE BAR 
         text_rpm = font_medium.render(f"{rpm} RPM", True, TEXT_MAIN)
-        screen.blit(text_rpm, (WIDTH - 200, 80))
+        screen.blit(text_rpm, (bar_x + bar_max_w - text_rpm.get_width(), bar_y + bar_h + 5))
 
-        # Traction Loss Warning
-        if (wheel_speed_kmh - car_speed_kmh) > 20 and throttle > 0.5:
-            pygame.draw.rect(screen, TRACTION_LOSS_COLOR, (450, 120, 120, 35))
-            text_slip = font_small.render("SLIP", True, BG_COLOR)
-            screen.blit(text_slip, (490, 125))
+        # 2. LEFT: GEAR - LARGE AND PROMINENT
+        text_gear_lbl = font_small.render("GEAR", True, TEXT_DIM)
+        text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
+        screen.blit(text_gear_lbl, (30, 60))
+        screen.blit(text_gear, (30, 85))
 
-        # Pedals
-        pedal_w, pedal_max_h = 40, 150
-        brk_x, brk_y = 600, 150
-        thr_x, thr_y = 670, 150
+        # 3. SPEED 
+        text_speed_lbl = font_small.render("SPEED", True, TEXT_DIM)
+        text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
         
-        thr_h = int(pedal_max_h * throttle)
-        brk_h = int(pedal_max_h * brake)
+        speed_x = 200
+        speed_lbl_x = 200
+        
+        screen.blit(text_speed_lbl, (speed_lbl_x, 60))
+        screen.blit(text_speed, (speed_x, 85))
 
-        pygame.draw.rect(screen, BRK_COLOR, (brk_x, brk_y + (pedal_max_h - brk_h), pedal_w, brk_h))
-        pygame.draw.rect(screen, FRAME_COLOR, (brk_x, brk_y, pedal_w, pedal_max_h), 2)
-        screen.blit(font_small.render("BRK", True, TEXT_DIM), (brk_x, brk_y + pedal_max_h + 10))
+        # 4. RIGHT: HORIZONTAL PEDAL BARS
+        # Throttle bar (top) 
+        thr_bar_x, thr_bar_y = 350, 90  
+        thr_bar_w, thr_bar_h = 200, 20  
+        
+        thr_current_w = int(thr_bar_w * throttle)
+        
+        pygame.draw.rect(screen, THR_COLOR, (thr_bar_x, thr_bar_y, thr_current_w, thr_bar_h))
+        pygame.draw.rect(screen, FRAME_COLOR, (thr_bar_x, thr_bar_y, thr_bar_w, thr_bar_h), 2)
+        
+        # Throttle label
+        text_thr = font_tiny.render("THR", True, TEXT_DIM)
+        screen.blit(text_thr, (thr_bar_x + thr_bar_w + 5, thr_bar_y + 3))
 
-        pygame.draw.rect(screen, THR_COLOR, (thr_x, thr_y + (pedal_max_h - thr_h), pedal_w, thr_h))
-        pygame.draw.rect(screen, FRAME_COLOR, (thr_x, thr_y, pedal_w, pedal_max_h), 2)
-        screen.blit(font_small.render("THR", True, TEXT_DIM), (thr_x, thr_y + pedal_max_h + 10))
+        # Brake bar (bottom)
+        brk_bar_x, brk_bar_y = 350, 120  
+        brk_bar_w, brk_bar_h = 200, 20  
+        
+        brk_current_w = int(brk_bar_w * brake)
+        
+        pygame.draw.rect(screen, BRK_COLOR, (brk_bar_x, brk_bar_y, brk_current_w, brk_bar_h))
+        pygame.draw.rect(screen, FRAME_COLOR, (brk_bar_x, brk_bar_y, brk_bar_w, brk_bar_h), 2)
+        
+        # Brake label
+        text_brk = font_tiny.render("BRK", True, TEXT_DIM)
+        screen.blit(text_brk, (brk_bar_x + brk_bar_w + 5, brk_bar_y + 3))
 
         pygame.display.flip() 
         clock.tick(60)

@@ -1,14 +1,14 @@
 # Geliştirme Günlüğü (Development Log) - Dirt Rally Projesi
-*Son Güncelleme: 17.04.2026*
+*Son Güncelleme: 20.04.2026*
 
 # YZ talimatlarım
-YZ modeli, bu metni otomatik güncellerken "Hedefler" kısmına rastgele yeni hedefler ekleme. O kısmı ben güncelleyeceğim.
+YZ modeli, -bu dosya hariç- bütün program dosyalarında kod ve yorumlar tamamen "İngilizce" olacak, yapılan her önemsiz değişiklik yorumlara yazılmayacak, yorumları sade ve anlaşılır tut. Bu dosyaya gelirsek: metni otomatik güncellerken "Hedefler" kısmına rastgele yeni hedefler ekleme. O kısmı ben güncelleyeceğim. Ayrıca yapılan değişiklikleri en başta belirtme, yalnızca değişiklik yapılan dosyanın (örneğin digital_dash.py) başlığı altında belirt. 
 
-Bu dosya, DiRT Rally 2.0 özel telemetri analiz aracı ve gösterge paneli projesinin gelişim sürecini takip etmek amacıyla oluşturulmuştur.
+# Dosyanın özeti
+Bu dosya, Dirt Rally 2.0 özel telemetri analiz aracı ve gösterge paneli projesinin gelişim sürecini takip etmek amacıyla oluşturulmuştur.
 
-## 🏁 Mevcut Durum Özeti
+## 🏁 Projenin Özeti
 Proje, oyun motoru tarafından 60Hz hızında yayınlanan ham UDP paketlerini (Extradata=3 formatı) yakalayıp gerçek zamanlı olarak işleyebilecek seviyeye gelmiştir. Oyun Windows 11 üzerinde çalışırken, gösterge paneli bir Raspberry Pi 5 üzerinden çizdirilmektedir.
-
 
 ---
 
@@ -24,6 +24,8 @@ Proje, oyun motoru tarafından 60Hz hızında yayınlanan ham UDP paketlerini (E
 - [x] **Dinamik RPM Barı:** Devir oranına göre renk değiştiren gösterge.
 - [x] **SLIP Uyarı Sistemi:** Tekerlek ve araç hızı farkına dayalı çekiş kaybı algoritması.
 - [x] **Pedal Takibi:** Gaz ve fren girişleri için anlık dikey barlar.
+- [x] **Kompakt Tasarım:** Pencere boyutu küçültülerek (600x300) daha minimal ve overlay için uygun hale getirildi.
+- [x] **WRC/F1 Tarzı Tasarım:** Patinaj bilgisi kaldırıldı, hız ortalandı, pedal çubukları yatay hale getirildi, gösterge daha da kısaltıldı (600x200).
 
 ### 3. Donanım Entegrasyonu (led_controller.py)
 - [x] **RPi GPIO Desteği:** `gpiozero` ile fiziksel LED kontrolü.
@@ -34,10 +36,11 @@ Proje, oyun motoru tarafından 60Hz hızında yayınlanan ham UDP paketlerini (E
 - [x] **İğne Yumuşatma (Smoothing):** Linear interpolation ile akıcı iğne hareketi.
 - [x] **Detaylı Kadran Tasarımı:** Ana ve ara RPM işaretçileri (Ticks).
 - [x] **Redline Vurgusu:** Yarı saydam kırmızı tehlike bölgesi tasarımı.
-- [ ] **Devir Okunurluğunu Artırma:** Numerik RPM etiketleri ve dijital RPM göstergesi eklenmesi.
+- [X] **Devir Okunurluğunu Artırma:** Numerik RPM etiketlerinin okunurluğu artıralacak.
 - [ ] **Güzel ve Çekici Görünüm Verme:** Estetik pivot noktası, geliştirilmiş renk paleti ve merkezi vites dairesi.
 
----
+### 5. Yerelde Çalıştırma
+- [ ] **Windows Overlay Modu:** Oyun ekranının üzerinde çalışacak şeffaf overlay tasarımı.
 
 ## 🚀 Diğer Hedefler ve İyileştirmeler
 
@@ -47,4 +50,3 @@ Proje, oyun motoru tarafından 60Hz hızında yayınlanan ham UDP paketlerini (E
 - [ ] **Günlükleme Sistemi:** Analiz için telemetri verilerinin CSV/JSON formatında kaydedilmesi. **[Önem: 2/5]**
 
 ---
-
