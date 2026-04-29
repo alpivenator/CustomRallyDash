@@ -35,6 +35,9 @@ font_large = pygame.font.SysFont("arial", 48, bold=True)
 font_small = pygame.font.SysFont("arial", 20)
 font_tiny = pygame.font.SysFont("arial", 16)
 
+# Constant gauge scale (0 - 9000 RPM)
+GAUGE_MAX_RPM = 9000
+
 # Telemetry Variables
 wheel_speed_kmh = 0
 rpm = 0
@@ -51,51 +54,42 @@ clock = pygame.time.Clock()
 
 # --- Helper Functions ---
 def draw_gauge_markings(surface, center_x, center_y, radius, start_angle, sweep_angle):
-    # Draw tick marks and labels on the gauge.
-    # Major ticks (every 25%)
-    for i in range(5):  # 0%, 25%, 50%, 75%, 100%
-        angle_deg = start_angle + (i * 0.25 * sweep_angle)
+    # Major ticks (every 10%)
+    for i in range(10):  # 0%, 10%, 20%, ..., 100%
+        angle_deg = start_angle + (i * 1/9 * sweep_angle)
         angle_rad = math.radians(angle_deg)
         
-        # Calculate tick endpoints
         inner_x = center_x + (radius - 25) * math.cos(angle_rad)
         inner_y = center_y + (radius - 25) * math.sin(angle_rad)
         outer_x = center_x + (radius - 10) * math.cos(angle_rad)
         outer_y = center_y + (radius - 10) * math.sin(angle_rad)
         
-        # Draw tick line
         pygame.draw.line(surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 3)
         
-        # Draw RPM label (WHITE for better visibility)
-        rpm_value = i * max_rpm // 4
-        if rpm_value <= max_rpm:
+        rpm_value = i * GAUGE_MAX_RPM // 9
+        if rpm_value <= GAUGE_MAX_RPM:
             label = font_tiny.render(f"{rpm_value//1000}k", True, TEXT_MAIN)
-            
-            # Position label slightly outside the tick
             label_x = center_x + (radius - 40) * math.cos(angle_rad)
             label_y = center_y + (radius - 40) * math.sin(angle_rad)
             label_rect = label.get_rect(center=(label_x, label_y))
             surface.blit(label, label_rect)
     
-    # Minor ticks (every 5%)
-    for i in range(21):  # 0% to 100% in 5% increments
-        if i % 5 == 0:  # Skip major ticks
-            continue
+    # Minor ticks (every 5%, skip major tick positions)
+    for i in range(1, 18, 2):  # 5% to 95%
+        if i % 2 == 1:  # odd indices (5%,15%,...,95%) are minor
+            angle_deg = start_angle + (i * 1/18 * sweep_angle)
+            angle_rad = math.radians(angle_deg)
             
-        angle_deg = start_angle + (i * 0.05 * sweep_angle)
-        angle_rad = math.radians(angle_deg)
-        
-        inner_x = center_x + (radius - 20) * math.cos(angle_rad)
-        inner_y = center_y + (radius - 20) * math.sin(angle_rad)
-        outer_x = center_x + (radius - 10) * math.cos(angle_rad)
-        outer_y = center_y + (radius - 10) * math.sin(angle_rad)
-        
-        pygame.draw.line(surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 1)
+            inner_x = center_x + (radius - 20) * math.cos(angle_rad)
+            inner_y = center_y + (radius - 20) * math.sin(angle_rad)
+            outer_x = center_x + (radius - 10) * math.cos(angle_rad)
+            outer_y = center_y + (radius - 10) * math.sin(angle_rad)
+            
+            pygame.draw.line(surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 1)
 
-def draw_redline_zone(surface, center_x, center_y, radius, start_angle, sweep_angle):
-    """Draw a red warning zone for the last 10% of the gauge."""
-    redline_start_ratio = 0.90  # Start redline at 90%
-    redline_end_ratio = 1.00    # End at 100%
+def draw_redline_zone(surface, center_x, center_y, radius, start_angle, sweep_angle, redline_start_ratio):
+    """Draw a red warning zone from car's max_rpm to GAUGE_MAX_RPM."""
+    redline_end_ratio = 1.00
     
     redline_start_angle = start_angle + (redline_start_ratio * sweep_angle)
     redline_end_angle = start_angle + (redline_end_ratio * sweep_angle)
@@ -103,13 +97,19 @@ def draw_redline_zone(surface, center_x, center_y, radius, start_angle, sweep_an
     # Create a surface for the redline zone with transparency
     redline_surface = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
     
-    # Draw red wedge
+    # Convert needle angles to pygame arc angles.
+    # Needle uses clockwise angles with 0° = right.
+    # pygame.draw.arc uses counterclockwise angles with 0° = right.
+    # Conversion: pygame_angle = -needle_angle
+    # Draw CCW from end_angle to start_angle to match the clockwise sweep.
+    pygame_start = math.radians(-redline_end_angle)
+    pygame_end   = math.radians(-redline_start_angle)
     pygame.draw.arc(
         redline_surface, 
         REDLINE_COLOR, 
         (0, 0, radius*2, radius*2),
-        math.radians(redline_start_angle - 90),  # Pygame angles are offset by -90 degrees
-        math.radians(redline_end_angle - 90),
+        pygame_start,
+        pygame_end,
         radius - 10
     )
     
@@ -165,8 +165,11 @@ try:
         center_x, center_y = 250, 220
         radius = 160
         
-        # Calculate ratio using the dynamic max_rpm
-        rpm_ratio = max(0.0, min(1.0, rpm / max_rpm))
+        # Calculate ratio using the constant max_rpm
+        rpm_ratio = max(0.0, min(1.0, rpm / GAUGE_MAX_RPM))
+
+        # Redline zone starts at car's actual max_rpm, ends at GAUGE_MAX_RPM
+        redline_start_ratio = min(1.0, max_rpm / GAUGE_MAX_RPM)
         
         # Hardware LED update
         led_controller.update_leds(rpm_ratio)
@@ -181,8 +184,8 @@ try:
         # Smooth needle movement using linear interpolation
         smooth_angle_deg += (target_angle_deg - smooth_angle_deg) * SMOOTHING_FACTOR
         
-        # Draw redline warning zone (last 10%)
-        draw_redline_zone(screen, center_x, center_y, radius, start_angle, sweep_angle)
+        # Draw redline warning zone (from car's max_rpm to GAUGE_MAX_RPM)
+        draw_redline_zone(screen, center_x, center_y, radius, start_angle, sweep_angle, redline_start_ratio)
         
         # Draw gauge markings and labels
         draw_gauge_markings(screen, center_x, center_y, radius, start_angle, sweep_angle)
@@ -197,8 +200,8 @@ try:
         needle_end_x = center_x + (radius - 15) * math.cos(current_angle_rad)
         needle_end_y = center_y + (radius - 15) * math.sin(current_angle_rad)
         
-        # Determine needle color
-        needle_color = RPM_WARNING if rpm_ratio >= 0.90 else RPM_NORMAL
+        # Determine needle color based on car's redline
+        needle_color = RPM_WARNING if rpm_ratio >= redline_start_ratio else RPM_NORMAL
         
         # Draw the needle line
         pygame.draw.line(screen, needle_color, (center_x, center_y), (needle_end_x, needle_end_y), 6)

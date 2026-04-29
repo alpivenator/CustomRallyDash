@@ -1,9 +1,6 @@
 # Geliştirme Günlüğü (Development Log) - Dirt Rally Projesi
 *Son Güncelleme: 20.04.2026*
 
-# YZ talimatlarım
-YZ modeli, -bu dosya hariç- bütün program dosyalarında kod ve yorumlar tamamen "İngilizce" olacak, yapılan her önemsiz değişiklik yorumlara yazılmayacak, yorumları sade ve anlaşılır tut. Bu dosyaya gelirsek: metni otomatik güncellerken "Hedefler" kısmına rastgele yeni hedefler ekleme. O kısmı ben güncelleyeceğim. Ayrıca yapılan değişiklikleri en başta belirtme, yalnızca değişiklik yapılan dosyanın (örneğin digital_dash.py) başlığı altında belirt. 
-
 # Dosyanın özeti
 Bu dosya, Dirt Rally 2.0 özel telemetri analiz aracı ve gösterge paneli projesinin gelişim sürecini takip etmek amacıyla oluşturulmuştur.
 
@@ -37,6 +34,8 @@ Proje, oyun motoru tarafından 60Hz hızında yayınlanan ham UDP paketlerini (E
 - [x] **Detaylı Kadran Tasarımı:** Ana ve ara RPM işaretçileri (Ticks).
 - [x] **Redline Vurgusu:** Yarı saydam kırmızı tehlike bölgesi tasarımı.
 - [X] **Devir Okunurluğunu Artırma:** Numerik RPM etiketlerinin okunurluğu artıralacak.
+- [x] **Sabit Ölçekli (0-9k) Gösterge:** RPM etiketleri GAUGE_MAX_RPM=9000 sabitine göre çizilir. 
+- [x] **Kırmızı bölge:** Kırmızı bölge ve iğne rengi eşiği aracın gerçek max_rpm değerine göre dinamik olarak ayarlanacak. Kırmızı bölge, aracın maksimum devrinden başlayıp göstergenin maksimum devrinde bitecek.
 - [ ] **Güzel ve Çekici Görünüm Verme:** Estetik pivot noktası, geliştirilmiş renk paleti ve merkezi vites dairesi.
 
 ### 5. Yerelde Çalıştırma
