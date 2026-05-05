@@ -42,11 +42,11 @@ BRK_COLOR = (255, 60, 60)
 FRAME_COLOR = (80, 80, 90)
 
 # Fonts - optimized
-font_huge = pygame.font.SysFont("arial", 64, bold=True)      # Large for gear
-font_large = pygame.font.SysFont("arial", 48, bold=True)     # Large for speed
-font_medium = pygame.font.SysFont("arial", 20, bold=True)    # RPM value
-font_small = pygame.font.SysFont("arial", 18)                # For labels
-font_tiny = pygame.font.SysFont("arial", 14)                 # Small labels
+font_huge = pygame.font.SysFont("arial", 64, bold=True)  # Large for gear
+font_large = pygame.font.SysFont("arial", 48, bold=True)  # Large for speed
+font_medium = pygame.font.SysFont("arial", 20, bold=True)  # RPM value
+font_small = pygame.font.SysFont("arial", 18)  # For labels
+font_tiny = pygame.font.SysFont("arial", 14)  # Small labels
 
 # Telemetry Variables
 wheel_speed_kmh = 0
@@ -80,7 +80,7 @@ try:
 
         # Data Parsing
         if last_packet:
-            unpacked = struct.unpack('66f', last_packet)
+            unpacked = struct.unpack("66f", last_packet)
 
             car_speed_kmh = int(unpacked[7] * 3.6)
 
@@ -126,7 +126,9 @@ try:
 
         # RPM value - bottom right of the bar
         text_rpm = font_medium.render(f"{rpm} RPM", True, TEXT_MAIN)
-        screen.blit(text_rpm, (bar_x + bar_max_w - text_rpm.get_width(), bar_y + bar_h + 5))
+        screen.blit(
+            text_rpm, (bar_x + bar_max_w - text_rpm.get_width(), bar_y + bar_h + 5)
+        )
 
         # 2. LEFT: GEAR
         text_gear_lbl = font_small.render("GEAR", True, TEXT_DIM)
@@ -151,8 +153,12 @@ try:
 
         thr_current_w = int(thr_bar_w * throttle)
 
-        pygame.draw.rect(screen, THR_COLOR, (thr_bar_x, thr_bar_y, thr_current_w, thr_bar_h))
-        pygame.draw.rect(screen, FRAME_COLOR, (thr_bar_x, thr_bar_y, thr_bar_w, thr_bar_h), 2)
+        pygame.draw.rect(
+            screen, THR_COLOR, (thr_bar_x, thr_bar_y, thr_current_w, thr_bar_h)
+        )
+        pygame.draw.rect(
+            screen, FRAME_COLOR, (thr_bar_x, thr_bar_y, thr_bar_w, thr_bar_h), 2
+        )
 
         # Throttle label
         text_thr = font_tiny.render("THR", True, TEXT_DIM)
@@ -164,8 +170,12 @@ try:
 
         brk_current_w = int(brk_bar_w * brake)
 
-        pygame.draw.rect(screen, BRK_COLOR, (brk_bar_x, brk_bar_y, brk_current_w, brk_bar_h))
-        pygame.draw.rect(screen, FRAME_COLOR, (brk_bar_x, brk_bar_y, brk_bar_w, brk_bar_h), 2)
+        pygame.draw.rect(
+            screen, BRK_COLOR, (brk_bar_x, brk_bar_y, brk_current_w, brk_bar_h)
+        )
+        pygame.draw.rect(
+            screen, FRAME_COLOR, (brk_bar_x, brk_bar_y, brk_bar_w, brk_bar_h), 2
+        )
 
         # Brake label
         text_brk = font_tiny.render("BRK", True, TEXT_DIM)

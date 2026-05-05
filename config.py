@@ -1,11 +1,8 @@
 # config.py
 # System Configuration Settings
-
-import sys
-
 # Set to True if running on Raspberry Pi with LEDs connected.
 # Set to False if running on the main PC or without hardware.
-ENABLE_LEDS = False 
+ENABLE_LEDS = False
 
 # Network Settings
 LISTEN_IP = "0.0.0.0"
