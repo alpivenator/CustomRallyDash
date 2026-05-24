@@ -2,4 +2,5 @@ __pycache__/
 venv/
 yz_talimatı.md
 .kilo
+.venv
 # development_log.md
