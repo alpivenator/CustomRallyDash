@@ -27,7 +27,12 @@ RPM_WARNING = (255, 40, 40)
 THR_COLOR = (40, 220, 100)
 BRK_COLOR = (255, 60, 60)
 FRAME_COLOR = (80, 80, 90)
-REDLINE_COLOR = (255, 40, 40, 100)  # Semi-transparent red for redline zone
+REDLINE_COLOR = (
+    255,
+    40,
+    40,
+    100,
+)  # Semi-transparent red for redline zone
 
 # Fonts
 font_huge = pygame.font.SysFont("arial", 96, bold=True)
@@ -54,7 +59,14 @@ clock = pygame.time.Clock()
 
 
 # --- Helper Functions ---
-def draw_gauge_markings(surface, center_x, center_y, radius, start_angle, sweep_angle):
+def draw_gauge_markings(
+    surface,
+    center_x,
+    center_y,
+    radius,
+    start_angle,
+    sweep_angle,
+):
     # Major ticks (every 10%)
     for i in range(10):  # 0%, 10%, 20%, ..., 100%
         angle_deg = start_angle + (i * 1 / 9 * sweep_angle)
@@ -65,11 +77,21 @@ def draw_gauge_markings(surface, center_x, center_y, radius, start_angle, sweep_
         outer_x = center_x + (radius - 10) * math.cos(angle_rad)
         outer_y = center_y + (radius - 10) * math.sin(angle_rad)
 
-        pygame.draw.line(surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 3)
+        pygame.draw.line(
+            surface,
+            TEXT_MAIN,
+            (inner_x, inner_y),
+            (outer_x, outer_y),
+            3,
+        )
 
         rpm_value = i * GAUGE_MAX_RPM // 9
         if rpm_value <= GAUGE_MAX_RPM:
-            label = font_tiny.render(f"{rpm_value//1000}k", True, TEXT_MAIN)
+            label = font_tiny.render(
+                f"{rpm_value//1000}k",
+                True,
+                TEXT_MAIN,
+            )
             label_x = center_x + (radius - 40) * math.cos(angle_rad)
             label_y = center_y + (radius - 40) * math.sin(angle_rad)
             label_rect = label.get_rect(center=(label_x, label_y))
@@ -87,12 +109,22 @@ def draw_gauge_markings(surface, center_x, center_y, radius, start_angle, sweep_
             outer_y = center_y + (radius - 10) * math.sin(angle_rad)
 
             pygame.draw.line(
-                surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 1
+                surface,
+                TEXT_MAIN,
+                (inner_x, inner_y),
+                (outer_x, outer_y),
+                1,
             )
 
 
 def draw_redline_zone(
-    surface, center_x, center_y, radius, start_angle, sweep_angle, redline_start_ratio
+    surface,
+    center_x,
+    center_y,
+    radius,
+    start_angle,
+    sweep_angle,
+    redline_start_ratio,
 ):
     """Draw a red warning zone from car's max_rpm to GAUGE_MAX_RPM."""
     redline_end_ratio = 1.00
@@ -120,7 +152,10 @@ def draw_redline_zone(
     )
 
     # Blit the redline surface onto the main surface
-    surface.blit(redline_surface, (center_x - radius, center_y - radius))
+    surface.blit(
+        redline_surface,
+        (center_x - radius, center_y - radius),
+    )
 
 
 # --- 3. MAIN LOOP ---
@@ -207,11 +242,22 @@ try:
 
         # Draw gauge markings and labels
         draw_gauge_markings(
-            screen, center_x, center_y, radius, start_angle, sweep_angle
+            screen,
+            center_x,
+            center_y,
+            radius,
+            start_angle,
+            sweep_angle,
         )
 
         # Draw outer circle for the gauge
-        pygame.draw.circle(screen, FRAME_COLOR, (center_x, center_y), radius, 4)
+        pygame.draw.circle(
+            screen,
+            FRAME_COLOR,
+            (center_x, center_y),
+            radius,
+            4,
+        )
 
         # Convert smoothed angle to radians
         current_angle_rad = math.radians(smooth_angle_deg)
@@ -225,16 +271,41 @@ try:
 
         # Draw the needle line
         pygame.draw.line(
-            screen, needle_color, (center_x, center_y), (needle_end_x, needle_end_y), 6
+            screen,
+            needle_color,
+            (center_x, center_y),
+            (needle_end_x, needle_end_y),
+            6,
         )
 
         # Draw needle pivot point (small circle at center)
-        pygame.draw.circle(screen, needle_color, (center_x, center_y), 8)
-        pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), 4)
+        pygame.draw.circle(
+            screen,
+            needle_color,
+            (center_x, center_y),
+            8,
+        )
+        pygame.draw.circle(
+            screen,
+            BG_COLOR,
+            (center_x, center_y),
+            4,
+        )
 
         # Draw gear background circle FIRST (so it's behind the text)
-        pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), 50)
-        pygame.draw.circle(screen, needle_color, (center_x, center_y), 50, 2)
+        pygame.draw.circle(
+            screen,
+            BG_COLOR,
+            (center_x, center_y),
+            50,
+        )
+        pygame.draw.circle(
+            screen,
+            needle_color,
+            (center_x, center_y),
+            50,
+            2,
+        )
 
         # Draw the Gear text - centered properly within the circle
         text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
@@ -249,7 +320,11 @@ try:
         # --- RIGHT SIDE: SPEED AND PEDALS ---
         # Speedometer Text
         text_speed_lbl = font_small.render("SPEED (KM/H)", True, TEXT_DIM)
-        text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
+        text_speed = font_large.render(
+            f"{wheel_speed_kmh:03d}",
+            True,
+            TEXT_MAIN,
+        )
         screen.blit(text_speed_lbl, (550, 50))
         screen.blit(text_speed, (550, 80))
 
@@ -263,20 +338,46 @@ try:
 
         # Brake Bar
         pygame.draw.rect(
-            screen, BRK_COLOR, (brk_x, brk_y + (max_h - brk_h), bar_w, brk_h)
+            screen,
+            BRK_COLOR,
+            (
+                brk_x,
+                brk_y + (max_h - brk_h),
+                bar_w,
+                brk_h,
+            ),
         )
-        pygame.draw.rect(screen, FRAME_COLOR, (brk_x, brk_y, bar_w, max_h), 2)
+        pygame.draw.rect(
+            screen,
+            FRAME_COLOR,
+            (brk_x, brk_y, bar_w, max_h),
+            2,
+        )
         screen.blit(
-            font_small.render("BRK", True, TEXT_DIM), (brk_x, brk_y + max_h + 10)
+            font_small.render("BRK", True, TEXT_DIM),
+            (brk_x, brk_y + max_h + 10),
         )
 
         # Throttle Bar
         pygame.draw.rect(
-            screen, THR_COLOR, (thr_x, thr_y + (max_h - thr_h), bar_w, thr_h)
+            screen,
+            THR_COLOR,
+            (
+                thr_x,
+                thr_y + (max_h - thr_h),
+                bar_w,
+                thr_h,
+            ),
         )
-        pygame.draw.rect(screen, FRAME_COLOR, (thr_x, thr_y, bar_w, max_h), 2)
+        pygame.draw.rect(
+            screen,
+            FRAME_COLOR,
+            (thr_x, thr_y, bar_w, max_h),
+            2,
+        )
         screen.blit(
-            font_small.render("THR", True, TEXT_DIM), (thr_x, thr_y + max_h + 10)
+            font_small.render("THR", True, TEXT_DIM),
+            (thr_x, thr_y + max_h + 10),
         )
 
         # Update Screen
