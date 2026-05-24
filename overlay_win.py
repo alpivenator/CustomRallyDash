@@ -12,26 +12,25 @@ import sys
 import ctypes
 from ctypes import wintypes
 
-
 # ----------------------------------------------------------------------
 # Win32 API constants
 # ----------------------------------------------------------------------
-GWL_STYLE        = -16
-GWL_EXSTYLE      = -20
+GWL_STYLE = -16
+GWL_EXSTYLE = -20
 
-WS_POPUP         = 0x80000000
-WS_VISIBLE       = 0x10000000
+WS_POPUP = 0x80000000
+WS_VISIBLE = 0x10000000
 
-WS_EX_LAYERED    = 0x00080000
-WS_EX_TRANSPARENT= 0x00000020
+WS_EX_LAYERED = 0x00080000
+WS_EX_TRANSPARENT = 0x00000020
 
-LWA_COLORKEY     = 0x00000001
-LWA_ALPHA        = 0x00000002
+LWA_COLORKEY = 0x00000001
+LWA_ALPHA = 0x00000002
 
-HWND_TOPMOST     = -1
-SWP_NOMOVE       = 0x0002
-SWP_NOSIZE       = 0x0001
-SWP_SHOWWINDOW   = 0x0040
+HWND_TOPMOST = -1
+SWP_NOMOVE = 0x0002
+SWP_NOSIZE = 0x0001
+SWP_SHOWWINDOW = 0x0040
 SWP_FRAMECHANGED = 0x0020
 
 SM_CXSCREEN = 0
@@ -56,14 +55,21 @@ if sys.platform == "win32":
 
     SetLayeredWindowAttributes = user32.SetLayeredWindowAttributes
     SetLayeredWindowAttributes.argtypes = (
-        wintypes.HWND, wintypes.COLORREF, wintypes.BYTE, wintypes.DWORD,
+        wintypes.HWND,
+        wintypes.COLORREF,
+        wintypes.BYTE,
+        wintypes.DWORD,
     )
     SetLayeredWindowAttributes.restype = wintypes.BOOL
 
     SetWindowPos = user32.SetWindowPos
     SetWindowPos.argtypes = (
-        wintypes.HWND, wintypes.HWND,
-        ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int,
+        wintypes.HWND,
+        wintypes.HWND,
+        ctypes.c_int,
+        ctypes.c_int,
+        ctypes.c_int,
+        ctypes.c_int,
         wintypes.UINT,
     )
     SetWindowPos.restype = wintypes.BOOL
@@ -136,7 +142,12 @@ def apply_overlay(pygame_screen, chroma_key=(0, 0, 0)):
     SetLayeredWindowAttributes(hwnd, colorref, 0, LWA_COLORKEY)
 
     SetWindowPos(
-        hwnd, HWND_TOPMOST, 0, 0, 0, 0,
+        hwnd,
+        HWND_TOPMOST,
+        0,
+        0,
+        0,
+        0,
         SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_FRAMECHANGED,
     )
 
@@ -163,6 +174,11 @@ def position_window_bottom_center(pygame_screen):
     y = screen_h - win_h
 
     SetWindowPos(
-        hwnd, HWND_TOPMOST, x, y, win_w, win_h,
+        hwnd,
+        HWND_TOPMOST,
+        x,
+        y,
+        win_w,
+        win_h,
         SWP_SHOWWINDOW,
     )
