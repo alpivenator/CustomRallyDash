@@ -13,7 +13,7 @@ LISTEN_PORT = 20777
 # ----------------------------------------------------------------------
 # Set to True to enable overlay on Windows.  Has no effect on other
 # platforms or if overlay_win module is missing.
-ENABLE_OVERLAY = False
+ENABLE_OVERLAY = True
 
 # Colour used for chroma-key transparency.  Pixels of this exact colour
 # in the dashboard window will become fully transparent.

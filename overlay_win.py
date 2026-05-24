@@ -1,4 +1,5 @@
 # overlay_win.py
+# pyright: reportUnreachable=false
 """Windows overlay module for pygame dashboard windows.
 
 Provides functions to configure a pygame window as a borderless,
@@ -10,6 +11,7 @@ are no-ops.
 
 import sys
 import ctypes
+import pygame
 from ctypes import wintypes
 
 # ----------------------------------------------------------------------
@@ -91,7 +93,7 @@ def _get_pygame_hwnd(pygame_screen):
     if sys.platform != "win32":
         raise RuntimeError("overlay_win is only supported on Windows")
 
-    wm_info = pygame_screen.get_wm_info()
+    wm_info = pygame.display.get_wm_info()
     return wm_info["window"]
 
 
