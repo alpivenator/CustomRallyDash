@@ -9,7 +9,12 @@ import config
 import led_controller
 from udp_listener import UDPListener
 
-WIDTH, HEIGHT = 800, 400
+try:
+    import overlay_win
+except ImportError:
+    overlay_win = None
+
+WIDTH, HEIGHT = 700, 350
 # Fixed gauge scale (0 – 9000 RPM) independent of car
 GAUGE_MAX_RPM = 9000
 
@@ -19,6 +24,17 @@ def run() -> None:
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("ANALOG RALLY DASHBOARD")
+
+    # Apply overlay settings on Windows
+    if sys.platform == "win32" and config.ENABLE_OVERLAY and overlay_win:
+        overlay_win.apply_overlay(
+            screen,
+            chroma_key=config.OVERLAY_CHROMA_KEY,
+            mode=config.OVERLAY_MODE,
+            alpha=config.OVERLAY_ALPHA,
+        )
+        if config.OVERLAY_BOTTOM_CENTER:
+            overlay_win.position_window_bottom_center(screen)
 
     # Colour Palette (RGB)
     BG_COLOR = (25, 25, 30)
@@ -33,7 +49,7 @@ def run() -> None:
 
     # Fonts
     font_huge = pygame.font.SysFont("arial", 96, bold=True)  # Gear
-    font_large = pygame.font.SysFont("arial", 48, bold=True)  # Speed
+    font_large = pygame.font.SysFont("arial", 30, bold=True)  # Speed
     font_small = pygame.font.SysFont("arial", 20)  # Labels
     font_tiny = pygame.font.SysFont("arial", 16)  # RPM tick labels
 
@@ -153,8 +169,8 @@ def run() -> None:
             screen.fill(BG_COLOR)
 
             # Gauge geometry
-            center_x, center_y = 250, 220
-            radius = 160
+            center_x, center_y = 350, 170
+            radius = 140
 
             # Ratios relative to the fixed 0-9000 scale
             rpm_ratio = max(0.0, min(1.0, rpm / GAUGE_MAX_RPM))
@@ -223,36 +239,47 @@ def run() -> None:
                 ),
             )
 
-            # --- RIGHT SIDE: SPEED + PEDALS ---
-            text_speed_lbl = font_small.render("SPEED (KM/H)", True, TEXT_DIM)
-            text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
-            screen.blit(text_speed_lbl, (550, 50))
-            screen.blit(text_speed, (550, 80))
-
-            # Vertical pedal bars (brake left, throttle right)
-            bar_w, max_h = 40, 150
-            brk_x, brk_y = 550, 180
-            thr_x, thr_y = 620, 180
+            # --- LEFT: BRAKE BAR (vertical, left of gauge) ---
+            bar_w, max_h = 35, 130
+            brk_x = center_x - radius - 70
+            brk_y = center_y - max_h // 2
 
             brk_h = int(max_h * brake)
-            thr_h = int(max_h * throttle)
 
-            # Brake bar — grows upward from the bottom
             pygame.draw.rect(
                 screen, BRK_COLOR, (brk_x, brk_y + (max_h - brk_h), bar_w, brk_h)
             )
             pygame.draw.rect(screen, FRAME_COLOR, (brk_x, brk_y, bar_w, max_h), 2)
             screen.blit(
-                font_small.render("BRK", True, TEXT_DIM), (brk_x, brk_y + max_h + 10)
+                font_small.render("BRK", True, TEXT_DIM),
+                (brk_x + bar_w // 2 - font_small.size("BRK")[0] // 2, brk_y + max_h + 8),
             )
 
-            # Throttle bar — grows upward from the bottom
+            # --- RIGHT: THROTTLE BAR (vertical, right of gauge) ---
+            thr_x = center_x + radius + 35
+            thr_y = center_y - max_h // 2
+
+            thr_h = int(max_h * throttle)
+
             pygame.draw.rect(
                 screen, THR_COLOR, (thr_x, thr_y + (max_h - thr_h), bar_w, thr_h)
             )
             pygame.draw.rect(screen, FRAME_COLOR, (thr_x, thr_y, bar_w, max_h), 2)
             screen.blit(
-                font_small.render("THR", True, TEXT_DIM), (thr_x, thr_y + max_h + 10)
+                font_small.render("THR", True, TEXT_DIM),
+                (thr_x + bar_w // 2 - font_small.size("THR")[0] // 2, thr_y + max_h + 8),
+            )
+
+            # --- BOTTOM CENTRE: DIGITAL SPEED (in needle-free arc) ---
+            text_speed_lbl = font_small.render("KM/H", True, TEXT_DIM)
+            text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
+            screen.blit(
+                text_speed_lbl,
+                (center_x - text_speed_lbl.get_width() // 2, center_y + radius - 75),
+            )
+            screen.blit(
+                text_speed,
+                (center_x - text_speed.get_width() // 2, center_y + radius - 50),
             )
 
             pygame.display.flip()

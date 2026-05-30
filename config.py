@@ -19,7 +19,7 @@ LISTEN_PORT = 20777
 # Dashboard Style
 # ----------------------------------------------------------------------
 # "digital"  — compact horizontal bar dashboard (600 x 200 px)
-# "analog"   — circular-needle gauge dashboard (800 x 400 px)
+# "analog"   — circular-needle gauge dashboard (700 x 350 px)
 DASH_STYLE = "digital"
 
 # ----------------------------------------------------------------------
@@ -33,6 +33,15 @@ ENABLE_OVERLAY = True
 # Chroma-key colour — pixels matching this exact colour become
 # fully transparent.  Default (0, 0, 0) = pure black.
 OVERLAY_CHROMA_KEY = (0, 0, 0)
+
+# Transparency mode (Windows only):
+#   "alpha"  — entire window semi-transparent at OVERLAY_ALPHA level
+#   "chroma" — background colour fully transparent (original behaviour)
+OVERLAY_MODE = "alpha"
+
+# Window opacity (0 = fully transparent, 255 = fully opaque).
+# Only used when OVERLAY_MODE == "alpha".
+OVERLAY_ALPHA = 200
 
 # Automatically position the overlay window at the bottom-centre of
 # the primary monitor.

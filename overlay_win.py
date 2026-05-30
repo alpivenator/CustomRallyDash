@@ -111,7 +111,7 @@ def _get_screen_size():
 # ----------------------------------------------------------------------
 # Public API
 # ----------------------------------------------------------------------
-def apply_overlay(pygame_screen, chroma_key=(0, 0, 0)):
+def apply_overlay(pygame_screen, chroma_key=(0, 0, 0), mode="alpha", alpha=200):
     """Make the given pygame window a borderless, transparent,
     click-through overlay that stays on top.
 
@@ -120,8 +120,12 @@ def apply_overlay(pygame_screen, chroma_key=(0, 0, 0)):
     pygame_screen : pygame.Surface
         The pygame display surface to be modified.
     chroma_key : tuple (R, G, B)
-        The colour that will become fully transparent.  Defaults to
-        (0, 0, 0) - pure black.
+        The colour that will become fully transparent (used in "chroma" mode).
+    mode : str
+        "alpha"  — entire window semi-transparent at *alpha* level (LWA_ALPHA).
+        "chroma" — background colour fully transparent (LWA_COLORKEY).
+    alpha : int
+        Window opacity 0–255.  Only used when mode == "alpha".
 
     Returns
     -------
@@ -140,9 +144,13 @@ def apply_overlay(pygame_screen, chroma_key=(0, 0, 0)):
     new_ex = current_ex | WS_EX_LAYERED | WS_EX_TRANSPARENT
     SetWindowLongW(hwnd, GWL_EXSTYLE, new_ex)
 
-    r, g, b = chroma_key
-    colorref = (b << 16) | (g << 8) | r
-    SetLayeredWindowAttributes(hwnd, colorref, 0, LWA_COLORKEY)
+    if mode == "chroma":
+        r, g, b = chroma_key
+        colorref = (b << 16) | (g << 8) | r
+        SetLayeredWindowAttributes(hwnd, colorref, 0, LWA_COLORKEY)
+    else:
+        clamped = max(0, min(255, alpha))
+        SetLayeredWindowAttributes(hwnd, 0, clamped, LWA_ALPHA)
 
     SetWindowPos(
         hwnd,

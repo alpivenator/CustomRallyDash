@@ -25,7 +25,12 @@ def run() -> None:
 
     # Apply overlay settings on Windows
     if sys.platform == "win32" and config.ENABLE_OVERLAY and overlay_win:
-        overlay_win.apply_overlay(screen, config.OVERLAY_CHROMA_KEY)
+        overlay_win.apply_overlay(
+            screen,
+            chroma_key=config.OVERLAY_CHROMA_KEY,
+            mode=config.OVERLAY_MODE,
+            alpha=config.OVERLAY_ALPHA,
+        )
         if config.OVERLAY_BOTTOM_CENTER:
             overlay_win.position_window_bottom_center(screen)
 
@@ -40,7 +45,7 @@ def run() -> None:
     FRAME_COLOR = (80, 80, 90)
 
     # Fonts — optimised for small overlay window
-    font_huge = pygame.font.SysFont("arial", 64, bold=True)  # Gear number
+    font_huge = pygame.font.SysFont("arial", 80, bold=True)  # Gear number
     font_large = pygame.font.SysFont("arial", 48, bold=True)  # Speed value
     font_medium = pygame.font.SysFont("arial", 20, bold=True)  # RPM value
     font_small = pygame.font.SysFont("arial", 18)  # Labels
@@ -94,18 +99,24 @@ def run() -> None:
                 text_rpm, (bar_x + bar_max_w - text_rpm.get_width(), bar_y + bar_h + 5)
             )
 
-            # 2. LEFT: GEAR
-            text_gear_lbl = font_small.render("GEAR", True, TEXT_DIM)
-            text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
-            screen.blit(text_gear_lbl, (30, 60))
-            screen.blit(text_gear, (30, 85))
-
-            # 3. CENTRE: SPEED
+            # 2. LEFT: SPEED
             text_speed_lbl = font_small.render("SPEED", True, TEXT_DIM)
             text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
+            screen.blit(text_speed_lbl, (30, 60))
+            screen.blit(text_speed, (30, 85))
 
-            screen.blit(text_speed_lbl, (200, 60))
-            screen.blit(text_speed, (200, 85))
+            # 3. CENTRE: GEAR
+            text_gear_lbl = font_small.render("GEAR", True, TEXT_DIM)
+            text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
+            gear_cx = 260
+            screen.blit(
+                text_gear_lbl,
+                (gear_cx - text_gear_lbl.get_width() // 2, 60),
+            )
+            screen.blit(
+                text_gear,
+                (gear_cx - text_gear.get_width() // 2, 80),
+            )
 
             # 4. RIGHT: HORIZONTAL PEDAL BARS
             # Throttle (top bar)
