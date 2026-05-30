@@ -9,10 +9,11 @@ Only functional on Windows (win32).  On other platforms, all functions
 are no-ops.
 """
 
-import sys
 import ctypes
-import pygame
+import sys
 from ctypes import wintypes
+
+import pygame
 
 # ----------------------------------------------------------------------
 # Win32 API constants

@@ -1,24 +1,39 @@
 # config.py
 # System Configuration Settings
-# Set to True if running on Raspberry Pi with LEDs connected.
-# Set to False if running on the main PC or without hardware.
+# Edit these values to customise behaviour without changing application code.
+
+# ----------------------------------------------------------------------
+# Hardware
+# ----------------------------------------------------------------------
+# Set to True when running on a Raspberry Pi with physical shift-light LEDs.
 ENABLE_LEDS = False
 
-# Network Settings
+# ----------------------------------------------------------------------
+# Network
+# ----------------------------------------------------------------------
+# IP and port must match the game's UDP broadcast settings.
 LISTEN_IP = "0.0.0.0"
 LISTEN_PORT = 20777
 
 # ----------------------------------------------------------------------
-# Overlay Settings (borderless, transparent, click-through window)
+# Dashboard Style
 # ----------------------------------------------------------------------
-# Set to True to enable overlay on Windows.  Has no effect on other
-# platforms or if overlay_win module is missing.
+# "digital"  — compact horizontal bar dashboard (600 x 200 px)
+# "analog"   — circular-needle gauge dashboard (800 x 400 px)
+DASH_STYLE = "digital"
+
+# ----------------------------------------------------------------------
+# Overlay Settings (Windows only)
+# ----------------------------------------------------------------------
+# Enable a borderless, transparent, click-through window that stays
+# on top of the game.  Only functional on Windows; silently ignored
+# elsewhere.
 ENABLE_OVERLAY = True
 
-# Colour used for chroma-key transparency.  Pixels of this exact colour
-# in the dashboard window will become fully transparent.
-OVERLAY_CHROMA_KEY = (0, 0, 0)  # R, G, B
+# Chroma-key colour — pixels matching this exact colour become
+# fully transparent.  Default (0, 0, 0) = pure black.
+OVERLAY_CHROMA_KEY = (0, 0, 0)
 
-# If True, the overlay window is placed at the bottom-centre of the primary
-# monitor.  Only relevant when ENABLE_OVERLAY is True.
+# Automatically position the overlay window at the bottom-centre of
+# the primary monitor.
 OVERLAY_BOTTOM_CENTER = True
