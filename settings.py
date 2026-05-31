@@ -1,0 +1,39 @@
+# settings.py
+# Visual Customization Settings
+# Edit these values to change colours, sizes, fonts and overlay position.
+
+# Window dimensions (base resolution)
+DIGITAL_WIDTH = 600
+DIGITAL_HEIGHT = 200
+ANALOG_WIDTH = 600
+ANALOG_HEIGHT = 350
+
+# Scale factor: set TARGET_WIDTH to resize the dashboard proportionally.
+# Set to None to use the base dimensions above without scaling.
+# Example: TARGET_WIDTH = 900 → scale = 900 / 600 = 1.5
+TARGET_WIDTH = None
+
+# Overlay position on screen (Windows only)
+# "bottom-left", "bottom-center", "bottom-right"
+OVERLAY_POSITION = "bottom-center"
+
+# Margin from screen edge in pixels (used for left/right positions)
+OVERLAY_MARGIN = 20
+
+# Color palette (R, G, B)
+COLOR_BG = (25, 25, 30)
+COLOR_TEXT_MAIN = (240, 240, 240)
+COLOR_TEXT_DIM = (180, 180, 180)
+COLOR_RPM_NORMAL = (0, 150, 255)
+COLOR_RPM_WARNING = (255, 40, 40)
+COLOR_THROTTLE = (40, 220, 100)
+COLOR_BRAKE = (255, 60, 60)
+COLOR_FRAME = (80, 80, 90)
+COLOR_REDLINE = (255, 40, 40, 100)
+
+# Font sizes (base values, scaled automatically when TARGET_WIDTH is set)
+FONT_HUGE_SIZE = 80
+FONT_LARGE_SIZE = 48
+FONT_MEDIUM_SIZE = 20
+FONT_SMALL_SIZE = 18
+FONT_TINY_SIZE = 14

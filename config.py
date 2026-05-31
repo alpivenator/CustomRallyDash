@@ -42,7 +42,3 @@ OVERLAY_MODE = "alpha"
 # Window opacity (0 = fully transparent, 255 = fully opaque).
 # Only used when OVERLAY_MODE == "alpha".
 OVERLAY_ALPHA = 220
-
-# Automatically position the overlay window at the bottom-centre of
-# the primary monitor.
-OVERLAY_BOTTOM_CENTER = True

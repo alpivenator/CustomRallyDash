@@ -7,6 +7,7 @@ import pygame
 
 import config
 import led_controller
+import settings
 from udp_listener import UDPListener
 
 try:
@@ -14,9 +15,23 @@ try:
 except ImportError:
     overlay_win = None
 
-WIDTH, HEIGHT = 600, 350
+# Base dimensions (design resolution)
+_BASE_W, _BASE_H = 600, 350
+
 # Fixed gauge scale (0 – 9000 RPM) independent of car
 GAUGE_MAX_RPM = 9000
+
+# Compute scale factor from settings
+_scale = settings.TARGET_WIDTH / _BASE_W if settings.TARGET_WIDTH else 1.0
+
+# Effective window size
+WIDTH = int(_BASE_W * _scale)
+HEIGHT = int(_BASE_H * _scale)
+
+
+def _s(value):
+    """Scale a numeric value by the current scale factor."""
+    return int(value * _scale)
 
 
 def run() -> None:
@@ -33,25 +48,26 @@ def run() -> None:
             mode=config.OVERLAY_MODE,
             alpha=config.OVERLAY_ALPHA,
         )
-        if config.OVERLAY_BOTTOM_CENTER:
-            overlay_win.position_window_bottom_center(screen)
+        overlay_win.position_window(
+            screen, settings.OVERLAY_POSITION, settings.OVERLAY_MARGIN
+        )
 
     # Colour Palette (RGB)
-    BG_COLOR = (25, 25, 30)
-    TEXT_MAIN = (240, 240, 240)
-    TEXT_DIM = (180, 180, 180)
-    RPM_NORMAL = (0, 150, 255)
-    RPM_WARNING = (255, 40, 40)
-    THR_COLOR = (40, 220, 100)
-    BRK_COLOR = (255, 60, 60)
-    FRAME_COLOR = (80, 80, 90)
-    REDLINE_COLOR = (255, 40, 40, 100)  # Semi-transparent red
+    BG_COLOR = settings.COLOR_BG
+    TEXT_MAIN = settings.COLOR_TEXT_MAIN
+    TEXT_DIM = settings.COLOR_TEXT_DIM
+    RPM_NORMAL = settings.COLOR_RPM_NORMAL
+    RPM_WARNING = settings.COLOR_RPM_WARNING
+    THR_COLOR = settings.COLOR_THROTTLE
+    BRK_COLOR = settings.COLOR_BRAKE
+    FRAME_COLOR = settings.COLOR_FRAME
+    REDLINE_COLOR = settings.COLOR_REDLINE  # Semi-transparent red
 
     # Fonts
-    font_huge = pygame.font.SysFont("arial", 96, bold=True)  # Gear
-    font_large = pygame.font.SysFont("arial", 30, bold=True)  # Speed
-    font_small = pygame.font.SysFont("arial", 20)  # Labels
-    font_tiny = pygame.font.SysFont("arial", 16)  # RPM tick labels
+    font_huge = pygame.font.SysFont("arial", _s(settings.FONT_HUGE_SIZE), bold=True)
+    font_large = pygame.font.SysFont("arial", _s(settings.FONT_LARGE_SIZE), bold=True)
+    font_small = pygame.font.SysFont("arial", _s(settings.FONT_SMALL_SIZE))
+    font_tiny = pygame.font.SysFont("arial", _s(settings.FONT_TINY_SIZE))
 
     # UDP listener and smoothing state
     listener = UDPListener(config.LISTEN_IP, config.LISTEN_PORT)
@@ -76,10 +92,10 @@ def run() -> None:
             angle_deg = start_angle + (i * 1 / 9 * sweep_angle)
             angle_rad = math.radians(angle_deg)
 
-            inner_x = center_x + (radius - 25) * math.cos(angle_rad)
-            inner_y = center_y + (radius - 25) * math.sin(angle_rad)
-            outer_x = center_x + (radius - 10) * math.cos(angle_rad)
-            outer_y = center_y + (radius - 10) * math.sin(angle_rad)
+            inner_x = center_x + (radius - _s(25)) * math.cos(angle_rad)
+            inner_y = center_y + (radius - _s(25)) * math.sin(angle_rad)
+            outer_x = center_x + (radius - _s(10)) * math.cos(angle_rad)
+            outer_y = center_y + (radius - _s(10)) * math.sin(angle_rad)
 
             pygame.draw.line(
                 surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 3
@@ -88,8 +104,8 @@ def run() -> None:
             rpm_value = i * GAUGE_MAX_RPM // 9
             if rpm_value <= GAUGE_MAX_RPM:
                 label = font_tiny.render(f"{rpm_value//1000}k", True, TEXT_MAIN)
-                label_x = center_x + (radius - 40) * math.cos(angle_rad)
-                label_y = center_y + (radius - 40) * math.sin(angle_rad)
+                label_x = center_x + (radius - _s(40)) * math.cos(angle_rad)
+                label_y = center_y + (radius - _s(40)) * math.sin(angle_rad)
                 label_rect = label.get_rect(center=(label_x, label_y))
                 surface.blit(label, label_rect)
 
@@ -99,10 +115,10 @@ def run() -> None:
                 angle_deg = start_angle + (i * 1 / 18 * sweep_angle)
                 angle_rad = math.radians(angle_deg)
 
-                inner_x = center_x + (radius - 20) * math.cos(angle_rad)
-                inner_y = center_y + (radius - 20) * math.sin(angle_rad)
-                outer_x = center_x + (radius - 10) * math.cos(angle_rad)
-                outer_y = center_y + (radius - 10) * math.sin(angle_rad)
+                inner_x = center_x + (radius - _s(20)) * math.cos(angle_rad)
+                inner_y = center_y + (radius - _s(20)) * math.sin(angle_rad)
+                outer_x = center_x + (radius - _s(10)) * math.cos(angle_rad)
+                outer_y = center_y + (radius - _s(10)) * math.sin(angle_rad)
 
                 pygame.draw.line(
                     surface, TEXT_MAIN, (inner_x, inner_y), (outer_x, outer_y), 1
@@ -138,7 +154,7 @@ def run() -> None:
             (0, 0, radius * 2, radius * 2),
             pygame_start,
             pygame_end,
-            radius - 10,
+            radius - _s(10),
         )
 
         surface.blit(redline_surface, (center_x - radius, center_y - radius))
@@ -149,7 +165,11 @@ def run() -> None:
     try:
         while True:
             # Handle window close events
-            for event in pygame.event.get():
+            try:
+                events = pygame.event.get()
+            except SystemError:
+                events = []
+            for event in events:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     led_controller.cleanup()
@@ -169,8 +189,8 @@ def run() -> None:
             screen.fill(BG_COLOR)
 
             # Gauge geometry
-            center_x, center_y = 300, 170
-            radius = 140
+            center_x, center_y = _s(300), _s(170)
+            radius = _s(140)
 
             # Ratios relative to the fixed 0-9000 scale
             rpm_ratio = max(0.0, min(1.0, rpm / GAUGE_MAX_RPM))
@@ -208,13 +228,11 @@ def run() -> None:
 
             # Needle trigonometry
             current_angle_rad = math.radians(smooth_angle_deg)
-            needle_end_x = center_x + (radius - 15) * math.cos(current_angle_rad)
-            needle_end_y = center_y + (radius - 15) * math.sin(current_angle_rad)
+            needle_end_x = center_x + (radius - _s(15)) * math.cos(current_angle_rad)
+            needle_end_y = center_y + (radius - _s(15)) * math.sin(current_angle_rad)
 
             # Needle colour: red when in car's redline zone
-            needle_color = (
-                RPM_WARNING if rpm_ratio >= redline_start_ratio else RPM_NORMAL
-            )
+            needle_color = RPM_WARNING if rpm_ratio >= redline_start_ratio else RPM_NORMAL
 
             pygame.draw.line(
                 screen,
@@ -225,12 +243,12 @@ def run() -> None:
             )
 
             # Pivot point
-            pygame.draw.circle(screen, needle_color, (center_x, center_y), 8)
-            pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), 4)
+            pygame.draw.circle(screen, needle_color, (center_x, center_y), _s(8))
+            pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), _s(4))
 
             # Gear circle (background + border + text)
-            pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), 50)
-            pygame.draw.circle(screen, needle_color, (center_x, center_y), 50, 2)
+            pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), _s(50))
+            pygame.draw.circle(screen, needle_color, (center_x, center_y), _s(50), 2)
 
             text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
             screen.blit(
@@ -242,8 +260,8 @@ def run() -> None:
             )
 
             # --- LEFT: BRAKE BAR (vertical, left of gauge) ---
-            bar_w, max_h = 35, 130
-            brk_x = center_x - radius - 70
+            bar_w, max_h = _s(35), _s(130)
+            brk_x = center_x - radius - _s(70)
             brk_y = center_y - max_h // 2
 
             brk_h = int(max_h * brake)
@@ -256,12 +274,12 @@ def run() -> None:
                 font_small.render("BRK", True, TEXT_DIM),
                 (
                     brk_x + bar_w // 2 - font_small.size("BRK")[0] // 2,
-                    brk_y + max_h + 8,
+                    brk_y + max_h + _s(8),
                 ),
             )
 
             # --- RIGHT: THROTTLE BAR (vertical, right of gauge) ---
-            thr_x = center_x + radius + 35
+            thr_x = center_x + radius + _s(35)
             thr_y = center_y - max_h // 2
 
             thr_h = int(max_h * throttle)
@@ -274,7 +292,7 @@ def run() -> None:
                 font_small.render("THR", True, TEXT_DIM),
                 (
                     thr_x + bar_w // 2 - font_small.size("THR")[0] // 2,
-                    thr_y + max_h + 8,
+                    thr_y + max_h + _s(8),
                 ),
             )
 
@@ -283,11 +301,11 @@ def run() -> None:
             text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
             screen.blit(
                 text_speed_lbl,
-                (center_x - text_speed_lbl.get_width() // 2, center_y + radius - 75),
+                (center_x - text_speed_lbl.get_width() // 2, center_y + radius - _s(75)),
             )
             screen.blit(
                 text_speed,
-                (center_x - text_speed.get_width() // 2, center_y + radius - 50),
+                (center_x - text_speed.get_width() // 2, center_y + radius - _s(50)),
             )
 
             pygame.display.flip()

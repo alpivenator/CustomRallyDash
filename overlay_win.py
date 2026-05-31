@@ -165,13 +165,17 @@ def apply_overlay(pygame_screen, chroma_key=(0, 0, 0), mode="alpha", alpha=200):
     return True
 
 
-def position_window_bottom_center(pygame_screen):
-    """Move the window to the bottom-centre of the primary display.
+def position_window(pygame_screen, position="bottom-center", margin=20):
+    """Move the window to the specified position on the primary display.
 
     Parameters
     ----------
     pygame_screen : pygame.Surface
         The pygame display surface whose window will be repositioned.
+    position : str
+        One of "bottom-left", "bottom-center", "bottom-right".
+    margin : int
+        Pixel margin from screen edges (used for left/right positions).
     """
     if sys.platform != "win32":
         return
@@ -181,7 +185,13 @@ def position_window_bottom_center(pygame_screen):
     win_w = pygame_screen.get_width()
     win_h = pygame_screen.get_height()
 
-    x = (screen_w - win_w) // 2
+    if position == "bottom-left":
+        x = margin
+    elif position == "bottom-right":
+        x = screen_w - win_w - margin
+    else:
+        x = (screen_w - win_w) // 2
+
     y = screen_h - win_h
 
     SetWindowPos(

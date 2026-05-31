@@ -6,6 +6,7 @@ import pygame
 
 import config
 import led_controller
+import settings
 from udp_listener import UDPListener
 
 # Import overlay_win if available (Windows only)
@@ -14,7 +15,20 @@ try:
 except ImportError:
     overlay_win = None
 
-WIDTH, HEIGHT = 600, 200
+# Base dimensions (design resolution)
+_BASE_W, _BASE_H = 600, 200
+
+# Compute scale factor from settings
+_scale = settings.TARGET_WIDTH / _BASE_W if settings.TARGET_WIDTH else 1.0
+
+# Effective window size
+WIDTH = int(_BASE_W * _scale)
+HEIGHT = int(_BASE_H * _scale)
+
+
+def _s(value):
+    """Scale a numeric value by the current scale factor."""
+    return int(value * _scale)
 
 
 def run() -> None:
@@ -31,25 +45,26 @@ def run() -> None:
             mode=config.OVERLAY_MODE,
             alpha=config.OVERLAY_ALPHA,
         )
-        if config.OVERLAY_BOTTOM_CENTER:
-            overlay_win.position_window_bottom_center(screen)
+        overlay_win.position_window(
+            screen, settings.OVERLAY_POSITION, settings.OVERLAY_MARGIN
+        )
 
     # Colour Palette (RGB)
-    BG_COLOR = (25, 25, 30)
-    TEXT_MAIN = (240, 240, 240)
-    TEXT_DIM = (180, 180, 180)
-    RPM_NORMAL = (0, 150, 255)
-    RPM_WARNING = (255, 40, 40)
-    THR_COLOR = (40, 220, 100)
-    BRK_COLOR = (255, 60, 60)
-    FRAME_COLOR = (80, 80, 90)
+    BG_COLOR = settings.COLOR_BG
+    TEXT_MAIN = settings.COLOR_TEXT_MAIN
+    TEXT_DIM = settings.COLOR_TEXT_DIM
+    RPM_NORMAL = settings.COLOR_RPM_NORMAL
+    RPM_WARNING = settings.COLOR_RPM_WARNING
+    THR_COLOR = settings.COLOR_THROTTLE
+    BRK_COLOR = settings.COLOR_BRAKE
+    FRAME_COLOR = settings.COLOR_FRAME
 
     # Fonts — optimised for small overlay window
-    font_huge = pygame.font.SysFont("arial", 80, bold=True)  # Gear number
-    font_large = pygame.font.SysFont("arial", 48, bold=True)  # Speed value
-    font_medium = pygame.font.SysFont("arial", 20, bold=True)  # RPM value
-    font_small = pygame.font.SysFont("arial", 18)  # Labels
-    font_tiny = pygame.font.SysFont("arial", 14)  # Small labels
+    font_huge = pygame.font.SysFont("arial", _s(settings.FONT_HUGE_SIZE), bold=True)
+    font_large = pygame.font.SysFont("arial", _s(settings.FONT_LARGE_SIZE), bold=True)
+    font_medium = pygame.font.SysFont("arial", _s(settings.FONT_MEDIUM_SIZE), bold=True)
+    font_small = pygame.font.SysFont("arial", _s(settings.FONT_SMALL_SIZE))
+    font_tiny = pygame.font.SysFont("arial", _s(settings.FONT_TINY_SIZE))
 
     # Initialise UDP listener and clock
     listener = UDPListener(config.LISTEN_IP, config.LISTEN_PORT)
@@ -58,7 +73,11 @@ def run() -> None:
     try:
         while True:
             # Handle window close events
-            for event in pygame.event.get():
+            try:
+                events = pygame.event.get()
+            except SystemError:
+                events = []
+            for event in events:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     led_controller.cleanup()
@@ -78,8 +97,8 @@ def run() -> None:
             screen.fill(BG_COLOR)
 
             # 1. TOP: RPM BAR
-            bar_x, bar_y = 30, 20
-            bar_max_w, bar_h = 540, 25
+            bar_x, bar_y = _s(30), _s(20)
+            bar_max_w, bar_h = _s(540), _s(25)
 
             rpm_ratio = max(0.0, min(1.0, rpm / max_rpm))
             bar_current_w = int(bar_max_w * rpm_ratio)
@@ -96,32 +115,33 @@ def run() -> None:
             # RPM label — bottom-right of the bar
             text_rpm = font_medium.render(f"{rpm} RPM", True, TEXT_MAIN)
             screen.blit(
-                text_rpm, (bar_x + bar_max_w - text_rpm.get_width(), bar_y + bar_h + 5)
+                text_rpm,
+                (bar_x + bar_max_w - text_rpm.get_width(), bar_y + bar_h + _s(5)),
             )
 
             # 2. LEFT: SPEED
             text_speed_lbl = font_small.render("SPEED", True, TEXT_DIM)
             text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
-            screen.blit(text_speed_lbl, (30, 60))
-            screen.blit(text_speed, (30, 85))
+            screen.blit(text_speed_lbl, (_s(30), _s(60)))
+            screen.blit(text_speed, (_s(30), _s(85)))
 
             # 3. CENTRE: GEAR
             text_gear_lbl = font_small.render("GEAR", True, TEXT_DIM)
             text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
-            gear_cx = 260
+            gear_cx = _s(260)
             screen.blit(
                 text_gear_lbl,
-                (gear_cx - text_gear_lbl.get_width() // 2, 60),
+                (gear_cx - text_gear_lbl.get_width() // 2, _s(60)),
             )
             screen.blit(
                 text_gear,
-                (gear_cx - text_gear.get_width() // 2, 80),
+                (gear_cx - text_gear.get_width() // 2, _s(80)),
             )
 
             # 4. RIGHT: HORIZONTAL PEDAL BARS
             # Throttle (top bar)
-            thr_bar_x, thr_bar_y = 350, 90
-            thr_bar_w, thr_bar_h = 200, 20
+            thr_bar_x, thr_bar_y = _s(350), _s(90)
+            thr_bar_w, thr_bar_h = _s(200), _s(20)
 
             thr_current_w = int(thr_bar_w * throttle)
 
@@ -133,11 +153,11 @@ def run() -> None:
             )
 
             text_thr = font_tiny.render("THR", True, TEXT_DIM)
-            screen.blit(text_thr, (thr_bar_x + thr_bar_w + 5, thr_bar_y + 3))
+            screen.blit(text_thr, (thr_bar_x + thr_bar_w + _s(5), thr_bar_y + _s(3)))
 
             # Brake (bottom bar)
-            brk_bar_x, brk_bar_y = 350, 120
-            brk_bar_w, brk_bar_h = 200, 20
+            brk_bar_x, brk_bar_y = _s(350), _s(120)
+            brk_bar_w, brk_bar_h = _s(200), _s(20)
 
             brk_current_w = int(brk_bar_w * brake)
 
@@ -149,7 +169,7 @@ def run() -> None:
             )
 
             text_brk = font_tiny.render("BRK", True, TEXT_DIM)
-            screen.blit(text_brk, (brk_bar_x + brk_bar_w + 5, brk_bar_y + 3))
+            screen.blit(text_brk, (brk_bar_x + brk_bar_w + _s(5), brk_bar_y + _s(3)))
 
             pygame.display.flip()
             clock.tick(60)
