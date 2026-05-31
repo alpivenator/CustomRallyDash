@@ -37,7 +37,7 @@ def run() -> None:
     # Colour Palette (RGB)
     BG_COLOR = (25, 25, 30)
     TEXT_MAIN = (240, 240, 240)
-    TEXT_DIM = (120, 120, 130)
+    TEXT_DIM = (180, 180, 180)
     RPM_NORMAL = (0, 150, 255)
     RPM_WARNING = (255, 40, 40)
     THR_COLOR = (40, 220, 100)

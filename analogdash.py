@@ -14,7 +14,7 @@ try:
 except ImportError:
     overlay_win = None
 
-WIDTH, HEIGHT = 700, 350
+WIDTH, HEIGHT = 600, 350
 # Fixed gauge scale (0 – 9000 RPM) independent of car
 GAUGE_MAX_RPM = 9000
 
@@ -39,7 +39,7 @@ def run() -> None:
     # Colour Palette (RGB)
     BG_COLOR = (25, 25, 30)
     TEXT_MAIN = (240, 240, 240)
-    TEXT_DIM = (120, 120, 130)
+    TEXT_DIM = (180, 180, 180)
     RPM_NORMAL = (0, 150, 255)
     RPM_WARNING = (255, 40, 40)
     THR_COLOR = (40, 220, 100)
@@ -169,7 +169,7 @@ def run() -> None:
             screen.fill(BG_COLOR)
 
             # Gauge geometry
-            center_x, center_y = 350, 170
+            center_x, center_y = 300, 170
             radius = 140
 
             # Ratios relative to the fixed 0-9000 scale
@@ -212,7 +212,9 @@ def run() -> None:
             needle_end_y = center_y + (radius - 15) * math.sin(current_angle_rad)
 
             # Needle colour: red when in car's redline zone
-            needle_color = RPM_WARNING if rpm_ratio >= redline_start_ratio else RPM_NORMAL
+            needle_color = (
+                RPM_WARNING if rpm_ratio >= redline_start_ratio else RPM_NORMAL
+            )
 
             pygame.draw.line(
                 screen,
@@ -252,7 +254,10 @@ def run() -> None:
             pygame.draw.rect(screen, FRAME_COLOR, (brk_x, brk_y, bar_w, max_h), 2)
             screen.blit(
                 font_small.render("BRK", True, TEXT_DIM),
-                (brk_x + bar_w // 2 - font_small.size("BRK")[0] // 2, brk_y + max_h + 8),
+                (
+                    brk_x + bar_w // 2 - font_small.size("BRK")[0] // 2,
+                    brk_y + max_h + 8,
+                ),
             )
 
             # --- RIGHT: THROTTLE BAR (vertical, right of gauge) ---
@@ -267,7 +272,10 @@ def run() -> None:
             pygame.draw.rect(screen, FRAME_COLOR, (thr_x, thr_y, bar_w, max_h), 2)
             screen.blit(
                 font_small.render("THR", True, TEXT_DIM),
-                (thr_x + bar_w // 2 - font_small.size("THR")[0] // 2, thr_y + max_h + 8),
+                (
+                    thr_x + bar_w // 2 - font_small.size("THR")[0] // 2,
+                    thr_y + max_h + 8,
+                ),
             )
 
             # --- BOTTOM CENTRE: DIGITAL SPEED (in needle-free arc) ---
