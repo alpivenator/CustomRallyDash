@@ -5,7 +5,9 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 `ARCHITECTURE.md`. Eski serbest metin günlüğü, kişisel arşiv olarak
 `development_log.md` içinde (git'te izlenmez) tutulur.
 
-## [Unreleased]
+> CHANGELOG.md'ye değişiklikler yazılırken her zaman en üstteki "## Son Değişiklikler" başlığı altına, "### dosya_adı.py" alt başlığıyla liste olarak eklenecek.
+
+## Son Değişiklikler
 
 ### udp_listener.py
 - `__init__` içine `settimeout(0.01)` nedeninin (60 FPS UI döngüsünü bloklamamak) kısa açıklaması eklendi.
@@ -20,7 +22,7 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 
 ---
 
-## Önceki özet (migration)
+## Geçmiş değişiklikler
 
 `development_log.md` içindeki tamamlanmış maddelerden, dosya / alan bazında
 yoğunlaştırılmış özet. Tam anlatı arşivde duruyor.
