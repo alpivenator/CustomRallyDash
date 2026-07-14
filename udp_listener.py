@@ -27,14 +27,20 @@ class UDPListener:
     def __init__(self, ip: str = "0.0.0.0", port: int = 20777) -> None:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((ip, port))
+        # Short timeout so receive() never blocks the 60 FPS UI loop; the
+        # loop below drains whatever has arrived since the last frame.
         self.sock.settimeout(0.01)
         self._data = TelemetryData()
 
     def receive(self) -> TelemetryData:
         last_packet: bytes | None = None
         try:
+            # Drain the socket until it times out; keep only the most recent
+            # packet so a slow frame does not render stale telemetry.
             while True:
                 raw, _addr = self.sock.recvfrom(1024)
+                # Filter by length: anything other than 264 bytes is not an
+                # Extradata=3 packet and would misalign the float table.
                 if len(raw) == 264:
                     last_packet = raw
         except socket.timeout:
@@ -60,14 +66,21 @@ class UDPListener:
         # [37]   = engine_rpm
         # [63]   = max_rpm
 
+        # Wheel average is more stable than the car's longitudinal speed for
+        # the speedometer when wheelspin or lock-up is in play.
         speed_ms = (f[25] + f[26] + f[27] + f[28]) / 4.0
+        # Convert m/s to km/h for the dashboards.
         wheel_speed_kmh = int(speed_ms * 3.6)
         car_speed_kmh = int(f[7] * 3.6)
+        # Game stores RPM scaled by 0.1; multiply to get the real value.
         rpm = int(f[37] * 10)
 
         read_max = int(f[63] * 10)
+        # Fall back to a sensible 8000 RPM when the game has not populated
+        # max_rpm yet (e.g. on the first frames of a stage).
         max_rpm = read_max if read_max > 0 else 8000
 
+        # Map raw gear codes to the strings the dashboards render.
         gear = int(f[33])
         if gear == 0:
             gear_str = "N"
@@ -76,6 +89,8 @@ class UDPListener:
         else:
             gear_str = str(gear)
 
+        # Clamp against occasional out-of-range floats so the bar fill stays
+        # inside [0, 1].
         throttle = max(0.0, min(1.0, f[29]))
         brake = max(0.0, min(1.0, f[31]))
 
