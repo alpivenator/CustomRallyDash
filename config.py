@@ -12,7 +12,7 @@ ENABLE_LEDS = False
 # Network
 # ----------------------------------------------------------------------
 # IP and port must match the game's UDP broadcast settings.
-LISTEN_IP = "0.0.0.0"
+LISTEN_IP = "0.0.0.0"  # nosec B104
 LISTEN_PORT = 20777
 
 # ----------------------------------------------------------------------

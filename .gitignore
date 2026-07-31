@@ -1,7 +1,6 @@
 __pycache__/
 venv/
 .ruff_cache/
-pyproject.toml
-yz_talimatı.md
+local
 .kilo
 .venv

@@ -1,0 +1,9 @@
+# Black tool configuration
+[tool.black]
+line-length = 90 # Maximum allowed line length
+target-version = ['py312'] # Target Python version for code optimization
+
+# Ruff tool configuration
+[tool.ruff]
+line-length = 90 # Keep Ruff's line limit consistent with Black
+lint.select = ["E", "F", "I"] # E (Errors), F (Logic Errors), I (Import sorting rules)

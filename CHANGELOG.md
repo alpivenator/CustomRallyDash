@@ -5,9 +5,19 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 `ARCHITECTURE.md`. Eski serbest metin günlüğü, kişisel arşiv olarak
 `development_log.md` içinde (git'te izlenmez) tutulur.
 
-> CHANGELOG.md'ye değişiklikler yazılırken her zaman en üstteki "## Son Değişiklikler" başlığı altına, "### dosya_adı.py" alt başlığıyla liste olarak eklenecek.
+> CHANGELOG.md'ye değişiklikler yazılırken her zaman en üstteki "## Son Değişiklikler" başlığı altına ("Son değişiklikler" başlığı altındaki önceki metin "geçmiş değişiklikler" başlığı altına düzeni bozmayacak şekilde taşınarak), "### dosya_adı.x" alt başlığıyla liste olarak eklenecek.
 
 ## Son Değişiklikler
+
+### requirements.txt
+- gpiozero'nun yalnızca Raspberry Pi'de fiziksel LED kontrolü (`led_controller.py`) için gerekli olduğu, Windows'ta gerekmediği yorumla belirtildi.
+
+### pyproject.toml
+- `.gitignore`'dan çıkarıldı (git'e alındı).
+- Ruff uyarısı düzeltildi: `select` → `lint.select`. Yorumlar İngilizceye çevrildi.
+
+### docs
+- `ROADMAP.md` yeniden yapılandırıldı: Alfa süreci bölümü (Faz 0–3, mermaid) kaldırıldı, tüm hedefler 5 genel başlıkta birleştirildi.
 
 ### udp_listener.py
 - `__init__` içine `settimeout(0.01)` nedeninin (60 FPS UI döngüsünü bloklamamak) kısa açıklaması eklendi.
