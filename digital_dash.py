@@ -16,7 +16,7 @@ except ImportError:
     overlay_win = None
 
 # Base dimensions (design resolution)
-_BASE_W, _BASE_H = 600, 200
+_BASE_W, _BASE_H = settings.DIGITAL_WIDTH, settings.DIGITAL_HEIGHT
 
 # Compute scale factor from settings
 _scale = settings.TARGET_WIDTH / _BASE_W if settings.TARGET_WIDTH else 1.0

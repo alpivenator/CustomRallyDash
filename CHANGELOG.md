@@ -9,6 +9,32 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 
 ## Son Değişiklikler
 
+### settings.py / digital_dash.py / analogdash.py
+- Pencere boyutları `settings.py`'deki `DIGITAL_WIDTH/HEIGHT` ve `ANALOG_WIDTH/HEIGHT` ayarlarına bağlandı (`_BASE_W`, `_BASE_H` sabit değerleri kaldırıldı). Varsayılanlar aynı kaldığı için görsel değişiklik yok.
+
+### ARCHITECTURE.md
+- `analogdash.py` açıklamasındaki yanlış boyut düzeltildi: 700×350 → 600×350.
+
+### LICENSE
+- GPL-3.0 lisansı eklendi (telif: Alperen (alpivenator), 2026).
+
+### pyproject.toml
+- `[project]` metadata eklendi: `name = "dirtdash"`, `version = "0.1.0a1"`, `license = "GPL-3.0-only"`, `requires-python = ">=3.12"`; gpiozero `optional-dependencies`'e taşındı. Mevcut `[tool.black]` / `[tool.ruff]` korundu.
+
+### CONFIG.md → CONFIGURATION.md
+- Dosya `git mv` ile yeniden adlandırıldı.
+- İngilizce kapsamlı ayar dokümantasyonu yazıldı: `config.py` (sistem) ve `settings.py` (görsel) tabloları, mevcut `0.0.0.0` açıklaması çevrilerek korundu, "Security Notes" bölümü eklendi.
+
+### README.md
+- Genişletildi: özellikler, gereksinimler, "3 adımda başlangıç", yapılandırma ve lisans bölümleri; ekran görüntüsü için placeholder eklendi.
+
+---
+
+## Geçmiş değişiklikler
+
+`development_log.md` içindeki tamamlanmış maddelerden, dosya / alan bazında
+yoğunlaştırılmış özet. Tam anlatı arşivde duruyor.
+
 ### requirements.txt
 - gpiozero'nun yalnızca Raspberry Pi'de fiziksel LED kontrolü (`led_controller.py`) için gerekli olduğu, Windows'ta gerekmediği yorumla belirtildi.
 
@@ -29,13 +55,6 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 - `CHANGELOG.md` (TR) eklendi — bu dosya.
 - `ROADMAP.md` (TR) eklendi — kullanıcı tarafından güncellenen hedefler.
 - `development_log.md` arşiv olarak işaretlendi ve `.gitignore` listesine alındı.
-
----
-
-## Geçmiş değişiklikler
-
-`development_log.md` içindeki tamamlanmış maddelerden, dosya / alan bazında
-yoğunlaştırılmış özet. Tam anlatı arşivde duruyor.
 
 ### udp_listener.py / Veri altyapısı
 - 264 bytelık UDP paketlerini dinleyen altyapı (`socket`).

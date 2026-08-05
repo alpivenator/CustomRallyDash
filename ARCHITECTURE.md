@@ -16,7 +16,7 @@ lights on a Raspberry Pi.
 | `settings.py` | Visual configuration: colors, sizes, fonts, positions. Editable by the user. |
 | `udp_listener.py` | Receives 264-byte UDP packets, decodes them with `struct.unpack("66f", …)`, returns a `TelemetryData` namedtuple. |
 | `digital_dash.py` | Compact digital dashboard (600×200). RPM bar, gear, speed, pedal bars. Can run as a Windows overlay. |
-| `analogdash.py` | Analog gauge dashboard (700×350). Trigonometric needle, dial ticks, dynamic redline, overlay support. |
+| `analogdash.py` | Analog gauge dashboard (600×350). Trigonometric needle, dial ticks, dynamic redline, overlay support. |
 | `led_controller.py` | Drives physical shift lights on Raspberry Pi GPIO via `gpiozero`. Toggled by `config.ENABLE_LEDS`. |
 | `overlay_win.py` | Windows-only Win32 (`ctypes`) helpers: borderless, transparent, click-through overlay window. Supports `alpha` and `chroma` modes. |
 

@@ -19,7 +19,7 @@ LISTEN_PORT = 20777
 # Dashboard Style
 # ----------------------------------------------------------------------
 # "digital"  — compact horizontal bar dashboard (600 x 200 px)
-# "analog"   — circular-needle gauge dashboard (700 x 350 px)
+# "analog"   — circular-needle gauge dashboard (600 x 350 px)
 DASH_STYLE = "digital"
 
 # ----------------------------------------------------------------------

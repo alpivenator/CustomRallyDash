@@ -16,7 +16,7 @@ except ImportError:
     overlay_win = None
 
 # Base dimensions (design resolution)
-_BASE_W, _BASE_H = 600, 350
+_BASE_W, _BASE_H = settings.ANALOG_WIDTH, settings.ANALOG_HEIGHT
 
 # Fixed gauge scale (0 – 9000 RPM) independent of car
 GAUGE_MAX_RPM = 9000
