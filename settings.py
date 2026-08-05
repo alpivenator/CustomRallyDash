@@ -8,10 +8,10 @@ DIGITAL_HEIGHT = 200
 ANALOG_WIDTH = 600
 ANALOG_HEIGHT = 350
 
-# Scale factor: set TARGET_WIDTH to resize the dashboard proportionally.
+# Scale factor: set TARGET_SCALE to resize the dashboard proportionally.
 # Set to None to use the base dimensions above without scaling.
-# Example: TARGET_WIDTH = 900 → scale = 900 / 600 = 1.5
-TARGET_WIDTH = None
+# Example: TARGET_SCALE = 1.5 → 600 * 1.5 = 900 px wide; 0.5 → 300 px.
+TARGET_SCALE = None  # Set to None to disable scaling
 
 # Overlay position on screen (Windows only)
 # "bottom-left", "bottom-center", "bottom-right"
@@ -31,7 +31,7 @@ COLOR_BRAKE = (255, 60, 60)
 COLOR_FRAME = (80, 80, 90)
 COLOR_REDLINE = (255, 40, 40, 100)
 
-# Font sizes (base values, scaled automatically when TARGET_WIDTH is set)
+# Font sizes (base values, scaled automatically when TARGET_SCALE is set)
 FONT_HUGE_SIZE = 80
 FONT_LARGE_SIZE = 48
 FONT_MEDIUM_SIZE = 20

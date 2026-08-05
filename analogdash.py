@@ -22,7 +22,7 @@ _BASE_W, _BASE_H = settings.ANALOG_WIDTH, settings.ANALOG_HEIGHT
 GAUGE_MAX_RPM = 9000
 
 # Compute scale factor from settings
-_scale = settings.TARGET_WIDTH / _BASE_W if settings.TARGET_WIDTH else 1.0
+_scale = settings.TARGET_SCALE if settings.TARGET_SCALE else 1.0
 
 # Effective window size
 WIDTH = int(_BASE_W * _scale)

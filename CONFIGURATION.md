@@ -37,7 +37,7 @@ By default the program listens on all network interfaces. There are two reasons:
 |---------|---------|-------------|
 | `DIGITAL_WIDTH` / `DIGITAL_HEIGHT` | `600` / `200` | Base resolution of the digital dashboard. |
 | `ANALOG_WIDTH` / `ANALOG_HEIGHT` | `600` / `350` | Base resolution of the analog dashboard. |
-| `TARGET_WIDTH` | `None` | Proportional scaling target. Example: `900` → scale = `900 / 600` = 1.5×. Set to `None` for no scaling. |
+| `TARGET_SCALE` | `None` | Proportional scale factor applied to the base resolution. Example: `1.5` → the 600 px wide digital dashboard becomes 900 px; `0.5` shrinks it to 300 px. Set to `None` for no scaling. |
 | `OVERLAY_POSITION` | `"bottom-center"` | Overlay position: `"bottom-left"`, `"bottom-center"` or `"bottom-right"` (Windows only). |
 | `OVERLAY_MARGIN` | `20` | Distance from the screen edge in pixels (used for left/right positions). |
 | `COLOR_BG` | `(25, 25, 30)` | Background colour (RGB 0–255). |
@@ -55,7 +55,7 @@ By default the program listens on all network interfaces. There are two reasons:
 | `FONT_SMALL_SIZE` | `18` | Small font. |
 | `FONT_TINY_SIZE` | `14` | Tiny font. |
 
-Font sizes are scaled automatically when `TARGET_WIDTH` is set.
+Font sizes are scaled automatically when `TARGET_SCALE` is set.
 
 ## Security Notes
 
