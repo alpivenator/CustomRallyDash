@@ -9,6 +9,10 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 
 ## Son Değişiklikler
 
+### docs
+- Geçmiş temizliği (`git filter-repo`): `venv/` dizini tüm commit geçmişinden kaldırıldı; yazar/committer kimliği `alpivenator` + GitHub noreply e-postasına sabitlendi; `origin` URL'si yeni hesaba güncellendi (repo boyutu ~14 MiB → ~353 KiB).
+- `ROADMAP.md`: tamamlanan "Hassas veri taraması" maddesi kaldırıldı; Not metnindeki ifade düzeltildi ("hedefler yöneticinin isteğiyle güncellenir").
+
 ### settings.py / digital_dash.py / analogdash.py
 - Pencere boyutları `settings.py`'deki `DIGITAL_WIDTH/HEIGHT` ve `ANALOG_WIDTH/HEIGHT` ayarlarına bağlandı (`_BASE_W`, `_BASE_H` sabit değerleri kaldırıldı). Varsayılanlar aynı kaldığı için görsel değişiklik yok.
 

@@ -3,12 +3,11 @@
 Bu dosya **yalnızca tamamlanmamış hedefleri** içerir. Tamamlanan çalışmalar
 `CHANGELOG.md` içinde, mimari bilgi ise `ARCHITECTURE.md` içindedir. Dosya şimdilik Türkçedir.
 
-> **Not:** Bu dosyanın "Hedefler" bölümü yönetici tarafından güncellenir.
+> **Not:** Bu dosyadaki "hedefler" yöneticinin isteğiyle güncellenir.
 > Yapay zeka veya herhangi bir kullanıcı, istenmedikçe, buraya yeni hedef eklemez.
 
 ## Yayın & Güvenlik
 
-- [ ] **Hassas veri taraması:** Geçmişteki e-postalar + venv geçmişi. İki seçenek: (a) GitHub Settings'te "Block command line pushes that expose my email" ayarını aç; (b) geçmişi `git filter-repo` ile yeniden yaz (repo daha public değilken yapılırsa sorunsuz). Önerilen: (a).
 - [ ] **GitHub Releases:** v0.1.0-alpha yayınla (tag + kaynak zip yeterli).
 - [ ] **GitHub'da public yap** — son adım.
 - [ ] **CI (isteğe bağlı):** Public'e açtıktan sonra GitHub Actions ile ruff + bandit.
