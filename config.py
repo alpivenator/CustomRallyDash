@@ -13,8 +13,9 @@ ENABLE_LEDS = False
 # Network
 # ----------------------------------------------------------------------
 # Address and port used by the dashboard's UDP listener.
-# Keep LISTEN_IP at 0.0.0.0 to receive local and LAN telemetry packets.
-LISTEN_IP = "0.0.0.0"  # nosec B104
+# The setup wizard can change this to the dashboard computer's LAN address
+# when the game runs on another computer.
+LISTEN_IP = "127.0.0.1"
 LISTEN_PORT = 20777
 
 # ----------------------------------------------------------------------

@@ -20,6 +20,7 @@ lights on a Raspberry Pi.
 | `led_controller.py` | Drives physical shift lights on Raspberry Pi GPIO via `gpiozero`. Toggled by `config.ENABLE_LEDS`. |
 | `overlay_win.py` | Windows-only Win32 (`ctypes`) helpers: borderless, transparent, click-through overlay window. Supports `alpha` and `chroma` modes. |
 | `setup_wizard.py` | First-run CLI setup: backs up and updates `config.py`, then configures the game's UDP telemetry XML. |
+| `telemetry_check.py` | Dependency-free CLI diagnostic that waits up to five seconds for one valid 264-byte telemetry packet. |
 
 ## Runtime flow
 

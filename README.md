@@ -35,11 +35,13 @@ shift lights on a Raspberry Pi.
 3. **Complete the setup wizard**:
    - Enter the dashboard computer's IPv4 address. `127.0.0.1` is the default
      when the game and dashboard run on the same computer.
-   - Windows loopback traffic can sometimes be blocked or mishandled by the
-     firewall. If telemetry does not arrive, use the computer's LAN address,
-     such as `192.168.1.25`.
+   - For a remote game computer, enter the dashboard computer's LAN IPv4 address,
+     such as `192.168.1.25`. The wizard writes this same address to `config.py`
+     and the game's telemetry XML.
    - Select the dashboard style and Windows overlay setting.
-   - The wizard backs up and updates `config.py` and the game's telemetry XML.
+   - The UDP port remains `20777`; LED settings remain in `config.py`.
+   - The wizard shows a connection-check command when it finishes. The dashboard
+     must be closed while `python telemetry_check.py` is running.
 
 4. **Run the dashboard** by double-clicking `run_dash.bat`.
 
@@ -53,13 +55,14 @@ requirements:
 The game file is normally located at
 `Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml`.
 The required UDP settings are `enabled="true"`, `extradata="3"`, and port
-`20777`. See [CONFIGURATION.md](docs/CONFIGURATION.md) for manual configuration and
-the Windows Firewall note.
+`20777`. See [CONFIGURATION.md](docs/CONFIGURATION.md) for manual configuration,
+the telemetry check tool, and the Windows Firewall note.
 
 ## Configuration
 
 - `config.py` — system settings (network, LEDs, overlay behaviour).
 - `settings.py` — visual settings (colours, fonts, sizes, positions).
+- `telemetry_check.py` — dependency-free UDP connection diagnostic.
 
 The setup wizard edits selected values in `config.py` after creating a
 timestamped backup. Visual settings remain manual and are edited in

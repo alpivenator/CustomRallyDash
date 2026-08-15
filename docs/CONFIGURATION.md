@@ -6,16 +6,17 @@ time the program is started (there is no hot-reload).
 - `config.py` — **system settings** (network, hardware, overlay behaviour).
 - `settings.py` — **visual settings** (sizes, colours, fonts, overlay position).
 
-`install.bat` runs `setup_wizard.py` after creating a timestamped backup of
-`config.py`. The wizard changes selected system settings directly in that file;
-it does not create a second configuration file. Visual settings remain manual.
+`install.bat` runs `setup_wizard.py`. After the setup summary is approved, the
+wizard creates a timestamped backup and changes selected system settings
+directly in `config.py`; it does not create a second configuration file. Visual
+settings remain manual.
 
 ## System Settings (`config.py`)
 
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `ENABLE_LEDS` | `False` | Enable Raspberry Pi shift-light LEDs (requires `gpiozero`). |
-| `LISTEN_IP` | `"0.0.0.0"` | Network interface for the dashboard UDP listener. See *Why `0.0.0.0`?* below. |
+| `LISTEN_IP` | `"127.0.0.1"` | Network interface for the dashboard UDP listener. Use the dashboard computer's LAN IPv4 address for a remote game computer. |
 | `LISTEN_PORT` | `20777` | UDP port the game broadcasts telemetry to. |
 | `DASH_STYLE` | `"digital"` | Dashboard variant: `"digital"` or `"analog"`. |
 | `ENABLE_OVERLAY` | `True` | Use the borderless, transparent, click-through overlay window (Windows only; silently ignored elsewhere). |
@@ -23,16 +24,17 @@ it does not create a second configuration file. Visual settings remain manual.
 | `OVERLAY_MODE` | `"alpha"` | Transparency mode: `"alpha"` (semi-transparent window) or `"chroma"` (key colour transparent). |
 | `OVERLAY_ALPHA` | `220` | Window opacity in `alpha` mode (`0` = fully transparent, `255` = fully opaque). |
 
-### Why `LISTEN_IP = "0.0.0.0"`?
+### Network address
 
-By default the program listens on all network interfaces. There are two reasons:
+By default the program listens only on localhost. Use `127.0.0.1` when the game
+and dashboard run on the same computer. For a remote game computer, enter the
+dashboard computer's LAN IPv4 address (for example, `192.168.1.25`) in the setup
+wizard. The wizard writes that same address to both `config.py` and the game's
+telemetry XML.
 
-1. If the game runs on a different computer, the dashboard must be able to
-   receive packets from that machine.
-2. On Windows, using `127.0.0.1` (localhost) can cause the Windows Firewall to
-   block loopback UDP traffic. With `0.0.0.0`, all interfaces are listened to,
-   and the game's `hardware_settings_config.xml` can target the computer's
-   local network IP (`192.168.x.x`) instead.
+Existing users with `LISTEN_IP = "0.0.0.0"` are not changed automatically. This
+value listens on every interface; replace it with a specific address when you
+want to restrict the listener.
 
 ### Game telemetry configuration
 
@@ -48,10 +50,25 @@ Inside the `<motion_platform>` section, enable the UDP telemetry entry:
 <udp enabled="true" extradata="3" ip="127.0.0.1" port="20777" delay="1" />
 ```
 
-The `ip` value is the dashboard computer's address. `127.0.0.1` is a useful
-default when both programs run on the same computer, but use the dashboard
-computer's LAN IPv4 address if Windows loopback traffic does not work. The
-setup wizard asks for this address and creates a backup before editing the XML.
+The `ip` value is the dashboard computer's address. Use `127.0.0.1` when both
+programs run on the same computer; for a remote game computer, use the
+dashboard computer's LAN IPv4 address. The setup wizard asks for this address
+and creates a backup only after you approve the summary.
+
+### Connection check
+
+After setup, close the dashboard and run:
+
+```sh
+python telemetry_check.py
+```
+
+The tool listens for up to five seconds on `LISTEN_IP` and `LISTEN_PORT`. It
+reports the source address when it receives a valid 264-byte packet. It does
+not start the dashboard and does not require pygame. If no packet arrives,
+check the firewall, the game's XML IP/port values, and that the game is running.
+The dashboard must remain closed because both programs cannot bind the same
+UDP port at the same time.
 
 ## Visual Settings (`settings.py`)
 

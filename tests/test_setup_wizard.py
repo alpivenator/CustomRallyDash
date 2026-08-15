@@ -2,8 +2,14 @@ import tempfile
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from unittest.mock import patch
 
-from setup_wizard import configure_game_xml, update_config_file, validate_ipv4
+from setup_wizard import (
+    configure_game_xml,
+    run_setup,
+    update_config_file,
+    validate_ipv4,
+)
 
 
 class SetupWizardTests(unittest.TestCase):
@@ -46,7 +52,8 @@ class SetupWizardTests(unittest.TestCase):
                 """<?xml version='1.0' encoding='utf-8'?>
 <hardware_settings_config>
   <motion_platform>
-    <udp enabled="false" extradata="0" ip="127.0.0.1" port="10000" delay="1" custom="keep" />
+    <udp enabled="false" extradata="0" ip="127.0.0.1" port="10000"
+         delay="1" custom="keep" />
   </motion_platform>
 </hardware_settings_config>
 """,
@@ -70,7 +77,8 @@ class SetupWizardTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             xml_path = Path(directory) / "hardware_settings_config.xml"
             xml_path.write_text(
-                "<hardware_settings_config><motion_platform /></hardware_settings_config>",
+                "<hardware_settings_config>"
+                "<motion_platform /></hardware_settings_config>",
                 encoding="utf-8",
             )
 
@@ -82,6 +90,90 @@ class SetupWizardTests(unittest.TestCase):
             self.assertEqual(udp.attrib["enabled"], "true")
             self.assertEqual(udp.attrib["extradata"], "3")
             self.assertEqual(udp.attrib["delay"], "1")
+
+    def test_run_setup_updates_listen_ip_and_xml_after_confirmation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project_root = Path(directory)
+            config_path = project_root / "config.py"
+            config_path.write_text(
+                'LISTEN_IP = "127.0.0.1"\n'
+                'DASH_STYLE = "digital"\n'
+                "ENABLE_OVERLAY = True\n",
+                encoding="utf-8",
+            )
+            xml_path = project_root / "hardware_settings_config.xml"
+            xml_path.write_text(
+                "<hardware_settings_config><motion_platform>"
+                '<udp custom="keep" /></motion_platform></hardware_settings_config>',
+                encoding="utf-8",
+            )
+            answers = iter(["192.168.1.25", "analog", "H", "E"])
+            output = []
+
+            with patch("setup_wizard.find_game_config", return_value=xml_path):
+                result = run_setup(
+                    project_root=project_root,
+                    input_fn=lambda _prompt: next(answers),
+                    output_fn=output.append,
+                )
+
+            self.assertEqual(result, 0)
+            self.assertIn('LISTEN_IP = "192.168.1.25"', config_path.read_text())
+            self.assertIn('DASH_STYLE = "analog"', config_path.read_text())
+            self.assertIn("ENABLE_OVERLAY = False", config_path.read_text())
+            udp = ET.parse(xml_path).getroot().find(".//motion_platform/udp")
+            self.assertIsNotNone(udp)
+            assert udp is not None
+            self.assertEqual(udp.attrib["ip"], "192.168.1.25")
+            self.assertEqual(udp.attrib["custom"], "keep")
+            self.assertTrue(list(project_root.glob("config.py.bak-*")))
+            self.assertTrue(list(project_root.glob("hardware_settings_config.xml.bak-*")))
+
+    def test_run_setup_preserves_current_values_and_retries_invalid_yes_no(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project_root = Path(directory)
+            config_path = project_root / "config.py"
+            original = (
+                'LISTEN_IP = "0.0.0.0"\nDASH_STYLE = "analog"\nENABLE_OVERLAY = False\n'
+            )
+            config_path.write_text(original, encoding="utf-8")
+            answers = iter(["", "", "belki", "", ""])
+            output = []
+
+            with patch("setup_wizard.find_game_config", return_value=None):
+                result = run_setup(
+                    project_root=project_root,
+                    input_fn=lambda _prompt: next(answers),
+                    output_fn=output.append,
+                )
+
+            self.assertEqual(result, 0)
+            self.assertEqual(
+                config_path.read_text(encoding="utf-8"),
+                original,
+            )
+            self.assertTrue(any("Geçersiz cevap" in message for message in output))
+
+    def test_run_setup_does_not_change_files_without_confirmation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project_root = Path(directory)
+            config_path = project_root / "config.py"
+            original = (
+                'LISTEN_IP = "127.0.0.1"\nDASH_STYLE = "digital"\nENABLE_OVERLAY = True\n'
+            )
+            config_path.write_text(original, encoding="utf-8")
+            answers = iter(["192.168.1.25", "analog", "H", "H"])
+
+            with patch("setup_wizard.find_game_config", return_value=None):
+                result = run_setup(
+                    project_root=project_root,
+                    input_fn=lambda _prompt: next(answers),
+                    output_fn=lambda _message: None,
+                )
+
+            self.assertEqual(result, 0)
+            self.assertEqual(config_path.read_text(encoding="utf-8"), original)
+            self.assertEqual(list(project_root.glob("*.bak-*")), [])
 
 
 if __name__ == "__main__":

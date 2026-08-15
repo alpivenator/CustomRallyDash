@@ -24,10 +24,10 @@ Bu dosya **yalnızca tamamlanmamış hedefleri** içerir. Tamamlanan çalışmal
 - [ ] **Görsel İyileştirme (analogdash):** Estetik pivot noktası, geliştirilmiş renk paleti ve merkezi vites dairesi.
 - [ ] **Tema Sistemi:** Hazır tema paketleri (Dark, WRC Classic, Neon, Minimalist). Kullanıcılar kendi temalarını oluşturup paylaşabilir.
 - [ ] **Örnek Tema Dosyaları:** Kullanıcıların başlaması için hazır şablonlar.
+- [ ] **Tema ve Özelleştirme CLI Aracı:** Hazır temaları seçme ve kullanıcı görsel ayarlarını kolayca düzenleme.
 - [ ] **Linux Overlay Desteği:** X11/Wayland üzerinde saydam overlay penceresi (ileri dönem). **[Öncelik: düşük]**
 
 ## Veri & Performans
 
 - [ ] **Günlükleme Sistemi:** Analiz için telemetri verilerinin CSV/JSON formatında kaydedilmesi. **[Öncelik: düşük]**
 - [ ] **Performans & Optimizasyon:** Programın daha verimli çalışması için yapılacak düzenlemeler.
-

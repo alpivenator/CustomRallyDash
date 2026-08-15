@@ -103,7 +103,7 @@ def run() -> None:
 
             rpm_value = i * GAUGE_MAX_RPM // 9
             if rpm_value <= GAUGE_MAX_RPM:
-                label = font_tiny.render(f"{rpm_value//1000}k", True, TEXT_MAIN)
+                label = font_tiny.render(f"{rpm_value // 1000}k", True, TEXT_MAIN)
                 label_x = center_x + (radius - _s(40)) * math.cos(angle_rad)
                 label_y = center_y + (radius - _s(40)) * math.sin(angle_rad)
                 label_rect = label.get_rect(center=(label_x, label_y))
