@@ -1,4 +1,4 @@
-# DiRT Rally 2.0 Telemetry Dashboard
+# Telemetry Dashboard for DiRT Rally 2.0 
 
 A real-time telemetry dashboard for **DiRT Rally 2.0**. The game broadcasts raw
 UDP packets in the **Extradata=3** format at 60 Hz; this project captures,
@@ -28,22 +28,18 @@ shift lights on a Raspberry Pi.
 1. **Install Python 3.12**: on Windows, install Python 3.12 x64 and make sure
    the Python Launcher (`py`) is available.
 
-2. **Install the dashboard**: extract the project folder and double-click
-   `install.bat`. The script creates a local `.venv`, installs pygame, and
+2. **Install the dashboard**: extract the project folder and run `install.bat`. The script creates a local `.venv`, installs pygame, and
    starts the first-run setup wizard.
 
 3. **Complete the setup wizard**:
    - Enter the dashboard computer's IPv4 address. `127.0.0.1` is the default
      when the game and dashboard run on the same computer.
-   - For a remote game computer, enter the dashboard computer's LAN IPv4 address,
-     such as `192.168.1.25`. The wizard writes this same address to `config.py`
+   - For a remote device, enter the device's LAN IPv4 address,
+     such as `192.168.1.x`. The wizard writes this same address to `config.py`
      and the game's telemetry XML.
    - Select the dashboard style and Windows overlay setting.
-   - The UDP port remains `20777`; LED settings remain in `config.py`.
    - The wizard shows a connection-check command when it finishes. The dashboard
      must be closed while `python telemetry_check.py` is running.
-
-4. **Run the dashboard** by double-clicking `run_dash.bat`.
 
 For a manual installation, use a virtual environment and install the base
 requirements:
