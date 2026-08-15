@@ -19,35 +19,51 @@ shift lights on a Raspberry Pi.
 
 ## Requirements
 
-- Python **3.12 or newer**
-- `pygame` (always)
-- `gpiozero` — Raspberry Pi shift lights only (optional)
+- Python **3.12.x** (Python 3.13 and newer are not supported)
+- `pygame==2.6.1`
+- Raspberry Pi shift lights: `gpiozero==2.0.1` (optional)
 
 ## Getting Started
 
-1. **Install dependencies** (a virtual environment is recommended):
+1. **Install Python 3.12**: on Windows, install Python 3.12 x64 and make sure
+   the Python Launcher (`py`) is available.
+
+2. **Install the dashboard**: extract the project folder and double-click
+   `install.bat`. The script creates a local `.venv`, installs pygame, and
+   starts the first-run setup wizard.
+
+3. **Complete the setup wizard**:
+   - Enter the dashboard computer's IPv4 address. `127.0.0.1` is the default
+     when the game and dashboard run on the same computer.
+   - Windows loopback traffic can sometimes be blocked or mishandled by the
+     firewall. If telemetry does not arrive, use the computer's LAN address,
+     such as `192.168.1.25`.
+   - Select the dashboard style and Windows overlay setting.
+   - The wizard backs up and updates `config.py` and the game's telemetry XML.
+
+4. **Run the dashboard** by double-clicking `run_dash.bat`.
+
+For a manual installation, use a virtual environment and install the base
+requirements:
 
    ```sh
-   pip install -r requirements.txt
+   python -m pip install -r requirements.txt
    ```
 
-2. **Configure the game**: enable UDP telemetry in DiRT Rally 2.0
-   (Extradata=3, 60 Hz) and set the `ip` field in
-   `hardware_settings_config.xml` inside the game's configuration folder
-   (`My Documents\My Games\DiRT Rally 2.0\`) to the dashboard computer's LAN
-   IP. Use `127.0.0.1` when running on the same machine — see
-   [CONFIGURATION.md](CONFIGURATION.md) for a Windows Firewall note.
-
-3. **Run the dashboard**:
-
-   ```sh
-   python main.py
-   ```
+The game file is normally located at
+`Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml`.
+The required UDP settings are `enabled="true"`, `extradata="3"`, and port
+`20777`. See [CONFIGURATION.md](CONFIGURATION.md) for manual configuration and
+the Windows Firewall note.
 
 ## Configuration
 
 - `config.py` — system settings (network, LEDs, overlay behaviour).
 - `settings.py` — visual settings (colours, fonts, sizes, positions).
+
+The setup wizard edits selected values in `config.py` after creating a
+timestamped backup. Visual settings remain manual and are edited in
+`settings.py`.
 
 See [CONFIGURATION.md](CONFIGURATION.md) for a full reference.
 

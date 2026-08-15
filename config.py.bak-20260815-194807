@@ -30,7 +30,7 @@ DASH_STYLE = "digital"
 # Enable a borderless, transparent, click-through window that stays
 # on top of the game.  Only functional on Windows; silently ignored
 # elsewhere.
-ENABLE_OVERLAY = True
+ENABLE_OVERLAY = False
 
 # Chroma-key colour — pixels matching this exact colour become
 # fully transparent.  Default (0, 0, 0) = pure black.

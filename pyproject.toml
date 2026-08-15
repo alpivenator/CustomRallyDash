@@ -4,9 +4,9 @@ version = "0.1.0a1"
 description = "Real-time DiRT Rally 2.0 telemetry dashboard (UDP Extradata=3)"
 readme = "README.md"
 license = "GPL-3.0-only"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 authors = [{ name = "Alperen (alpivenator)" }]
-dependencies = ["pygame"]
+dependencies = ["pygame==2.6.1"]
 
 [project.optional-dependencies]
 pi = ["gpiozero==2.0.1"]

@@ -9,10 +9,15 @@ Bu dosya **yalnızca tamamlanmamış hedefleri** içerir. Tamamlanan çalışmal
 ## Yayın & Güvenlik
 
 - [ ] **GitHub Releases:** v0.1.0-alpha yayınla (tag + kaynak zip yeterli).
+- [ ] **Güvenlik:** Programın güvenlik testleri (planlanacak).
 - [ ] **GitHub'da public yap** — son adım.
 - [ ] **CI (isteğe bağlı):** Public'e açtıktan sonra GitHub Actions ile ruff + bandit.
-- [ ] **Güvenlik:** Programın güvenlik testleri (planlanacak).
 
+
+## Kullanım Kolaylığı
+
+- [x] **Windows Başlangıç Betiği:** `run_dash.bat` ile tek tıkla çalıştırma ve `install.bat` ile sanal ortam kurulumu tamamlandı.
+- [x] **Kurulum Sihirbazı:** İlk çalıştırmada `config.py` ve oyun telemetry XML’i yedeklenerek yapılandırılıyor.
 
 ## Arayüz & Özelleştirme
 
@@ -21,14 +26,8 @@ Bu dosya **yalnızca tamamlanmamış hedefleri** içerir. Tamamlanan çalışmal
 - [ ] **Örnek Tema Dosyaları:** Kullanıcıların başlaması için hazır şablonlar.
 - [ ] **Linux Overlay Desteği:** X11/Wayland üzerinde saydam overlay penceresi (ileri dönem). **[Öncelik: düşük]**
 
-## Kullanım Kolaylığı
-
-- [ ] **Windows Başlangıç Betiği:** Tek tıkla çalıştırma için `run_dash.bat` başlatıcı. Kolaylık için gerekli. **[Öncelik: yüksek]**
-- [ ] **Kurulum Sihirbazı:** İlk çalıştırmada ayar dosyası oluşturma.
-
 ## Veri & Performans
 
 - [ ] **Günlükleme Sistemi:** Analiz için telemetri verilerinin CSV/JSON formatında kaydedilmesi. **[Öncelik: düşük]**
 - [ ] **Performans & Optimizasyon:** Programın daha verimli çalışması için yapılacak düzenlemeler.
-
 

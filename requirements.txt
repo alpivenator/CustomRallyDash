@@ -1,7 +1,5 @@
 # requirements.txt
 # This file lists the Python dependencies for the project. To install these dependencies, run:
 # pip install -r requirements.txt
-# gpiozero is only needed on a Raspberry Pi for physical LED control (led_controller.py).
-# Therefore not required on Windows, where the dashboard runs as a standalone window.
-gpiozero==2.0.1
+# gpiozero is optional and is listed in requirements-pi.txt.
 pygame==2.6.1

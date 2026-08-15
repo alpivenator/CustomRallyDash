@@ -6,12 +6,16 @@ time the program is started (there is no hot-reload).
 - `config.py` — **system settings** (network, hardware, overlay behaviour).
 - `settings.py` — **visual settings** (sizes, colours, fonts, overlay position).
 
+`install.bat` runs `setup_wizard.py` after creating a timestamped backup of
+`config.py`. The wizard changes selected system settings directly in that file;
+it does not create a second configuration file. Visual settings remain manual.
+
 ## System Settings (`config.py`)
 
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `ENABLE_LEDS` | `False` | Enable Raspberry Pi shift-light LEDs (requires `gpiozero`). |
-| `LISTEN_IP` | `"0.0.0.0"` | Network interface to listen on. See *Why `0.0.0.0`?* below. |
+| `LISTEN_IP` | `"0.0.0.0"` | Network interface for the dashboard UDP listener. See *Why `0.0.0.0`?* below. |
 | `LISTEN_PORT` | `20777` | UDP port the game broadcasts telemetry to. |
 | `DASH_STYLE` | `"digital"` | Dashboard variant: `"digital"` or `"analog"`. |
 | `ENABLE_OVERLAY` | `True` | Use the borderless, transparent, click-through overlay window (Windows only; silently ignored elsewhere). |
@@ -27,9 +31,27 @@ By default the program listens on all network interfaces. There are two reasons:
    receive packets from that machine.
 2. On Windows, using `127.0.0.1` (localhost) can cause the Windows Firewall to
    block loopback UDP traffic. With `0.0.0.0`, all interfaces are listened to,
-   and it is enough to set the `ip` address in the game's
-   `hardware_settings_config.xml` to the computer's local network IP
-   (`192.168.x.x`) — the firewall does not interfere with that traffic.
+   and the game's `hardware_settings_config.xml` can target the computer's
+   local network IP (`192.168.x.x`) instead.
+
+### Game telemetry configuration
+
+The game file is normally located at:
+
+```text
+Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml
+```
+
+Inside the `<motion_platform>` section, enable the UDP telemetry entry:
+
+```xml
+<udp enabled="true" extradata="3" ip="127.0.0.1" port="20777" delay="1" />
+```
+
+The `ip` value is the dashboard computer's address. `127.0.0.1` is a useful
+default when both programs run on the same computer, but use the dashboard
+computer's LAN IPv4 address if Windows loopback traffic does not work. The
+setup wizard asks for this address and creates a backup before editing the XML.
 
 ## Visual Settings (`settings.py`)
 
@@ -60,6 +82,6 @@ Font sizes are scaled automatically when `TARGET_SCALE` is set.
 ## Security Notes
 
 The telemetry stream is unauthenticated UDP broadcast on the local network.
-Only run the program on networks you trust, and set `LISTEN_IP` to the
-machine's LAN IP instead of `0.0.0.0` if you want to restrict which interface
-receives packets.
+Only run the program on networks you trust. Set `LISTEN_IP` to the machine's
+LAN IP instead of `0.0.0.0` if you want to restrict which interface receives
+packets.

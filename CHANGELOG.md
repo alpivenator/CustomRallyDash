@@ -9,6 +9,13 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 
 ## Son Değişiklikler
 
+### Kurulum ve dokümantasyon
+- Windows için Python 3.12 sanal ortamı oluşturan `install.bat` ve dashboard'u başlatan `run_dash.bat` eklendi.
+- `setup_wizard.py` eklendi; `config.py` ve DiRT Rally 2.0 telemetry XML'i yedeklenerek güncelleniyor.
+- Kurulumda alıcı IP adresi soruluyor; `127.0.0.1` loopback/Firewall uyarısı ile varsayılan olarak sunuluyor.
+- Windows ve Raspberry Pi bağımlılıkları ayrıldı; Python sürümü 3.12 ile sınırlandırıldı.
+- README, CONFIGURATION ve ARCHITECTURE kurulum akışına göre güncellendi.
+
 ### docs
 - Geçmiş temizliği (`git filter-repo`): `venv/` dizini tüm commit geçmişinden kaldırıldı; yazar/committer kimliği `alpivenator` + GitHub noreply e-postasına sabitlendi; `origin` URL'si yeni hesaba güncellendi (repo boyutu ~14 MiB → ~353 KiB).
 - `ROADMAP.md`: tamamlanan "Hassas veri taraması" maddesi kaldırıldı; Not metnindeki ifade düzeltildi ("hedefler yöneticinin isteğiyle güncellenir").
