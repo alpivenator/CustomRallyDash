@@ -53,7 +53,7 @@ requirements:
 The game file is normally located at
 `Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml`.
 The required UDP settings are `enabled="true"`, `extradata="3"`, and port
-`20777`. See [CONFIGURATION.md](CONFIGURATION.md) for manual configuration and
+`20777`. See [CONFIGURATION.md](docs/CONFIGURATION.md) for manual configuration and
 the Windows Firewall note.
 
 ## Configuration
@@ -65,14 +65,14 @@ The setup wizard edits selected values in `config.py` after creating a
 timestamped backup. Visual settings remain manual and are edited in
 `settings.py`.
 
-See [CONFIGURATION.md](CONFIGURATION.md) for a full reference.
+See [CONFIGURATION.md](docs/CONFIGURATION.md) for a full reference.
 
 ## Docs
 
-- [ARCHITECTURE.md](ARCHITECTURE.md) — how the project is structured
-- [CONFIGURATION.md](CONFIGURATION.md) — all settings explained
-- [CHANGELOG.md](CHANGELOG.md) — change history (TR)
-- [ROADMAP.md](ROADMAP.md) — planned work (TR)
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — how the project is structured
+- [CONFIGURATION.md](docs/CONFIGURATION.md) — all settings explained
+- [CHANGELOG.md](docs/CHANGELOG.md) — change history (TR)
+- [ROADMAP.md](docs/ROADMAP.md) — planned work (TR)
 
 ## License
 
