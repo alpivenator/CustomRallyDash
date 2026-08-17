@@ -9,6 +9,13 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 
 ## Son Değişiklikler
 
+### setup_wizard.py / install.bat / run_dash.bat / check_telemetry.bat / telemetry_check.py
+- `setup_wizard.py`: İki dilli (İngilizce ve Türkçe) ilk kurulum desteği eklendi; başlangıçta dil seçimi (`en`/`tr`) soruluyor, Türkçe metinlerde UTF-8 karakterler eksiksiz kullanıldı.
+- `install.bat` & `run_dash.bat`: Terminal çıktıları İngilizceye çevrilerek standartlaştırıldı; adımlar `[1/3]`, `[2/3]`, `[3/3]` şeklinde satır boşluklarıyla ayrıldı ve kurulum sonu mükerrer bildirimler kaldırıldı.
+- `check_telemetry.bat`: Windows ortamında sanal ortam üzerinden `telemetry_check.py`'yi tek tıkla çalıştıran yeni yardımcı betik eklendi.
+- `telemetry_check.py`: Konsol hata ve durum mesajları İngilizce olarak standartlaştırıldı.
+- Kurulum sonu özetinde `telemetry_check` teşhis adımı ve sanal ortam çalıştırma komutları belirginleştirildi.
+
 ### Kurulum ve dokümantasyon
 - Windows için Python 3.12 sanal ortamı oluşturan `install.bat` ve dashboard'u başlatan `run_dash.bat` eklendi.
 - `setup_wizard.py` eklendi; `config.py` ve DiRT Rally 2.0 telemetry XML'i yedeklenerek güncelleniyor.

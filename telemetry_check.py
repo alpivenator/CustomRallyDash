@@ -28,12 +28,12 @@ def check_telemetry(
         except OSError as error:
             if error.errno in {errno.EADDRINUSE, 10048}:
                 output_fn(
-                    f"UDP portu {listen_port} zaten kullanımda. "
-                    "Dashboard kapalı olmalıdır."
+                    f"UDP port {listen_port} is already in use. "
+                    "Ensure the dashboard is closed."
                 )
             else:
                 output_fn(
-                    f"UDP dinleme adresi açılamadı ({listen_ip}:{listen_port}): {error}"
+                    f"Could not bind to UDP {listen_ip}:{listen_port}: {error}"
                 )
             return 1
 
@@ -49,23 +49,23 @@ def check_telemetry(
             except socket.timeout:
                 break
             except OSError as error:
-                output_fn(f"UDP telemetri okunamadı: {error}")
+                output_fn(f"Error reading UDP telemetry: {error}")
                 return 1
 
             if len(packet) == EXPECTED_PACKET_SIZE:
                 output_fn(
-                    f"Telemetri paketi alındı: {source[0]}:{source[1]} "
-                    f"({len(packet)} byte)."
+                    f"Telemetry packet received from {source[0]}:{source[1]} "
+                    f"({len(packet)} bytes)."
                 )
                 return 0
 
         output_fn(
-            f"{wait_timeout:.0f} saniye içinde {EXPECTED_PACKET_SIZE} byte uzunluğunda "
-            "telemetri paketi alınamadı."
+            f"No {EXPECTED_PACKET_SIZE}-byte telemetry packet received "
+            f"within {wait_timeout:.0f} seconds."
         )
         output_fn(
-            "Firewall ayarını, oyun XML'indeki IP/port değerlerini ve oyunun açık "
-            "olduğunu kontrol edin."
+            "Check your firewall settings, game XML IP/port values, and ensure "
+            "DiRT Rally 2.0 is running and in a stage."
         )
         return 1
     finally:

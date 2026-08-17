@@ -9,14 +9,12 @@ if not exist ".venv\Scripts\python.exe" (
     exit /b 1
 )
 
-".venv\Scripts\python.exe" main.py
+".venv\Scripts\python.exe" telemetry_check.py %*
 set "exit_code=%ERRORLEVEL%"
 
 if not "%exit_code%" == "0" (
     echo.
-    echo Dashboard exited with error code: %exit_code%
     pause
 )
 
 exit /b %exit_code%
-

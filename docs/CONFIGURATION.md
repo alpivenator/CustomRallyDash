@@ -6,10 +6,10 @@ time the program is started (there is no hot-reload).
 - `config.py` — **system settings** (network, hardware, overlay behaviour).
 - `settings.py` — **visual settings** (sizes, colours, fonts, overlay position).
 
-`install.bat` runs `setup_wizard.py`. After the setup summary is approved, the
-wizard creates a timestamped backup and changes selected system settings
-directly in `config.py`; it does not create a second configuration file. Visual
-settings remain manual.
+`install.bat` runs `setup_wizard.py`. The setup wizard prompts for language
+(English or Turkish). After the setup summary is approved, the wizard creates a
+timestamped backup and changes selected system settings directly in `config.py`;
+it does not create a second configuration file. Visual settings remain manual.
 
 ## System Settings (`config.py`)
 
@@ -57,7 +57,13 @@ and creates a backup only after you approve the summary.
 
 ### Connection check
 
-After setup, close the dashboard and run:
+After setup, ensure the dashboard is closed and run the diagnostic tool. On Windows:
+
+```sh
+check_telemetry.bat
+```
+
+Or run via Python in your active virtual environment:
 
 ```sh
 python telemetry_check.py
@@ -66,9 +72,9 @@ python telemetry_check.py
 The tool listens for up to five seconds on `LISTEN_IP` and `LISTEN_PORT`. It
 reports the source address when it receives a valid 264-byte packet. It does
 not start the dashboard and does not require pygame. If no packet arrives,
-check the firewall, the game's XML IP/port values, and that the game is running.
-The dashboard must remain closed because both programs cannot bind the same
-UDP port at the same time.
+check the firewall, the game's XML IP/port values, and that DiRT Rally 2.0 is
+running and in a stage. The dashboard must remain closed because both programs
+cannot bind the same UDP port at the same time.
 
 ## Visual Settings (`settings.py`)
 

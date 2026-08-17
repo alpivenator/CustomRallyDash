@@ -33,6 +33,105 @@ GAME_CONFIG_RELATIVE_PATH = Path(
 InputFunction = Callable[[str], str]
 OutputFunction = Callable[[str], Any]
 
+MESSAGES: dict[str, dict[str, str]] = {
+    "en": {
+        "lang_prompt": "Select language / Dil seçin [en/tr] (en): ",
+        "lang_invalid": "Invalid choice. Please enter 'en' or 'tr'.",
+        "banner_title": "DiRT Rally 2.0 Telemetry Dashboard - Initial Setup",
+        "banner_note": "DiRT Rally 2.0 must be closed. Configuration files will be backed up before updating.\n",
+        "prompt_ip": "Dashboard computer IPv4 address [{default}]: ",
+        "invalid_ip": "Invalid IPv4 address. Example: 127.0.0.1 or 192.168.1.25",
+        "prompt_dash_style": "Dashboard style",
+        "invalid_choice": "Invalid choice. Please choose one of: {choices}",
+        "prompt_overlay": "Enable Windows overlay?",
+        "invalid_yes_no": "Invalid answer. Please enter {yes} or {no}.",
+        "config_read_error": "Could not read config.py: {error}",
+        "game_xml_invalid": "Game XML could not be verified: {error}",
+        "summary_title": "\nSelected settings:",
+        "summary_ip": "- Dashboard computer IPv4 address: {ip}",
+        "summary_style": "- Dashboard style: {style}",
+        "summary_overlay": "- Windows overlay: {overlay}",
+        "summary_port": "- UDP port: {port}",
+        "summary_xml_found": "- Game XML: {path}",
+        "summary_xml_missing": "- Game XML: not found automatically (manual configuration required)",
+        "prompt_confirm": "Proceed with these settings?",
+        "setup_cancelled": "Setup cancelled. No files were modified.",
+        "config_update_error": "Failed to update config.py: {error}",
+        "game_xml_update_error": "Failed to update game XML: {error}",
+        "config_backup_info": "config.py backup: {path}",
+        "game_xml_not_found_header": "DiRT Rally 2.0 XML file could not be found automatically.",
+        "game_xml_expected_location": "Expected location: Documents\\My Games\\DiRT Rally 2.0\\hardwaresettings\\hardware_settings_config.xml",
+        "game_xml_manual_instruction": 'Manually add this UDP element:\n<udp enabled="true" extradata="3" ip="{ip}" port="{port}" delay="1" />',
+        "game_xml_updated": "Game XML updated. Backup: {path}",
+        "config_updated": "config.py updated. Backup: {path}",
+        "completion_banner": (
+            "\n======================================================\n"
+            "  Setup Completed Successfully!\n"
+            "======================================================"
+        ),
+        "completion_instructions": (
+            "\nNext steps:\n"
+            "  1. Test telemetry connection (with DiRT Rally 2.0 in a stage):\n"
+            "     run check_telemetry.bat  (or: .venv\\Scripts\\python.exe telemetry_check.py)\n"
+            "     Note: The dashboard must be closed while testing.\n\n"
+            "  2. Launch the dashboard:\n"
+            "     run run_dash.bat\n"
+        ),
+        "yes_label": "Yes",
+        "no_label": "No",
+        "yes_short": "Y",
+        "no_short": "N",
+    },
+    "tr": {
+        "lang_prompt": "Select language / Dil seçin [en/tr] (en): ",
+        "lang_invalid": "Geçersiz seçim. Lütfen 'en' veya 'tr' girin.",
+        "banner_title": "DiRT Rally 2.0 Telemetry Dashboard - İlk Kurulum",
+        "banner_note": "DiRT Rally 2.0 kapalı olmalıdır; yapılandırma dosyaları onayınızdan sonra yedeklenerek güncellenir.\n",
+        "prompt_ip": "Dashboard bilgisayarının IPv4 adresi [{default}]: ",
+        "invalid_ip": "Geçersiz IPv4 adresi. Örnek: 127.0.0.1 veya 192.168.1.25",
+        "prompt_dash_style": "Dashboard türü",
+        "invalid_choice": "Geçersiz seçim. Şunlardan birini kullanın: {choices}",
+        "prompt_overlay": "Windows overlay etkinleştirilsin mi?",
+        "invalid_yes_no": "Geçersiz cevap. Lütfen {yes} veya {no} girin.",
+        "config_read_error": "Mevcut config.py okunamadı: {error}",
+        "game_xml_invalid": "Oyun XML'i doğrulanamadı: {error}",
+        "summary_title": "\nSeçilen ayarlar:",
+        "summary_ip": "- Dashboard bilgisayarının IPv4 adresi: {ip}",
+        "summary_style": "- Dashboard türü: {style}",
+        "summary_overlay": "- Windows overlay: {overlay}",
+        "summary_port": "- UDP portu: {port}",
+        "summary_xml_found": "- Oyun XML'i: {path}",
+        "summary_xml_missing": "- Oyun XML'i: otomatik bulunamadı (manuel yapılandırma gerekiyor)",
+        "prompt_confirm": "Bu ayarlarla devam edilsin mi?",
+        "setup_cancelled": "Kurulum iptal edildi. Dosyalarda değişiklik yapılmadı.",
+        "config_update_error": "config.py güncellenemedi: {error}",
+        "game_xml_update_error": "Oyun XML'i güncellenemedi: {error}",
+        "config_backup_info": "config.py yedeği: {path}",
+        "game_xml_not_found_header": "DiRT Rally 2.0 XML dosyası otomatik bulunamadı.",
+        "game_xml_expected_location": "Beklenen konum: Documents\\My Games\\DiRT Rally 2.0\\hardwaresettings\\hardware_settings_config.xml",
+        "game_xml_manual_instruction": 'Manuel olarak şu UDP satırını ekleyin:\n<udp enabled="true" extradata="3" ip="{ip}" port="{port}" delay="1" />',
+        "game_xml_updated": "Oyun XML'i güncellendi. Yedek: {path}",
+        "config_updated": "config.py güncellendi. Yedek: {path}",
+        "completion_banner": (
+            "\n======================================================\n"
+            "  Kurulum Başarıyla Tamamlandı!\n"
+            "======================================================"
+        ),
+        "completion_instructions": (
+            "\nSonraki adımlar:\n"
+            "  1. Telemetri bağlantısını test edin (DiRT Rally 2.0 yarıştayken):\n"
+            "     check_telemetry.bat çalıştırın  (veya: .venv\\Scripts\\python.exe telemetry_check.py)\n"
+            "     Not: Test sırasında dashboard kapalı olmalıdır.\n\n"
+            "  2. Dashboard'u başlatın:\n"
+            "     run_dash.bat çalıştırın\n"
+        ),
+        "yes_label": "Evet",
+        "no_label": "Hayır",
+        "yes_short": "E",
+        "no_short": "H",
+    },
+}
+
 
 class SetupError(Exception):
     """Raised when a setup file cannot be safely updated."""
@@ -210,20 +309,35 @@ def find_game_config(home: Path | None = None) -> Path | None:
     return None
 
 
+def _ask_language(
+    input_fn: InputFunction,
+    output_fn: OutputFunction,
+) -> str:
+    """Ask user to select interface language, defaulting to English."""
+    while True:
+        answer = input_fn(MESSAGES["en"]["lang_prompt"]).strip().lower()
+        if not answer or answer in {"en", "1", "english", "ingilizce"}:
+            return "en"
+        if answer in {"tr", "2", "turkish", "türkçe", "turkce"}:
+            return "tr"
+        output_fn(MESSAGES["en"]["lang_invalid"])
+
+
 def _ask_ip(
     input_fn: InputFunction,
     output_fn: OutputFunction,
     default_ip: str = DEFAULT_IP,
+    lang: str = "en",
 ) -> str:
+    msg = MESSAGES[lang]
+    prompt_text = msg["prompt_ip"].format(default=default_ip)
     while True:
-        answer = input_fn(
-            f"Dashboard bilgisayarının IPv4 adresi [{default_ip}]: "
-        ).strip()
+        answer = input_fn(prompt_text).strip()
         value = answer or default_ip
         try:
             normalized = validate_ipv4(value)
         except ValueError:
-            output_fn("Geçersiz IPv4 adresi. Örnek: 127.0.0.1 veya 192.168.1.25")
+            output_fn(msg["invalid_ip"])
             continue
 
         return normalized
@@ -235,14 +349,17 @@ def _ask_choice(
     default: str,
     input_fn: InputFunction,
     output_fn: OutputFunction,
+    lang: str = "en",
 ) -> str:
+    msg = MESSAGES[lang]
     choices_text = "/".join(choices)
+    prompt_text = f"{prompt} ({choices_text}) [{default}]: "
     while True:
-        answer = input_fn(f"{prompt} ({choices_text}) [{default}]: ").strip().lower()
+        answer = input_fn(prompt_text).strip().lower()
         value = answer or default
         if value in choices:
             return value
-        output_fn(f"Geçersiz seçim. Şunlardan birini kullanın: {choices_text}")
+        output_fn(msg["invalid_choice"].format(choices=choices_text))
 
 
 def _ask_yes_no(
@@ -250,55 +367,71 @@ def _ask_yes_no(
     default: bool,
     input_fn: InputFunction,
     output_fn: OutputFunction = print,
+    lang: str = "en",
 ) -> bool:
-    default_text = "E" if default else "H"
+    msg = MESSAGES[lang]
+    yes_short = msg["yes_short"]
+    no_short = msg["no_short"]
+    default_text = yes_short if default else no_short
+    prompt_text = f"{prompt} ({yes_short}/{no_short}) [{default_text}]: "
+
     while True:
-        answer = input_fn(f"{prompt} (E/H) [{default_text}]: ").strip().lower()
+        answer = input_fn(prompt_text).strip().lower()
         if not answer:
             return default
-        if answer in {"e", "evet", "y", "yes"}:
+        if answer in {"y", "yes", "e", "evet", "1", "true"}:
             return True
-        if answer in {"h", "hayır", "hayir", "n", "no"}:
+        if answer in {"n", "no", "h", "hayır", "hayir", "0", "false"}:
             return False
-        output_fn("Geçersiz cevap. Lütfen E veya H girin.")
+        output_fn(msg["invalid_yes_no"].format(yes=yes_short, no=no_short))
 
 
 def run_setup(
     project_root: Path | None = None,
     input_fn: InputFunction = input,
     output_fn: OutputFunction = print,
+    lang: str | None = None,
 ) -> int:
     """Run the interactive setup flow and return a process exit code."""
     project_root = project_root or Path(__file__).resolve().parent
     config_path = project_root / "config.py"
 
-    output_fn("DiRT Rally 2.0 Telemetry Dashboard - İlk Kurulum")
-    output_fn(
-        "Oyun kapalı olmalıdır; XML dosyası onaydan sonra yedeklenerek güncellenir.\n"
-    )
+    if lang is None:
+        selected_lang = _ask_language(input_fn, output_fn)
+    else:
+        selected_lang = "tr" if lang.lower().startswith("tr") else "en"
+
+    msg = MESSAGES[selected_lang]
+
+    output_fn(f"\n{msg['banner_title']}")
+    output_fn(msg["banner_note"])
+
     try:
         current_config = read_config_defaults(config_path)
     except (OSError, SetupError) as error:
-        output_fn(f"Mevcut config.py okunamadı: {error}")
+        output_fn(msg["config_read_error"].format(error=error))
         return 1
 
     destination_ip = _ask_ip(
         input_fn,
         output_fn,
         str(current_config["LISTEN_IP"]),
+        lang=selected_lang,
     )
     dash_style = _ask_choice(
-        "Dashboard türü",
+        msg["prompt_dash_style"],
         ("digital", "analog"),
         str(current_config["DASH_STYLE"]),
         input_fn,
         output_fn,
+        lang=selected_lang,
     )
     enable_overlay = _ask_yes_no(
-        "Windows overlay etkinleştirilsin mi?",
+        msg["prompt_overlay"],
         bool(current_config["ENABLE_OVERLAY"]),
         input_fn,
         output_fn,
+        lang=selected_lang,
     )
 
     game_config = find_game_config()
@@ -306,26 +439,29 @@ def run_setup(
         try:
             _validate_game_config(game_config)
         except SetupError as error:
-            output_fn(f"Oyun XML'i doğrulanamadı: {error}")
+            output_fn(msg["game_xml_invalid"].format(error=error))
             return 1
 
-    output_fn("\nSeçilen ayarlar:")
-    output_fn(f"- Dashboard bilgisayarının IPv4 adresi: {destination_ip}")
-    output_fn(f"- Dashboard türü: {dash_style}")
-    output_fn(f"- Windows overlay: {'Evet' if enable_overlay else 'Hayır'}")
-    output_fn(f"- UDP portu: {DEFAULT_PORT}")
+    output_fn(msg["summary_title"])
+    output_fn(msg["summary_ip"].format(ip=destination_ip))
+    output_fn(msg["summary_style"].format(style=dash_style))
+    overlay_text = msg["yes_label"] if enable_overlay else msg["no_label"]
+    output_fn(msg["summary_overlay"].format(overlay=overlay_text))
+    output_fn(msg["summary_port"].format(port=DEFAULT_PORT))
     if game_config is None:
-        output_fn("- Oyun XML'i: otomatik bulunamadı; manuel yapılandırma gerekiyor")
+        output_fn(msg["summary_xml_missing"])
     else:
-        output_fn(f"- Oyun XML'i: {game_config}")
+        output_fn(msg["summary_xml_found"].format(path=game_config))
 
+    output_fn("")
     if not _ask_yes_no(
-        "Bu ayarlarla devam edilsin mi?",
+        msg["prompt_confirm"],
         True,
         input_fn,
         output_fn,
+        lang=selected_lang,
     ):
-        output_fn("Kurulum iptal edildi. Dosyalarda değişiklik yapılmadı.")
+        output_fn(msg["setup_cancelled"])
         return 0
 
     try:
@@ -338,34 +474,29 @@ def run_setup(
             },
         )
     except (OSError, SetupError) as error:
-        output_fn(f"config.py güncellenemedi: {error}")
+        output_fn(msg["config_update_error"].format(error=error))
         return 1
 
     if game_config is None:
-        output_fn("DiRT Rally 2.0 XML dosyası otomatik bulunamadı.")
+        output_fn(f"\n{msg['game_xml_not_found_header']}")
+        output_fn(msg["game_xml_expected_location"])
         output_fn(
-            "Beklenen konum: Documents\\My Games\\DiRT Rally 2.0\\hardwaresettings\\"
-            "hardware_settings_config.xml"
-        )
-        output_fn(
-            f'Manuel olarak şu UDP satırını ekleyin: <udp enabled="true" '
-            f'extradata="3" ip="{destination_ip}" port="{DEFAULT_PORT}" delay="1" />'
+            msg["game_xml_manual_instruction"].format(
+                ip=destination_ip, port=DEFAULT_PORT
+            )
         )
     else:
         try:
             game_backup = configure_game_xml(game_config, destination_ip)
         except (OSError, SetupError) as error:
-            output_fn(f"Oyun XML'i güncellenemedi: {error}")
-            output_fn(f"config.py yedeği: {config_backup}")
+            output_fn(msg["game_xml_update_error"].format(error=error))
+            output_fn(msg["config_backup_info"].format(path=config_backup))
             return 1
-        output_fn(f"Oyun XML'i güncellendi. Yedek: {game_backup}")
+        output_fn(msg["game_xml_updated"].format(path=game_backup))
 
-    output_fn(f"config.py güncellendi. Yedek: {config_backup}")
-    output_fn("Kurulum tamamlandı. Programı run_dash.bat ile başlatabilirsiniz.")
-    output_fn(
-        "Bağlantıyı kontrol etmek için dashboard kapalıyken "
-        "python telemetry_check.py komutunu çalıştırın."
-    )
+    output_fn(msg["config_updated"].format(path=config_backup))
+    output_fn(msg["completion_banner"])
+    output_fn(msg["completion_instructions"])
     return 0
 
 

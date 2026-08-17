@@ -19,8 +19,9 @@ lights on a Raspberry Pi.
 | `analogdash.py` | Analog gauge dashboard (600×350). Trigonometric needle, dial ticks, dynamic redline, overlay support. |
 | `led_controller.py` | Drives physical shift lights on Raspberry Pi GPIO via `gpiozero`. Toggled by `config.ENABLE_LEDS`. |
 | `overlay_win.py` | Windows-only Win32 (`ctypes`) helpers: borderless, transparent, click-through overlay window. Supports `alpha` and `chroma` modes. |
-| `setup_wizard.py` | First-run CLI setup: backs up and updates `config.py`, then configures the game's UDP telemetry XML. |
+| `setup_wizard.py` | First-run CLI setup with English and Turkish language support: backs up and updates `config.py`, then configures the game's UDP telemetry XML. |
 | `telemetry_check.py` | Dependency-free CLI diagnostic that waits up to five seconds for one valid 264-byte telemetry packet. |
+| `check_telemetry.bat` | Windows batch launcher that executes `telemetry_check.py` using the project's virtual environment. |
 
 ## Runtime flow
 
@@ -47,10 +48,11 @@ main.py
 ```
 
 On Windows, `install.bat` creates the Python 3.12 virtual environment and runs
-`setup_wizard.py`. The wizard updates the existing `config.py` after creating a
-timestamped backup, so the dashboard modules continue to consume the same
-configuration interface. It also backs up and updates the game's
-`hardwaresettings/hardware_settings_config.xml` file when that file is found.
+`setup_wizard.py`. The wizard presents a bilingual interface (English / Turkish)
+and updates the existing `config.py` after creating a timestamped backup, so the
+dashboard modules continue to consume the same configuration interface. It also
+backs up and updates the game's `hardwaresettings/hardware_settings_config.xml`
+file when that file is found.
 
 ## Data flow
 

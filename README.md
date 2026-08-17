@@ -32,14 +32,16 @@ shift lights on a Raspberry Pi.
    starts the first-run setup wizard.
 
 3. **Complete the setup wizard**:
+   - Choose your preferred language (English or Turkish).
    - Enter the dashboard computer's IPv4 address. `127.0.0.1` is the default
      when the game and dashboard run on the same computer.
    - For a remote device, enter the device's LAN IPv4 address,
      such as `192.168.1.x`. The wizard writes this same address to `config.py`
      and the game's telemetry XML.
    - Select the dashboard style and Windows overlay setting.
-   - The wizard shows a connection-check command when it finishes. The dashboard
-     must be closed while `python telemetry_check.py` is running.
+   - When setup completes, test the telemetry stream with `check_telemetry.bat`
+     (or `python telemetry_check.py`) while DiRT Rally 2.0 is running in a stage.
+     The dashboard must be closed during the test.
 
 For a manual installation, use a virtual environment and install the base
 requirements:
@@ -58,7 +60,7 @@ the telemetry check tool, and the Windows Firewall note.
 
 - `config.py` — system settings (network, LEDs, overlay behaviour).
 - `settings.py` — visual settings (colours, fonts, sizes, positions).
-- `telemetry_check.py` — dependency-free UDP connection diagnostic.
+- `telemetry_check.py` / `check_telemetry.bat` — UDP connection diagnostic.
 
 The setup wizard edits selected values in `config.py` after creating a
 timestamped backup. Visual settings remain manual and are edited in
