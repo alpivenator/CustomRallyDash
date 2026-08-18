@@ -32,9 +32,7 @@ def check_telemetry(
                     "Ensure the dashboard is closed."
                 )
             else:
-                output_fn(
-                    f"Could not bind to UDP {listen_ip}:{listen_port}: {error}"
-                )
+                output_fn(f"Could not bind to UDP {listen_ip}:{listen_port}: {error}")
             return 1
 
         wait_timeout = min(max(timeout, 0.0), DEFAULT_TIMEOUT)

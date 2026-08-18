@@ -27,7 +27,12 @@ class SetupWizardTests(unittest.TestCase):
 
     def test_telemetry_check_times_out_gracefully(self):
         output = []
-        result = check_telemetry(listen_ip="127.0.0.1", listen_port=29999, timeout=0.01, output_fn=output.append)
+        result = check_telemetry(
+            listen_ip="127.0.0.1",
+            listen_port=29999,
+            timeout=0.01,
+            output_fn=output.append,
+        )
         self.assertEqual(result, 1)
         self.assertTrue(any("telemetry packet received" in line for line in output))
 
@@ -146,7 +151,9 @@ class SetupWizardTests(unittest.TestCase):
             self.assertEqual(udp.attrib["custom"], "keep")
             self.assertTrue(list(project_root.glob("config.py.bak-*")))
             self.assertTrue(list(project_root.glob("hardware_settings_config.xml.bak-*")))
-            self.assertTrue(any("Setup Completed Successfully" in line for line in output))
+            self.assertTrue(
+                any("Setup Completed Successfully" in line for line in output)
+            )
 
     def test_run_setup_updates_listen_ip_and_xml_after_confirmation_turkish(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -178,7 +185,9 @@ class SetupWizardTests(unittest.TestCase):
             self.assertIn('LISTEN_IP = "192.168.1.25"', config_path.read_text())
             self.assertIn('DASH_STYLE = "analog"', config_path.read_text())
             self.assertIn("ENABLE_OVERLAY = False", config_path.read_text())
-            self.assertTrue(any("Kurulum Başarıyla Tamamlandı" in line for line in output))
+            self.assertTrue(
+                any("Kurulum Başarıyla Tamamlandı" in line for line in output)
+            )
 
     def test_run_setup_preserves_current_values_and_retries_invalid_yes_no(self):
         with tempfile.TemporaryDirectory() as directory:

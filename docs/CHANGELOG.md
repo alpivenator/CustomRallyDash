@@ -9,6 +9,14 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 
 ## Son Değişiklikler
 
+### .gitattributes / install.bat / run_dash.bat / check_telemetry.bat
+- `.gitattributes`: Repodaki `.bat` ve `.cmd` dosyalarının Git ve ZIP arşivleme işlemlerinde her zaman `CRLF` satır sonuna sahip olmasını sağlayan yapılandırma eklendi.
+- `install.bat`, `run_dash.bat`, `check_telemetry.bat`: Unix `LF` satır sonlarında `cmd.exe` parantez bloğu sözdizimi çökmesini önlemek amacıyla çok satırlı `if (...)` blokları `goto` ve etiket tabanlı akışa dönüştürüldü; olası hata durumlarında pencerenin kapanması engellendi.
+
+---
+
+## Geçmiş değişiklikler
+
 ### setup_wizard.py / install.bat / run_dash.bat / check_telemetry.bat / telemetry_check.py
 - `setup_wizard.py`: İki dilli (İngilizce ve Türkçe) ilk kurulum desteği eklendi; başlangıçta dil seçimi (`en`/`tr`) soruluyor, Türkçe metinlerde UTF-8 karakterler eksiksiz kullanıldı.
 - `install.bat` & `run_dash.bat`: Terminal çıktıları İngilizceye çevrilerek standartlaştırıldı; adımlar `[1/3]`, `[2/3]`, `[3/3]` şeklinde satır boşluklarıyla ayrıldı ve kurulum sonu mükerrer bildirimler kaldırıldı.
