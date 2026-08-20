@@ -9,9 +9,9 @@ import config
 
 def main() -> None:
     if config.DASH_STYLE == "analog":
-        from analogdash import run
+        from dashboards.analog_dash import run
     else:
-        from digital_dash import run
+        from dashboards.digital_dash import run
     run()
 
 

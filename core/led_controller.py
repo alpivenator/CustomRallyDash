@@ -1,4 +1,4 @@
-# led_controller.py
+# core/led_controller.py
 import config
 
 if config.ENABLE_LEDS:

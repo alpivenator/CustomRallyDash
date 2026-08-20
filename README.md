@@ -40,7 +40,7 @@ shift lights on a Raspberry Pi.
      and the game's telemetry XML.
    - Select the dashboard style and Windows overlay setting.
    - When setup completes, test the telemetry stream with `check_telemetry.bat`
-     (or `python telemetry_check.py`) while DiRT Rally 2.0 is running in a stage.
+     (or `python tools/telemetry_check.py`) while DiRT Rally 2.0 is running in a stage.
      The dashboard must be closed during the test.
 
 For a manual installation, use a virtual environment and install the base
@@ -60,7 +60,7 @@ the telemetry check tool, and the Windows Firewall note.
 
 - `config.py` — system settings (network, LEDs, overlay behaviour).
 - `settings.py` — visual settings (colours, fonts, sizes, positions).
-- `telemetry_check.py` / `check_telemetry.bat` — UDP connection diagnostic.
+- `tools/telemetry_check.py` / `check_telemetry.bat` — UDP connection diagnostic.
 
 The setup wizard edits selected values in `config.py` after creating a
 timestamped backup. Visual settings remain manual and are edited in

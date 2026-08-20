@@ -4,14 +4,14 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from unittest.mock import patch
 
-from setup_wizard import (
+from tools.setup_wizard import (
     _ask_language,
     configure_game_xml,
     run_setup,
     update_config_file,
     validate_ipv4,
 )
-from telemetry_check import check_telemetry
+from tools.telemetry_check import check_telemetry
 
 
 class SetupWizardTests(unittest.TestCase):
@@ -133,7 +133,7 @@ class SetupWizardTests(unittest.TestCase):
             answers = iter(["en", "192.168.1.25", "analog", "N", "Y"])
             output = []
 
-            with patch("setup_wizard.find_game_config", return_value=xml_path):
+            with patch("tools.setup_wizard.find_game_config", return_value=xml_path):
                 result = run_setup(
                     project_root=project_root,
                     input_fn=lambda _prompt: next(answers),
@@ -174,7 +174,7 @@ class SetupWizardTests(unittest.TestCase):
             answers = iter(["tr", "192.168.1.25", "analog", "H", "E"])
             output = []
 
-            with patch("setup_wizard.find_game_config", return_value=xml_path):
+            with patch("tools.setup_wizard.find_game_config", return_value=xml_path):
                 result = run_setup(
                     project_root=project_root,
                     input_fn=lambda _prompt: next(answers),
@@ -200,7 +200,7 @@ class SetupWizardTests(unittest.TestCase):
             answers = iter(["tr", "", "", "belki", "", ""])
             output = []
 
-            with patch("setup_wizard.find_game_config", return_value=None):
+            with patch("tools.setup_wizard.find_game_config", return_value=None):
                 result = run_setup(
                     project_root=project_root,
                     input_fn=lambda _prompt: next(answers),
@@ -224,7 +224,7 @@ class SetupWizardTests(unittest.TestCase):
             config_path.write_text(original, encoding="utf-8")
             answers = iter(["en", "192.168.1.25", "analog", "N", "N"])
 
-            with patch("setup_wizard.find_game_config", return_value=None):
+            with patch("tools.setup_wizard.find_game_config", return_value=None):
                 result = run_setup(
                     project_root=project_root,
                     input_fn=lambda _prompt: next(answers),

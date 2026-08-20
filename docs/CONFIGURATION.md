@@ -6,7 +6,7 @@ time the program is started (there is no hot-reload).
 - `config.py` — **system settings** (network, hardware, overlay behaviour).
 - `settings.py` — **visual settings** (sizes, colours, fonts, overlay position).
 
-`install.bat` runs `setup_wizard.py`. The setup wizard prompts for language
+`install.bat` runs `tools/setup_wizard.py`. The setup wizard prompts for language
 (English or Turkish). After the setup summary is approved, the wizard creates a
 timestamped backup and changes selected system settings directly in `config.py`;
 it does not create a second configuration file. Visual settings remain manual.
@@ -66,7 +66,7 @@ check_telemetry.bat
 Or run via Python in your active virtual environment:
 
 ```sh
-python telemetry_check.py
+python tools/telemetry_check.py
 ```
 
 The tool listens for up to five seconds on `LISTEN_IP` and `LISTEN_PORT`. It

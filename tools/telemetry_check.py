@@ -4,10 +4,17 @@ from __future__ import annotations
 
 import errno
 import socket
+import sys
 import time
+from pathlib import Path
 from typing import Any, Callable
 
-import config
+# Ensure project root is in sys.path when executed directly
+_PROJECT_ROOT = str(Path(__file__).resolve().parent.parent)
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+
+import config  # noqa: E402
 
 EXPECTED_PACKET_SIZE = 264
 DEFAULT_TIMEOUT = 5.0

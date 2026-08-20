@@ -38,7 +38,10 @@ MESSAGES: dict[str, dict[str, str]] = {
         "lang_prompt": "Select language / Dil seçin [en/tr] (en): ",
         "lang_invalid": "Invalid choice. Please enter 'en' or 'tr'.",
         "banner_title": "DiRT Rally 2.0 Telemetry Dashboard - Initial Setup",
-        "banner_note": "DiRT Rally 2.0 must be closed. Configuration files will be backed up before updating.\n",
+        "banner_note": (
+            "DiRT Rally 2.0 must be closed. Configuration files will be backed up "
+            "before updating.\n"
+        ),
         "prompt_ip": "Dashboard computer IPv4 address [{default}]: ",
         "invalid_ip": "Invalid IPv4 address. Example: 127.0.0.1 or 192.168.1.25",
         "prompt_dash_style": "Dashboard style",
@@ -53,15 +56,25 @@ MESSAGES: dict[str, dict[str, str]] = {
         "summary_overlay": "- Windows overlay: {overlay}",
         "summary_port": "- UDP port: {port}",
         "summary_xml_found": "- Game XML: {path}",
-        "summary_xml_missing": "- Game XML: not found automatically (manual configuration required)",
+        "summary_xml_missing": (
+            "- Game XML: not found automatically (manual configuration required)"
+        ),
         "prompt_confirm": "Proceed with these settings?",
         "setup_cancelled": "Setup cancelled. No files were modified.",
         "config_update_error": "Failed to update config.py: {error}",
         "game_xml_update_error": "Failed to update game XML: {error}",
         "config_backup_info": "config.py backup: {path}",
-        "game_xml_not_found_header": "DiRT Rally 2.0 XML file could not be found automatically.",
-        "game_xml_expected_location": "Expected location: Documents\\My Games\\DiRT Rally 2.0\\hardwaresettings\\hardware_settings_config.xml",
-        "game_xml_manual_instruction": 'Manually add this UDP element:\n<udp enabled="true" extradata="3" ip="{ip}" port="{port}" delay="1" />',
+        "game_xml_not_found_header": (
+            "DiRT Rally 2.0 XML file could not be found automatically."
+        ),
+        "game_xml_expected_location": (
+            "Expected location: Documents\\My Games\\DiRT Rally 2.0\\"
+            "hardwaresettings\\hardware_settings_config.xml"
+        ),
+        "game_xml_manual_instruction": (
+            "Manually add this UDP element:\n"
+            '<udp enabled="true" extradata="3" ip="{ip}" port="{port}" delay="1" />'
+        ),
         "game_xml_updated": "Game XML updated. Backup: {path}",
         "config_updated": "config.py updated. Backup: {path}",
         "completion_banner": (
@@ -72,7 +85,8 @@ MESSAGES: dict[str, dict[str, str]] = {
         "completion_instructions": (
             "\nNext steps:\n"
             "  1. Test telemetry connection (with DiRT Rally 2.0 in a stage):\n"
-            "     run check_telemetry.bat  (or: .venv\\Scripts\\python.exe telemetry_check.py)\n"
+            "     run check_telemetry.bat  (or: .venv\\Scripts\\python.exe "
+            "tools\\telemetry_check.py)\n"
             "     Note: The dashboard must be closed while testing.\n\n"
             "  2. Launch the dashboard:\n"
             "     run run_dash.bat\n"
@@ -86,7 +100,10 @@ MESSAGES: dict[str, dict[str, str]] = {
         "lang_prompt": "Select language / Dil seçin [en/tr] (en): ",
         "lang_invalid": "Geçersiz seçim. Lütfen 'en' veya 'tr' girin.",
         "banner_title": "DiRT Rally 2.0 Telemetry Dashboard - İlk Kurulum",
-        "banner_note": "DiRT Rally 2.0 kapalı olmalıdır; yapılandırma dosyaları onayınızdan sonra yedeklenerek güncellenir.\n",
+        "banner_note": (
+            "DiRT Rally 2.0 kapalı olmalıdır; yapılandırma dosyaları onayınızdan sonra "
+            "yedeklenerek güncellenir.\n"
+        ),
         "prompt_ip": "Dashboard bilgisayarının IPv4 adresi [{default}]: ",
         "invalid_ip": "Geçersiz IPv4 adresi. Örnek: 127.0.0.1 veya 192.168.1.25",
         "prompt_dash_style": "Dashboard türü",
@@ -101,15 +118,23 @@ MESSAGES: dict[str, dict[str, str]] = {
         "summary_overlay": "- Windows overlay: {overlay}",
         "summary_port": "- UDP portu: {port}",
         "summary_xml_found": "- Oyun XML'i: {path}",
-        "summary_xml_missing": "- Oyun XML'i: otomatik bulunamadı (manuel yapılandırma gerekiyor)",
+        "summary_xml_missing": (
+            "- Oyun XML'i: otomatik bulunamadı (manuel yapılandırma gerekiyor)"
+        ),
         "prompt_confirm": "Bu ayarlarla devam edilsin mi?",
         "setup_cancelled": "Kurulum iptal edildi. Dosyalarda değişiklik yapılmadı.",
         "config_update_error": "config.py güncellenemedi: {error}",
         "game_xml_update_error": "Oyun XML'i güncellenemedi: {error}",
         "config_backup_info": "config.py yedeği: {path}",
-        "game_xml_not_found_header": "DiRT Rally 2.0 XML dosyası otomatik bulunamadı.",
-        "game_xml_expected_location": "Beklenen konum: Documents\\My Games\\DiRT Rally 2.0\\hardwaresettings\\hardware_settings_config.xml",
-        "game_xml_manual_instruction": 'Manuel olarak şu UDP satırını ekleyin:\n<udp enabled="true" extradata="3" ip="{ip}" port="{port}" delay="1" />',
+        "game_xml_not_found_header": ("DiRT Rally 2.0 XML dosyası otomatik bulunamadı."),
+        "game_xml_expected_location": (
+            "Beklenen konum: Documents\\My Games\\DiRT Rally 2.0\\"
+            "hardwaresettings\\hardware_settings_config.xml"
+        ),
+        "game_xml_manual_instruction": (
+            "Manuel olarak şu UDP satırını ekleyin:\n"
+            '<udp enabled="true" extradata="3" ip="{ip}" port="{port}" delay="1" />'
+        ),
         "game_xml_updated": "Oyun XML'i güncellendi. Yedek: {path}",
         "config_updated": "config.py güncellendi. Yedek: {path}",
         "completion_banner": (
@@ -120,7 +145,8 @@ MESSAGES: dict[str, dict[str, str]] = {
         "completion_instructions": (
             "\nSonraki adımlar:\n"
             "  1. Telemetri bağlantısını test edin (DiRT Rally 2.0 yarıştayken):\n"
-            "     check_telemetry.bat çalıştırın  (veya: .venv\\Scripts\\python.exe telemetry_check.py)\n"
+            "     check_telemetry.bat çalıştırın  (veya: .venv\\Scripts\\python.exe "
+            "tools\\telemetry_check.py)\n"
             "     Not: Test sırasında dashboard kapalı olmalıdır.\n\n"
             "  2. Dashboard'u başlatın:\n"
             "     run_dash.bat çalıştırın\n"
@@ -393,7 +419,7 @@ def run_setup(
     lang: str | None = None,
 ) -> int:
     """Run the interactive setup flow and return a process exit code."""
-    project_root = project_root or Path(__file__).resolve().parent
+    project_root = project_root or Path(__file__).resolve().parent.parent
     config_path = project_root / "config.py"
 
     if lang is None:

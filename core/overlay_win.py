@@ -1,4 +1,4 @@
-# overlay_win.py
+# core/overlay_win.py
 # pyright: reportUnreachable=false
 """Windows overlay module for pygame dashboard windows.
 

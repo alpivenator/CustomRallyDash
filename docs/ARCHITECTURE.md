@@ -7,21 +7,46 @@ compact **digital dash** or an **analog gauge**, optionally layered as a
 click-through overlay on Windows, and optionally mirrored to physical shift
 lights on a Raspberry Pi.
 
-## File roles
+## Directory Structure & File Roles
 
-| Module | Responsibility |
-|--------|----------------|
+```
+ralli-codex/
+├── core/
+│   ├── __init__.py           # Package exports for telemetry and platform helpers
+│   ├── udp_listener.py       # UDP socket listener & Extradata=3 packet decoder
+│   ├── overlay_win.py        # Windows Win32 ctypes overlay helpers
+│   └── led_controller.py     # Raspberry Pi GPIO shift-light driver (gpiozero)
+├── dashboards/
+│   ├── __init__.py           # Package exports for dashboard runners
+│   ├── digital_dash.py       # Compact digital dashboard (600×200 px)
+│   └── analog_dash.py        # Analog gauge dashboard (600×350 px)
+├── tools/
+│   ├── __init__.py           # Package exports for setup and check utilities
+│   ├── setup_wizard.py       # Bilingual first-run CLI setup wizard
+│   └── telemetry_check.py    # UDP connectivity diagnostic tool
+├── docs/                     # Architecture, configuration, and roadmap docs
+├── tests/                    # Unit tests
+├── main.py                   # Unified application entry point
+├── config.py                 # Central system/hardware configuration
+├── settings.py               # Visual layout & styling configuration
+├── install.bat               # Windows environment setup & wizard launcher
+├── run_dash.bat              # Windows dashboard launcher
+└── check_telemetry.bat       # Windows telemetry check launcher
+```
+
+| Module / File | Responsibility |
+|---------------|----------------|
 | `main.py` | Unified entry point. Reads `config.DASH_STYLE` and launches the selected dashboard. |
-| `config.py` | Central non-visual configuration: listen IP/port, LED enable, overlay enable, style. No code change needed for tuning. |
+| `config.py` | Central non-visual configuration: listen IP/port, LED enable, overlay enable, style. Editable by the user and setup wizard. |
 | `settings.py` | Visual configuration: colors, sizes, fonts, positions. Editable by the user. |
-| `udp_listener.py` | Receives 264-byte UDP packets, decodes them with `struct.unpack("66f", …)`, returns a `TelemetryData` namedtuple. |
-| `digital_dash.py` | Compact digital dashboard (600×200). RPM bar, gear, speed, pedal bars. Can run as a Windows overlay. |
-| `analogdash.py` | Analog gauge dashboard (600×350). Trigonometric needle, dial ticks, dynamic redline, overlay support. |
-| `led_controller.py` | Drives physical shift lights on Raspberry Pi GPIO via `gpiozero`. Toggled by `config.ENABLE_LEDS`. |
-| `overlay_win.py` | Windows-only Win32 (`ctypes`) helpers: borderless, transparent, click-through overlay window. Supports `alpha` and `chroma` modes. |
-| `setup_wizard.py` | First-run CLI setup with English and Turkish language support: backs up and updates `config.py`, then configures the game's UDP telemetry XML. |
-| `telemetry_check.py` | Dependency-free CLI diagnostic that waits up to five seconds for one valid 264-byte telemetry packet. |
-| `check_telemetry.bat` | Windows batch launcher that executes `telemetry_check.py` using the project's virtual environment. |
+| `core/udp_listener.py` | Receives 264-byte UDP packets, decodes them with `struct.unpack("66f", …)`, returns a `TelemetryData` namedtuple. |
+| `core/overlay_win.py` | Windows-only Win32 (`ctypes`) helpers: borderless, transparent, click-through overlay window. Supports `alpha` and `chroma` modes. |
+| `core/led_controller.py` | Drives physical shift lights on Raspberry Pi GPIO via `gpiozero`. Toggled by `config.ENABLE_LEDS`. |
+| `dashboards/digital_dash.py` | Compact digital dashboard (600×200). RPM bar, gear, speed, pedal bars. Can run as a Windows overlay. |
+| `dashboards/analog_dash.py` | Analog gauge dashboard (600×350). Trigonometric needle, dial ticks, dynamic redline, overlay support. |
+| `tools/setup_wizard.py` | First-run CLI setup with English and Turkish language support: backs up and updates `config.py`, then configures the game's UDP telemetry XML. |
+| `tools/telemetry_check.py` | Dependency-free CLI diagnostic that waits up to five seconds for one valid 264-byte telemetry packet. |
+| `check_telemetry.bat` | Windows batch launcher that executes `tools/telemetry_check.py` using the project's virtual environment. |
 
 ## Runtime flow
 
@@ -30,25 +55,25 @@ main.py
   │
   ├─ read config.DASH_STYLE  ("digital" | "analog")
   │
-  ├─ import the selected dashboard ──► digital_dash.run()
-  │                                 ──► analogdash.run()
+  ├─ import the selected dashboard ──► dashboards.digital_dash.run()
+  │                                 ──► dashboards.analog_dash.run()
   │
   └─ run():
        │
        ├─ init pygame display
-       ├─ (Windows) overlay_win.apply_overlay()  ← borderless, layered
-       ├─ UDPListener(config.LISTEN_IP, config.LISTEN_PORT)
+       ├─ (Windows) core.overlay_win.apply_overlay()  ← borderless, layered
+       ├─ core.UDPListener(config.LISTEN_IP, config.LISTEN_PORT)
        │
        └─ main loop @ 60 FPS:
             │
             ├─ listener.receive()           → TelemetryData
             ├─ render RPM bar / needle, speed, gear, pedal bars
-            ├─ led_controller.update_leds(rpm_ratio)   (if enabled)
+            ├─ core.led_controller.update_leds(rpm_ratio)   (if enabled)
             └─ pygame.display.flip()
 ```
 
 On Windows, `install.bat` creates the Python 3.12 virtual environment and runs
-`setup_wizard.py`. The wizard presents a bilingual interface (English / Turkish)
+`tools/setup_wizard.py`. The wizard presents a bilingual interface (English / Turkish)
 and updates the existing `config.py` after creating a timestamped backup, so the
 dashboard modules continue to consume the same configuration interface. It also
 backs up and updates the game's `hardwaresettings/hardware_settings_config.xml`
@@ -60,7 +85,7 @@ file when that file is found.
 DiRT Rally 2.0  (60 Hz UDP broadcast, Extradata=3)
         │
         ▼
-udp_listener.py
+core.udp_listener.py
    - 264-byte packet → struct.unpack("66f", packet)
    - convert m/s → km/h, decode gear, clamp pedals
         │
@@ -74,20 +99,20 @@ TelemetryData (namedtuple)
    throttle        : float  # 0.0 .. 1.0 (clamped)
    brake           : float  # 0.0 .. 1.0 (clamped)
         │
-        ├─► digital_dash.py : RPM bar, speed, gear, pedal bars
-        ├─► analogdash.py   : needle, ticks, dynamic redline
-        └─► led_controller.py: green → blue → red shift lights
+        ├─► dashboards/digital_dash.py : RPM bar, speed, gear, pedal bars
+        ├─► dashboards/analog_dash.py  : needle, ticks, dynamic redline
+        └─► core/led_controller.py     : green → blue → red shift lights
 ```
 
 ## Platform notes
 
 - **Windows** — the dashboards can attach to a Win32 overlay window through
-  `overlay_win.py`. The window is borderless (`WS_POPUP`), layered
+  `core/overlay_win.py`. The window is borderless (`WS_POPUP`), layered
   (`WS_EX_LAYERED`), click-through (`WS_EX_TRANSPARENT`), and kept on top
   (`HWND_TOPMOST`). Two transparency modes are available:
   - `alpha` — per-pixel alpha via `LWA_ALPHA`; opacity set by `OVERLAY_ALPHA` (0–255).
   - `chroma` — single key color made fully transparent via `LWA_COLORKEY`.
 - **Linux** — `overlay_win` is only imported on `sys.platform.startswith("win")`.
   The dashboards run in a normal pygame window.
-- **Raspberry Pi (optional)** — `led_controller.py` drives GPIO shift lights
+- **Raspberry Pi (optional)** — `core/led_controller.py` drives GPIO shift lights
   based on `rpm / max_rpm`.

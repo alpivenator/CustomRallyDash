@@ -1,4 +1,4 @@
-# udp_listener.py
+# core/udp_listener.py
 # DiRT Rally 2.0 — Shared UDP Telemetry Listener
 #
 # Decodes 264-byte Extradata=3 packets broadcast by the game at 60 Hz.

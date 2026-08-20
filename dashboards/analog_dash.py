@@ -1,4 +1,4 @@
-# analogdash.py
+# dashboards/analog_dash.py
 # DiRT Rally 2.0 — Analog Telemetry Dashboard
 import math
 import sys
@@ -6,12 +6,12 @@ import sys
 import pygame
 
 import config
-import led_controller
 import settings
-from udp_listener import UDPListener
+from core import led_controller
+from core.udp_listener import UDPListener
 
 try:
-    import overlay_win
+    from core import overlay_win
 except ImportError:
     overlay_win = None
 

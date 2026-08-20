@@ -4,7 +4,7 @@ cd /d "%~dp0"
 
 if not exist ".venv\Scripts\python.exe" goto :no_venv
 
-".venv\Scripts\python.exe" telemetry_check.py %*
+".venv\Scripts\python.exe" tools\telemetry_check.py %*
 set "exit_code=%ERRORLEVEL%"
 
 if not "%exit_code%"=="0" goto :check_error

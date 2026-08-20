@@ -30,7 +30,7 @@ if errorlevel 1 goto :error
 
 echo.
 echo [3/3] Starting setup wizard...
-".venv\Scripts\python.exe" setup_wizard.py
+".venv\Scripts\python.exe" tools\setup_wizard.py
 if errorlevel 1 goto :error
 
 echo.

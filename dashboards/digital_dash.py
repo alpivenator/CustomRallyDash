@@ -1,17 +1,17 @@
-# digital_dash.py
+# dashboards/digital_dash.py
 # DiRT Rally 2.0 — Digital Telemetry Dashboard
 import sys
 
 import pygame
 
 import config
-import led_controller
 import settings
-from udp_listener import UDPListener
+from core import led_controller
+from core.udp_listener import UDPListener
 
 # Import overlay_win if available (Windows only)
 try:
-    import overlay_win
+    from core import overlay_win
 except ImportError:
     overlay_win = None
 

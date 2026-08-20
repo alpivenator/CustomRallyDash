@@ -9,13 +9,22 @@ Hedefler buraya yazılmaz — bkz. `ROADMAP.md`. Mimari açıklamalar için bkz.
 
 ## Son Değişiklikler
 
-### .gitattributes / install.bat / run_dash.bat / check_telemetry.bat
-- `.gitattributes`: Repodaki `.bat` ve `.cmd` dosyalarının Git ve ZIP arşivleme işlemlerinde her zaman `CRLF` satır sonuna sahip olmasını sağlayan yapılandırma eklendi.
-- `install.bat`, `run_dash.bat`, `check_telemetry.bat`: Unix `LF` satır sonlarında `cmd.exe` parantez bloğu sözdizimi çökmesini önlemek amacıyla çok satırlı `if (...)` blokları `goto` ve etiket tabanlı akışa dönüştürüldü; olası hata durumlarında pencerenin kapanması engellendi.
+### core / dashboards / tools / main.py / install.bat / check_telemetry.bat / tests
+- `core/`: Telemetri ve donanım/platform katmanı `core/` paketine taşındı (`core/udp_listener.py`, `core/overlay_win.py`, `core/led_controller.py`); `core/__init__.py` üzerinden temiz export'lar sağlandı.
+- `dashboards/`: Gösterge panelleri `dashboards/` paketine taşındı (`dashboards/digital_dash.py`, `dashboards/analog_dash.py`); `analogdash.py` ismi `analog_dash.py` olarak normalize edildi.
+- `tools/`: İlk kurulum ve teşhis araçları `tools/` paketine taşındı (`tools/setup_wizard.py`, `tools/telemetry_check.py`); `setup_wizard.py` kök `config.py` yolunu dinamik olarak çözecek şekilde güncellendi, `telemetry_check.py` doğrudan çalıştırıldığında `sys.path` üzerinden kökü tanıyacak şekilde ayarlandı.
+- `main.py`: Gösterge çalıştırma içe aktarmaları `dashboards.digital_dash` ve `dashboards.analog_dash` yollarına güncellendi.
+- `install.bat` & `check_telemetry.bat`: Başlatıcılar `tools\setup_wizard.py` ve `tools\telemetry_check.py` hedeflerine güncellendi.
+- `tests/test_setup_wizard.py`: Birim testler `tools.setup_wizard` ve `tools.telemetry_check` modüllerine göre uyarlandı.
+- Dokümantasyon (`ARCHITECTURE.md`, `CONFIGURATION.md`, `README.md`): Yeni modüler dizin mimarisi ve komut yollarına göre güncellendi.
 
 ---
 
 ## Geçmiş değişiklikler
+
+### .gitattributes / install.bat / run_dash.bat / check_telemetry.bat
+- `.gitattributes`: Repodaki `.bat` ve `.cmd` dosyalarının Git ve ZIP arşivleme işlemlerinde her zaman `CRLF` satır sonuna sahip olmasını sağlayan yapılandırma eklendi.
+- `install.bat`, `run_dash.bat`, `check_telemetry.bat`: Unix `LF` satır sonlarında `cmd.exe` parantez bloğu sözdizimi çökmesini önlemek amacıyla çok satırlı `if (...)` blokları `goto` ve etiket tabanlı akışa dönüştürüldü; olası hata durumlarında pencerenin kapanması engellendi.
 
 ### setup_wizard.py / install.bat / run_dash.bat / check_telemetry.bat / telemetry_check.py
 - `setup_wizard.py`: İki dilli (İngilizce ve Türkçe) ilk kurulum desteği eklendi; başlangıçta dil seçimi (`en`/`tr`) soruluyor, Türkçe metinlerde UTF-8 karakterler eksiksiz kullanıldı.
