@@ -19,34 +19,45 @@ ralli-codex/
 ├── dashboards/
 │   ├── __init__.py           # Package exports for dashboard runners
 │   ├── digital_dash.py       # Compact digital dashboard (600×200 px)
-│   └── analog_dash.py        # Analog gauge dashboard (600×350 px)
+│   ├── analog_dash.py        # Analog gauge dashboard (600×350 px)
+│   └── themes.py             # Motorsport and simulator colour theme presets
 ├── tools/
 │   ├── __init__.py           # Package exports for setup and check utilities
 │   ├── setup_wizard.py       # Bilingual first-run CLI setup wizard
-│   └── telemetry_check.py    # UDP connectivity diagnostic tool
+│   ├── telemetry_check.py    # UDP connectivity diagnostic tool
+│   ├── mock_telemetry.py     # 60 Hz synthetic UDP packet generator
+│   └── theme_selector.py     # Standalone CLI theme switcher
 ├── docs/                     # Architecture, configuration, and roadmap docs
 ├── tests/                    # Unit tests
-├── main.py                   # Unified application entry point
+├── main.py                   # Unified application entry point (supports --mock)
 ├── config.py                 # Central system/hardware configuration
 ├── settings.py               # Visual layout & styling configuration
 ├── install.bat               # Windows environment setup & wizard launcher
 ├── run_dash.bat              # Windows dashboard launcher
+├── run_mock.bat              # Windows mock telemetry launcher
+├── select_theme.bat          # Windows theme selector launcher
 └── check_telemetry.bat       # Windows telemetry check launcher
 ```
 
 | Module / File | Responsibility |
 |---------------|----------------|
-| `main.py` | Unified entry point. Reads `config.DASH_STYLE` and launches the selected dashboard. |
-| `config.py` | Central non-visual configuration: listen IP/port, LED enable, overlay enable, style. Editable by the user and setup wizard. |
-| `settings.py` | Visual configuration: colors, sizes, fonts, positions. Editable by the user. |
-| `core/udp_listener.py` | Receives 264-byte UDP packets, decodes them with `struct.unpack("66f", …)`, returns a `TelemetryData` namedtuple. |
-| `core/overlay_win.py` | Windows-only Win32 (`ctypes`) helpers: borderless, transparent, click-through overlay window. Supports `alpha` and `chroma` modes. |
+| `main.py` | Unified entry point. Reads `config.DASH_STYLE` and launches dashboard. Supports `--mock` for automatic preview. |
+| `config.py` | Central non-visual configuration: listen IP/port, LED enable, overlay enable, style. Editable by user & setup wizard. |
+| `settings.py` | Visual configuration: colors, sizes, fonts, positions. Editable by user & theme selector. |
+| `core/udp_listener.py` | Receives 264-byte UDP packets, decodes with `struct.unpack("66f", …)`, returns `TelemetryData`. |
+| `core/overlay_win.py` | Windows Win32 (`ctypes`) helpers: borderless, transparent, click-through overlay window. |
 | `core/led_controller.py` | Drives physical shift lights on Raspberry Pi GPIO via `gpiozero`. Toggled by `config.ENABLE_LEDS`. |
-| `dashboards/digital_dash.py` | Compact digital dashboard (600×200). RPM bar, gear, speed, pedal bars. Can run as a Windows overlay. |
-| `dashboards/analog_dash.py` | Analog gauge dashboard (600×350). Trigonometric needle, dial ticks, dynamic redline, overlay support. |
-| `tools/setup_wizard.py` | First-run CLI setup with English and Turkish language support: backs up and updates `config.py`, then configures the game's UDP telemetry XML. |
-| `tools/telemetry_check.py` | Dependency-free CLI diagnostic that waits up to five seconds for one valid 264-byte telemetry packet. |
-| `check_telemetry.bat` | Windows batch launcher that executes `tools/telemetry_check.py` using the project's virtual environment. |
+| `dashboards/digital_dash.py` | Compact digital dashboard (600×200). RPM bar, gear, speed, pedal bars. |
+| `dashboards/analog_dash.py` | Analog gauge dashboard (600×350). Trigonometric needle, dial ticks, dynamic redline, central gear housing. |
+| `dashboards/themes.py` | Curated motorsport colour presets (`modern_dark`, `subaru_classic`, `gt3_racing`, `night_neon`, `retro_amber`). |
+| `tools/setup_wizard.py` | First-run CLI setup with English and Turkish language support. |
+| `tools/telemetry_check.py` | Dependency-free CLI diagnostic that waits for valid telemetry packets. |
+| `tools/mock_telemetry.py` | Generates synthetic 264-byte UDP packets at 60 Hz for live preview without running the game. |
+| `tools/theme_selector.py` | Interactive CLI to select and apply curated colour presets to `settings.py`. |
+| `run_mock.bat` | Windows batch launcher for standalone mock telemetry broadcaster. |
+| `select_theme.bat` | Windows batch launcher for theme selector. |
+| `check_telemetry.bat` | Windows batch launcher for telemetry connectivity diagnostic. |
+
 
 ## Runtime flow
 

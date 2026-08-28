@@ -11,6 +11,8 @@ shift lights on a Raspberry Pi.
 - Digital dashboard (RPM bar, gear, speed, throttle/brake bars) and analog
   gauge dashboard (needle, dial ticks, dynamic redline).
 - Windows click-through overlay with `alpha` and `chroma` transparency modes.
+- Interactive theme selector.
+- Standalone 60 Hz mock telemetry generator for live preview.
 - Raspberry Pi shift-light LEDs via `gpiozero` (optional).
 - Full visual customization through `settings.py` (colours, fonts, sizes,
   scaling, overlay position).

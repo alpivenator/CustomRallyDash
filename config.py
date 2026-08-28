@@ -23,7 +23,7 @@ LISTEN_PORT = 20777
 # ----------------------------------------------------------------------
 # "digital"  — compact horizontal bar dashboard (600 x 200 px)
 # "analog"   — circular-needle gauge dashboard (600 x 350 px)
-DASH_STYLE = "digital"
+DASH_STYLE = "analog"
 
 # ----------------------------------------------------------------------
 # Overlay Settings (Windows only)

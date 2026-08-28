@@ -234,6 +234,7 @@ def run() -> None:
             # Needle colour: red when in car's redline zone
             needle_color = RPM_WARNING if rpm_ratio >= redline_start_ratio else RPM_NORMAL
 
+            # Draw needle (behind central gear housing)
             pygame.draw.line(
                 screen,
                 needle_color,
@@ -242,14 +243,13 @@ def run() -> None:
                 6,
             )
 
-            # Pivot point
-            pygame.draw.circle(screen, needle_color, (center_x, center_y), _s(8))
-            pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), _s(4))
+            # Central Gear Housing (clean background mask + stylish border)
+            gear_radius = _s(50)
+            pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), gear_radius)
+            pygame.draw.circle(screen, FRAME_COLOR, (center_x, center_y), gear_radius, 2)
+            pygame.draw.circle(screen, needle_color, (center_x, center_y), gear_radius - _s(4), 1)
 
-            # Gear circle (background + border + text)
-            pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), _s(50))
-            pygame.draw.circle(screen, needle_color, (center_x, center_y), _s(50), 2)
-
+            # Gear text
             text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
             screen.blit(
                 text_gear,
@@ -258,6 +258,7 @@ def run() -> None:
                     center_y - text_gear.get_height() // 2.1,
                 ),
             )
+
 
             # --- LEFT: BRAKE BAR (vertical, left of gauge) ---
             bar_w, max_h = _s(35), _s(130)

@@ -4,4 +4,4 @@ venv/
 local
 .kilo
 .venv
-*.bak-*
+*.bak*

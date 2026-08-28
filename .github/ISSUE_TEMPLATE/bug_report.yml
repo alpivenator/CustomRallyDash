@@ -1,0 +1,47 @@
+name: Bug Report
+description: Create a report to help us improve
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to report a bug!
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: What OS are you running the dashboard on? (e.g. Windows 11 64-bit, Ubuntu 24.04, Raspberry Pi OS)
+    validations:
+      required: true
+  - type: dropdown
+    id: style
+    attributes:
+      label: Dashboard Style
+      options:
+        - Digital
+        - Analog
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the behaviour.
+      placeholder: |
+        1. Run '...'
+        2. In DiRT Rally 2.0 enter a stage
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console Output / Traceback
+      description: Paste terminal output or error messages if available.
+      render: shell

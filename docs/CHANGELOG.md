@@ -9,6 +9,22 @@ Gelecekteki hedefler için bkz. `ROADMAP.md`. Mimari açıklamalar için bkz. `A
 
 ---
 
+## [2026-08-28]
+
+### Eklendi
+- `dashboards/themes.py`: Motor sporları ve simülasyon kültüründen esinlenilen 5 hazır renk teması eklendi (`modern_dark`, `subaru_classic`, `gt3_racing`, `night_neon`, `retro_amber`).
+- `tools/theme_selector.py` & `select_theme.bat`: Kullanıcının `settings.py` dosyasını bozmadan hazır temalar arasında güvenle geçiş yapmasını sağlayan iki dilli (EN/TR) interaktif CLI aracı ve Windows başlatıcısı eklendi.
+- `tools/mock_telemetry.py` & `run_mock.bat`: Oyunu açmadan 60 Hz frekansında Extradata=3 UDP paketleri üreten, hızlanma, vites geçişleri, sert fren ve viraj çıkışı simüle eden hafif mock telemetri üreteci eklendi.
+- `main.py`: Tek komutla dashboard ve sahte telemetriyi birlikte başlatan `--mock` parametresi desteği eklendi (`python main.py --mock`).
+- `.github/ISSUE_TEMPLATE/`: GitHub için `bug_report.yml` ve `feature_request.yml` şablonları eklendi.
+- `tests/test_themes_and_mock.py`: Mock paket üretim doğrulaması ve tema uygulama işlevleri için birim testleri eklendi.
+
+### Değiştirildi
+- `dashboards/analog_dash.py`: Analog göstergede iğne, vites kutusu dairesi ve merkez pivot noktasının çizim katman hiyerarşisi modernize edildi.
+- `README.md`, `ARCHITECTURE.md`, `ROADMAP.md`: Yeni tema sistemi, mock önizleme araçları ve güncellenen mimariyle uyumlu hale getirildi.
+
+---
+
 ## [2026-08-20]
 
 ### Refaktör

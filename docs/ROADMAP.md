@@ -21,11 +21,12 @@ Bu dosya **yalnızca tamamlanmamış hedefleri** içerir. Tamamlanan çalışmal
 
 ## Arayüz & Özelleştirme
 
-- [ ] **Görsel İyileştirme (analogdash):** Estetik pivot noktası, geliştirilmiş renk paleti ve merkezi vites dairesi.
-- [ ] **Tema Sistemi:** Hazır tema paketleri (Dark, WRC Classic, Neon, Minimalist). Kullanıcılar kendi temalarını oluşturup paylaşabilir.
-- [ ] **Örnek Tema Dosyaları:** Kullanıcıların başlaması için hazır şablonlar.
-- [ ] **Tema ve Özelleştirme CLI Aracı:** Hazır temaları seçme ve kullanıcı görsel ayarlarını kolayca düzenleme.
+- [x] **Görsel İyileştirme (analogdash):** Estetik pivot noktası, geliştirilmiş renk paleti ve merkezi vites dairesi.
+- [x] **Tema Sistemi:** Hazır tema paketleri (`dashboards/themes.py` altında Subaru Classic, GT3, Neon, Retro Amber, Modern Dark).
+- [x] **Tema ve Özelleştirme CLI Aracı:** Hazır temaları seçme ve kullanıcı görsel ayarlarını kolayca düzenleme (`tools/theme_selector.py`, `select_theme.bat`).
+- [x] **Mock / Canlı Önizleme Sistemi:** Oyunu açmadan 60 Hz UDP simülasyonu ile canlı önizleme (`tools/mock_telemetry.py`, `main.py --mock`, `run_mock.bat`).
 - [ ] **Linux Overlay Desteği:** X11/Wayland üzerinde saydam overlay penceresi (ileri dönem). **[Öncelik: düşük]**
+
 
 ## Veri & Performans
 
