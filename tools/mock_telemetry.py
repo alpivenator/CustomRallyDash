@@ -25,32 +25,32 @@ def generate_packet(
     elapsed_time: float, max_rpm: float = 8000.0
 ) -> tuple[bytes, float, int, float, str]:
     """Generate a single 264-byte Extradata=3 packet for a synthetic rally stage loop."""
-    # 20-second stage loop
-    cycle = elapsed_time % 20.0
+    # 15-second stage loop (9s WRC acceleration -> 205 km/h + 6s braking & downshifts)
+    cycle = elapsed_time % 15.0
 
-    if cycle < 14.0:
-        # Acceleration & sequential upshifts (0s - 14s: 1st -> 6th gear, ~2.33s per gear)
-        gear_duration = 14.0 / 6.0
+    if cycle < 9.0:
+        # Acceleration & sequential upshifts (0s - 9s: 1st -> 6th gear, 1.5s per gear)
+        gear_duration = 9.0 / 6.0  # 1.5s
         gear_idx = min(6, int(cycle / gear_duration) + 1)
         gear_t = (cycle % gear_duration) / gear_duration
-        
+
         # 1st gear launches from 2500 RPM; 2nd-6th drop to close-ratio ~5800 RPM on upshift
         min_gear_rpm = 2500.0 if gear_idx == 1 else 5800.0
         rpm = min_gear_rpm + (gear_t**0.85) * (max_rpm - min_gear_rpm)
-        speed_kmh = (gear_idx - 1) * 28.0 + (gear_t * 32.0)
-        throttle = 1.0 if gear_t < 0.92 else 0.85
+        speed_kmh = (gear_idx - 1) * 33.0 + (gear_t * 40.0)
+        throttle = 1.0 if gear_t < 0.90 else 0.85
         brake = 0.0
         gear_str = str(gear_idx)
     else:
-        # Braking & sequential downshifts with auto-blip / rev-matching (14s - 20s)
-        brake_elapsed = cycle - 14.0  # 0.0s to 6.0s
+        # Braking & sequential downshifts with auto-blip / rev-matching (9s - 15s)
+        brake_elapsed = cycle - 9.0  # 0.0s to 6.0s
         downshift_step = min(5, int(brake_elapsed))  # 0 (6th) -> 1 (5th) -> 2 (4th) -> 3 (3rd) -> 4 (2nd) -> 5 (1st)
         step_t = brake_elapsed % 1.0  # 0.0 to 1.0 within each 1-second gear window
         brake_progress = brake_elapsed / 6.0
-        
+
         gear_idx = max(1, 6 - downshift_step)
-        speed_kmh = max(0.0, 175.0 * ((1.0 - brake_progress)**1.1))
-        
+        speed_kmh = max(0.0, 205.0 * ((1.0 - brake_progress)**1.1))
+
         # Auto-blip throttle pulse on downshifts (first 150ms of steps 1-4)
         if downshift_step > 0 and step_t < 0.15:
             blip_phase = step_t / 0.15
@@ -61,7 +61,7 @@ def generate_packet(
             throttle = 0.0
             rpm = max(5200.0, 8000.0 - (step_t * 2800.0))
         elif downshift_step == 5:
-            # Final deceleration to full stop and idle in 1st gear (19s - 20s)
+            # Final deceleration to full stop and idle in 1st gear (14s - 15s)
             throttle = 0.0
             decay_t = step_t
             rpm = max(1200.0, 4200.0 * (1.0 - decay_t) + 1200.0 * decay_t)
@@ -70,13 +70,13 @@ def generate_packet(
             throttle = 0.0
             decay_t = (step_t - 0.15) / 0.85
             rpm = max(4200.0, 6400.0 - (decay_t * 2200.0))
-            
+
         # Brake pedal pressure with release as vehicle comes to halt
         if brake_elapsed < 4.8:
             brake = 0.9
         else:
             brake = max(0.0, 0.9 * (1.0 - ((brake_elapsed - 4.8) / 1.2)))
-            
+
         gear_str = str(gear_idx)
 
     car_speed_ms = speed_kmh / 3.6

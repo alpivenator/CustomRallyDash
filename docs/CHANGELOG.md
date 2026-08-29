@@ -10,11 +10,12 @@ Gelecekteki hedefler için bkz. `ROADMAP.md`. Mimari açıklamalar için bkz. `A
 ## [2026-08-29]
 
 ### Değiştirildi
+- `tools/mock_telemetry.py`: Telemetri simülasyon döngüsü 15 saniyeye ve modern WRC ivmelenme dinamiğine uyarlandı; 9 saniyede 1'den 6. vitese (vites başına 1.5 sn) çıkılarak 205 km/s son hıza ulaşılması sağlandı.
 - `tools/mock_telemetry.py`: Vites yükseltme aşaması sıralı yarış şanzımanına (close-ratio sequential) uygun hale getirildi; 1. vites 2500 RPM'den kalkarken üst vites geçişlerinde devir düşüşü ~5800 RPM seviyesine çekildi.
-- `tools/mock_telemetry.py`: 14-20 saniye frenaj döngüsüne kademeli vites düşürme (6->1), ECU otomatik ara gazı darbesi (auto-blip throttle pulse ~%50) ve devir eşleme (rev-matching ~6800 RPM sıçraması ve motor freni süzülmesi) eklendi.
+- `tools/mock_telemetry.py`: 9-15 saniye frenaj döngüsüne kademeli vites düşürme (6->1), ECU otomatik ara gazı darbesi (auto-blip throttle pulse ~%50) ve devir eşleme (rev-matching ~6800 RPM sıçraması ve motor freni süzülmesi) eklendi.
 
 ### Düzeltildi
-- `tools/mock_telemetry.py`: Sentetik sürüş döngüsünün frenleme fazı 1. vitese ve durma/rölantiye kadar indirilecek şekilde uyarlandı; 20 saniyelik döngü başa sararken yaşanan ani vites sıçraması düzeltildi.
+- `tools/mock_telemetry.py`: Sentetik sürüş döngüsünün frenleme fazı 1. vitese ve durma/rölantiye kadar indirilecek şekilde uyarlandı; 15 saniyelik döngü başa sararken yaşanan ani vites sıçraması düzeltildi.
 
 ---
 
