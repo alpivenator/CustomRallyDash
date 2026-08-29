@@ -29,34 +29,55 @@ def generate_packet(
     cycle = elapsed_time % 20.0
 
     if cycle < 14.0:
-        # Acceleration & upshifting phase (0s - 14s)
-        # 6 gears over 14 seconds
-        gear_idx = min(6, int(cycle / 2.33) + 1)
-        gear_t = (cycle % 2.33) / 2.33
-        # RPM builds up, drops on shift
-        rpm = 3000.0 + (gear_t**0.8) * (max_rpm - 2600.0)
-        speed_kmh = (gear_idx - 1) * 28.0 + gear_t * 32.0
-        throttle = 1.0 if gear_t < 0.9 else 0.85
+        # Acceleration & sequential upshifts (0s - 14s: 1st -> 6th gear, ~2.33s per gear)
+        gear_duration = 14.0 / 6.0
+        gear_idx = min(6, int(cycle / gear_duration) + 1)
+        gear_t = (cycle % gear_duration) / gear_duration
+        
+        # 1st gear launches from 2500 RPM; 2nd-6th drop to close-ratio ~5800 RPM on upshift
+        min_gear_rpm = 2500.0 if gear_idx == 1 else 5800.0
+        rpm = min_gear_rpm + (gear_t**0.85) * (max_rpm - min_gear_rpm)
+        speed_kmh = (gear_idx - 1) * 28.0 + (gear_t * 32.0)
+        throttle = 1.0 if gear_t < 0.92 else 0.85
         brake = 0.0
-        gear_str = str(gear_idx)
-    elif cycle < 17.5:
-        # Hard braking & downshift hairpin corner (14s - 17.5s)
-        brake_t = (cycle - 14.0) / 3.5
-        speed_kmh = max(25.0, 170.0 - (brake_t * 145.0))
-        gear_idx = max(2, 6 - int(brake_t * 4))
-        rpm = 5500.0 - (brake_t * 2500.0) + (math.sin(cycle * 15.0) * 400.0)
-        throttle = 0.0
-        brake = max(0.0, min(1.0, 1.0 - (brake_t * 0.4)))
         gear_str = str(gear_idx)
     else:
-        # Corner exit acceleration (17.5s - 20s)
-        exit_t = (cycle - 17.5) / 2.5
-        speed_kmh = 25.0 + (exit_t * 40.0)
-        gear_idx = 2
-        rpm = 3200.0 + (exit_t * 3800.0)
-        throttle = min(1.0, exit_t * 1.2)
-        brake = 0.0
-        gear_str = "2"
+        # Braking & sequential downshifts with auto-blip / rev-matching (14s - 20s)
+        brake_elapsed = cycle - 14.0  # 0.0s to 6.0s
+        downshift_step = min(5, int(brake_elapsed))  # 0 (6th) -> 1 (5th) -> 2 (4th) -> 3 (3rd) -> 4 (2nd) -> 5 (1st)
+        step_t = brake_elapsed % 1.0  # 0.0 to 1.0 within each 1-second gear window
+        brake_progress = brake_elapsed / 6.0
+        
+        gear_idx = max(1, 6 - downshift_step)
+        speed_kmh = max(0.0, 175.0 * ((1.0 - brake_progress)**1.1))
+        
+        # Auto-blip throttle pulse on downshifts (first 150ms of steps 1-4)
+        if downshift_step > 0 and step_t < 0.15:
+            blip_phase = step_t / 0.15
+            throttle = 0.5 * math.sin(blip_phase * math.pi)
+            rpm = 6800.0 - (blip_phase * 400.0)
+        elif downshift_step == 0:
+            # Initial braking in 6th gear before first downshift
+            throttle = 0.0
+            rpm = max(5200.0, 8000.0 - (step_t * 2800.0))
+        elif downshift_step == 5:
+            # Final deceleration to full stop and idle in 1st gear (19s - 20s)
+            throttle = 0.0
+            decay_t = step_t
+            rpm = max(1200.0, 4200.0 * (1.0 - decay_t) + 1200.0 * decay_t)
+        else:
+            # Engine braking decay after blip (~6400 RPM -> ~4200 RPM)
+            throttle = 0.0
+            decay_t = (step_t - 0.15) / 0.85
+            rpm = max(4200.0, 6400.0 - (decay_t * 2200.0))
+            
+        # Brake pedal pressure with release as vehicle comes to halt
+        if brake_elapsed < 4.8:
+            brake = 0.9
+        else:
+            brake = max(0.0, 0.9 * (1.0 - ((brake_elapsed - 4.8) / 1.2)))
+            
+        gear_str = str(gear_idx)
 
     car_speed_ms = speed_kmh / 3.6
     # Add slight wheel slip during hard acceleration / braking

@@ -7,6 +7,15 @@ Gelecekteki hedefler için bkz. `ROADMAP.md`. Mimari açıklamalar için bkz. `A
 > Yeni değişiklikler her zaman en üste `## [YYYY-MM-DD]` (veya varsa sürüm etiketi `## [vX.Y.Z] - YYYY-MM-DD`) başlığıyla eklenir.
 > Altında değişiklik tipine göre `### Eklendi`, `### Değiştirildi`, `### Düzeltildi`, `### Refaktör` gibi standart kategoriler açılır ve etkilenen modüller/dosyalar belirginleştirilerek listelenir.
 
+## [2026-08-29]
+
+### Değiştirildi
+- `tools/mock_telemetry.py`: Vites yükseltme aşaması sıralı yarış şanzımanına (close-ratio sequential) uygun hale getirildi; 1. vites 2500 RPM'den kalkarken üst vites geçişlerinde devir düşüşü ~5800 RPM seviyesine çekildi.
+- `tools/mock_telemetry.py`: 14-20 saniye frenaj döngüsüne kademeli vites düşürme (6->1), ECU otomatik ara gazı darbesi (auto-blip throttle pulse ~%50) ve devir eşleme (rev-matching ~6800 RPM sıçraması ve motor freni süzülmesi) eklendi.
+
+### Düzeltildi
+- `tools/mock_telemetry.py`: Sentetik sürüş döngüsünün frenleme fazı 1. vitese ve durma/rölantiye kadar indirilecek şekilde uyarlandı; 20 saniyelik döngü başa sararken yaşanan ani vites sıçraması düzeltildi.
+
 ---
 
 ## [2026-08-28]
