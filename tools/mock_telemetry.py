@@ -34,7 +34,8 @@ def generate_packet(
         gear_idx = min(6, int(cycle / gear_duration) + 1)
         gear_t = (cycle % gear_duration) / gear_duration
 
-        # 1st gear launches from 2500 RPM; 2nd-6th drop to close-ratio ~5800 RPM on upshift
+        # 1st gear launches from 2500 RPM;
+        # 2nd-6th drop to close-ratio ~5800 RPM on upshift
         min_gear_rpm = 2500.0 if gear_idx == 1 else 5800.0
         rpm = min_gear_rpm + (gear_t**0.85) * (max_rpm - min_gear_rpm)
         speed_kmh = (gear_idx - 1) * 33.0 + (gear_t * 40.0)
@@ -44,12 +45,13 @@ def generate_packet(
     else:
         # Braking & sequential downshifts with auto-blip / rev-matching (9s - 15s)
         brake_elapsed = cycle - 9.0  # 0.0s to 6.0s
-        downshift_step = min(5, int(brake_elapsed))  # 0 (6th) -> 1 (5th) -> 2 (4th) -> 3 (3rd) -> 4 (2nd) -> 5 (1st)
+        # 0 (6th) -> 1 (5th) -> 2 (4th) -> 3 (3rd) -> 4 (2nd) -> 5 (1st)
+        downshift_step = min(5, int(brake_elapsed))
         step_t = brake_elapsed % 1.0  # 0.0 to 1.0 within each 1-second gear window
         brake_progress = brake_elapsed / 6.0
 
         gear_idx = max(1, 6 - downshift_step)
-        speed_kmh = max(0.0, 205.0 * ((1.0 - brake_progress)**1.1))
+        speed_kmh = max(0.0, 205.0 * ((1.0 - brake_progress) ** 1.1))
 
         # Auto-blip throttle pulse on downshifts (first 150ms of steps 1-4)
         if downshift_step > 0 and step_t < 0.15:

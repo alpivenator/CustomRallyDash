@@ -11,6 +11,10 @@ lights on a Raspberry Pi.
 
 ```
 ralli-codex/
+├── .github/
+│   ├── workflows/
+│   │   └── ci.yml            # Automated GitHub Actions CI (ruff + pytest)
+│   └── ISSUE_TEMPLATE/       # GitHub issue report and feature request templates
 ├── core/
 │   ├── __init__.py           # Package exports for telemetry and platform helpers
 │   ├── udp_listener.py       # UDP socket listener & Extradata=3 packet decoder
@@ -27,8 +31,14 @@ ralli-codex/
 │   ├── telemetry_check.py    # UDP connectivity diagnostic tool
 │   ├── mock_telemetry.py     # 60 Hz synthetic UDP packet generator
 │   └── theme_selector.py     # Standalone CLI theme switcher
-├── docs/                     # Architecture, configuration, and roadmap docs
-├── tests/                    # Unit tests
+├── docs/                     # Architecture, configuration, roadmap, and changelog docs
+│   ├── ARCHITECTURE.md       # Technical design and architecture reference
+│   ├── CONFIGURATION.md      # Configuration options and hardware setup
+│   ├── CHANGELOG.md          # Version history (English)
+│   ├── CHANGELOG_TR.md       # Version history (Turkish)
+│   ├── ROADMAP.md            # Planned milestones (English)
+│   └── ROADMAP_TR.md         # Planned milestones (Turkish)
+├── tests/                    # Unit tests (pytest)
 ├── main.py                   # Unified application entry point (supports --mock)
 ├── config.py                 # Central system/hardware configuration
 ├── settings.py               # Visual layout & styling configuration

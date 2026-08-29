@@ -9,7 +9,10 @@ from typing import Any
 THEMES: dict[str, dict[str, Any]] = {
     "modern_dark": {
         "name": "Modern Dark (Default)",
-        "description": "Sleek dark grey cockpit with high-visibility cyan/blue RPM and red rev limiter.",
+        "description": (
+            "Sleek dark grey cockpit with high-visibility cyan/blue RPM "
+            "and red rev limiter."
+        ),
         "colors": {
             "COLOR_BG": (25, 25, 30),
             "COLOR_TEXT_MAIN": (240, 240, 240),
@@ -24,7 +27,10 @@ THEMES: dict[str, dict[str, Any]] = {
     },
     "subaru_classic": {
         "name": "Subaru Classic WRC",
-        "description": "Iconic World Rally Championship 555 heritage: World Rally Blue, Gold/Yellow accents, and STi Cherry Red alerts.",
+        "description": (
+            "Iconic World Rally Championship 555 heritage: World Rally Blue, "
+            "Gold/Yellow accents, and STi Cherry Red alerts."
+        ),
         "colors": {
             "COLOR_BG": (12, 18, 32),
             "COLOR_TEXT_MAIN": (245, 245, 250),
@@ -39,7 +45,10 @@ THEMES: dict[str, dict[str, Any]] = {
     },
     "gt3_racing": {
         "name": "GT3 Competition",
-        "description": "Modern endurance cockpit: Matte asphalt slate, high-contrast vibrant orange, and turquoise telemetry lines.",
+        "description": (
+            "Modern endurance cockpit: Matte asphalt slate, high-contrast vibrant "
+            "orange, and turquoise telemetry lines."
+        ),
         "colors": {
             "COLOR_BG": (20, 22, 25),
             "COLOR_TEXT_MAIN": (250, 250, 250),
@@ -54,7 +63,10 @@ THEMES: dict[str, dict[str, Any]] = {
     },
     "night_neon": {
         "name": "Night Stage Neon (Cyberpunk)",
-        "description": "OLED deep black night stage theme with electric cyan and vivid magenta shift warnings.",
+        "description": (
+            "OLED deep black night stage theme with electric cyan and "
+            "vivid magenta shift warnings."
+        ),
         "colors": {
             "COLOR_BG": (10, 10, 14),
             "COLOR_TEXT_MAIN": (255, 255, 255),
@@ -69,7 +81,10 @@ THEMES: dict[str, dict[str, Any]] = {
     },
     "retro_amber": {
         "name": "Retro 90s Amber",
-        "description": "Classic 1990s analogue instrument cluster with soothing monochrome warm amber illumination.",
+        "description": (
+            "Classic 1990s analogue instrument cluster with soothing monochrome "
+            "warm amber illumination."
+        ),
         "colors": {
             "COLOR_BG": (18, 16, 14),
             "COLOR_TEXT_MAIN": (255, 185, 60),  # Warm Amber

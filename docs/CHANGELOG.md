@@ -1,130 +1,126 @@
 # Changelog
 
-Bu dosyada projede yapılan değişiklikler ters kronolojik sırayla (en yeni en üstte) belgelenir.
-Gelecekteki hedefler için bkz. `ROADMAP.md`. Mimari açıklamalar için bkz. `ARCHITECTURE.md`.
-
-> **CHANGELOG Güncelleme Kuralı:**
-> Yeni değişiklikler her zaman en üste `## [YYYY-MM-DD]` (veya varsa sürüm etiketi `## [vX.Y.Z] - YYYY-MM-DD`) başlığıyla eklenir.
-> Altında değişiklik tipine göre `### Eklendi`, `### Değiştirildi`, `### Düzeltildi`, `### Refaktör` gibi standart kategoriler açılır ve etkilenen modüller/dosyalar belirginleştirilerek listelenir.
+All notable changes to this project are documented in this file in reverse chronological order.
+For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
 
 ## [2026-08-29]
 
-### Değiştirildi
-- `tools/mock_telemetry.py`: Telemetri simülasyon döngüsü 15 saniyeye ve modern WRC ivmelenme dinamiğine uyarlandı; 9 saniyede 1'den 6. vitese (vites başına 1.5 sn) çıkılarak 205 km/s son hıza ulaşılması sağlandı.
-- `tools/mock_telemetry.py`: Vites yükseltme aşaması sıralı yarış şanzımanına (close-ratio sequential) uygun hale getirildi; 1. vites 2500 RPM'den kalkarken üst vites geçişlerinde devir düşüşü ~5800 RPM seviyesine çekildi.
-- `tools/mock_telemetry.py`: 9-15 saniye frenaj döngüsüne kademeli vites düşürme (6->1), ECU otomatik ara gazı darbesi (auto-blip throttle pulse ~%50) ve devir eşleme (rev-matching ~6800 RPM sıçraması ve motor freni süzülmesi) eklendi.
+### Changed
+- `tools/mock_telemetry.py`: Tuned telemetry simulation loop to a 15-second cycle matching modern WRC acceleration dynamics; shifts through gears 1 to 6 in 9 seconds (~1.5s per gear) reaching a top speed of 205 km/h.
+- `tools/mock_telemetry.py`: Modeled close-ratio sequential transmission dynamics; launch starts at 2500 RPM in 1st gear, with subsequent upshifts dropping engine speed to ~5800 RPM.
+- `tools/mock_telemetry.py`: Added progressive downshifting (6->1), simulated ECU auto-blip throttle pulses (~50%), and rev-matching dynamics (~6800 RPM spikes with engine braking decay) across the 9-15s braking phase.
 
-### Düzeltildi
-- `tools/mock_telemetry.py`: Sentetik sürüş döngüsünün frenleme fazı 1. vitese ve durma/rölantiye kadar indirilecek şekilde uyarlandı; 15 saniyelik döngü başa sararken yaşanan ani vites sıçraması düzeltildi.
+### Fixed
+- `tools/mock_telemetry.py`: Extended deceleration phase down to 1st gear and idle/stop, eliminating abrupt gear/RPM jumps when the 15-second loop restarts.
 
 ---
 
 ## [2026-08-28]
 
-### Eklendi
-- `dashboards/themes.py`: Motor sporları ve simülasyon kültüründen esinlenilen 5 hazır renk teması eklendi (`modern_dark`, `subaru_classic`, `gt3_racing`, `night_neon`, `retro_amber`).
-- `tools/theme_selector.py` & `select_theme.bat`: Kullanıcının `settings.py` dosyasını bozmadan hazır temalar arasında güvenle geçiş yapmasını sağlayan iki dilli (EN/TR) interaktif CLI aracı ve Windows başlatıcısı eklendi.
-- `tools/mock_telemetry.py` & `run_mock.bat`: Oyunu açmadan 60 Hz frekansında Extradata=3 UDP paketleri üreten, hızlanma, vites geçişleri, sert fren ve viraj çıkışı simüle eden hafif mock telemetri üreteci eklendi.
-- `main.py`: Tek komutla dashboard ve sahte telemetriyi birlikte başlatan `--mock` parametresi desteği eklendi (`python main.py --mock`).
-- `.github/ISSUE_TEMPLATE/`: GitHub için `bug_report.yml` ve `feature_request.yml` şablonları eklendi.
-- `tests/test_themes_and_mock.py`: Mock paket üretim doğrulaması ve tema uygulama işlevleri için birim testleri eklendi.
+### Added
+- `dashboards/themes.py`: Added 5 curated motorsport-inspired color themes (`modern_dark`, `subaru_classic`, `gt3_racing`, `night_neon`, `retro_amber`).
+- `tools/theme_selector.py` & `select_theme.bat`: Added bilingual (EN/TR) interactive CLI tool and Windows launcher to switch presets safely without breaking `settings.py`.
+- `tools/mock_telemetry.py` & `run_mock.bat`: Added lightweight synthetic 60 Hz Extradata=3 UDP generator simulating acceleration, sequential gear shifts, hard braking, and corner exits.
+- `main.py`: Added `--mock` flag to run dashboard and synthetic telemetry generator concurrently (`python main.py --mock`).
+- `.github/ISSUE_TEMPLATE/`: Added `bug_report.yml` and `feature_request.yml` issue forms for GitHub.
+- `tests/test_themes_and_mock.py`: Added unit tests verifying synthetic packet generation and theme application logic.
 
-### Değiştirildi
-- `dashboards/analog_dash.py`: Analog göstergede iğne, vites kutusu dairesi ve merkez pivot noktasının çizim katman hiyerarşisi modernize edildi.
-- `README.md`, `ARCHITECTURE.md`, `ROADMAP.md`: Yeni tema sistemi, mock önizleme araçları ve güncellenen mimariyle uyumlu hale getirildi.
+### Changed
+- `dashboards/analog_dash.py`: Modernized analog gauge rendering hierarchy including needle, center pivot, and gear indicator housing.
+- `README.md`, `ARCHITECTURE.md`, `ROADMAP.md`: Updated documentation to reflect theme architecture, mock preview utilities, and modular structure.
 
 ---
 
 ## [2026-08-20]
 
-### Refaktör
-- `core/`: Telemetri ve donanım/platform katmanı `core/` paketine taşındı (`core/udp_listener.py`, `core/overlay_win.py`, `core/led_controller.py`); `core/__init__.py` üzerinden temiz export'lar sağlandı.
-- `dashboards/`: Gösterge panelleri `dashboards/` paketine taşındı (`dashboards/digital_dash.py`, `dashboards/analog_dash.py`); `analogdash.py` ismi `analog_dash.py` olarak normalize edildi.
-- `tools/`: İlk kurulum ve teşhis araçları `tools/` paketine taşındı (`tools/setup_wizard.py`, `tools/telemetry_check.py`); `setup_wizard.py` kök `config.py` yolunu dinamik olarak çözecek şekilde güncellendi, `telemetry_check.py` doğrudan çalıştırıldığında `sys.path` üzerinden kökü tanıyacak şekilde ayarlandı.
-- `main.py`: Gösterge çalıştırma içe aktarmaları `dashboards.digital_dash` ve `dashboards.analog_dash` yollarına güncellendi.
-- `install.bat` & `check_telemetry.bat`: Başlatıcılar `tools\setup_wizard.py` ve `tools\telemetry_check.py` hedeflerine güncellendi.
-- `tests/test_setup_wizard.py`: Birim testler `tools.setup_wizard` ve `tools.telemetry_check` modüllerine göre uyarlandı.
-- Dokümantasyon (`ARCHITECTURE.md`, `CONFIGURATION.md`, `README.md`): Yeni modüler dizin mimarisi ve komut yollarına göre güncellendi.
+### Refactored
+- `core/`: Moved telemetry decoder, overlay, and hardware drivers into `core/` package (`core/udp_listener.py`, `core/overlay_win.py`, `core/led_controller.py`) with clean package exports in `core/__init__.py`.
+- `dashboards/`: Moved digital and analog dashboard implementations into `dashboards/` package (`dashboards/digital_dash.py`, `dashboards/analog_dash.py`); normalized `analogdash.py` to `analog_dash.py`.
+- `tools/`: Moved setup wizard and diagnostic utilities into `tools/` package (`tools/setup_wizard.py`, `tools/telemetry_check.py`); enabled dynamic root path resolution in `setup_wizard.py` and `telemetry_check.py`.
+- `main.py`: Updated imports to new package paths `dashboards.digital_dash` and `dashboards.analog_dash`.
+- `install.bat` & `check_telemetry.bat`: Updated batch targets to `tools\setup_wizard.py` and `tools\telemetry_check.py`.
+- `tests/test_setup_wizard.py`: Updated unit tests for `tools.setup_wizard` and `tools.telemetry_check`.
+- Documentation (`ARCHITECTURE.md`, `CONFIGURATION.md`, `README.md`): Updated all references to reflect the modular package structure.
 
 ---
 
 ## [2026-08-18]
 
-### Eklendi
-- `.gitattributes`: Repodaki `.bat` ve `.cmd` dosyalarının Git ve ZIP arşivleme işlemlerinde her zaman `CRLF` satır sonuna sahip olmasını sağlayan yapılandırma eklendi.
+### Added
+- `.gitattributes`: Added repository attribute ensuring `.bat` and `.cmd` files retain CRLF line endings across Git and ZIP archives.
 
-### Düzeltildi
-- `install.bat`, `run_dash.bat`, `check_telemetry.bat`: Unix `LF` satır sonlarında `cmd.exe` parantez bloğu sözdizimi çökmesini önlemek amacıyla çok satırlı `if (...)` blokları `goto` ve etiket tabanlı akışa dönüştürüldü; olası hata durumlarında pencerenin aniden kapanması engellendi.
+### Fixed
+- `install.bat`, `run_dash.bat`, `check_telemetry.bat`: Replaced multiline `if (...)` parenthesis blocks with `goto` and label-based branching to prevent `cmd.exe` crashes under Unix LF line endings.
 
 ---
 
 ## [2026-08-16 – 2026-08-17]
 
-### Eklendi
-- `setup_wizard.py`: İki dilli (İngilizce ve Türkçe) ilk kurulum desteği eklendi; başlangıçta dil seçimi (`en`/`tr`) soruluyor, Türkçe metinlerde UTF-8 karakterler eksiksiz kullanıldı.
-- `check_telemetry.bat`: Windows ortamında sanal ortam üzerinden `telemetry_check.py`'yi tek tıkla çalıştıran yeni yardımcı betik eklendi.
+### Added
+- `setup_wizard.py`: Added bilingual setup wizard supporting English and Turkish CLI flows.
+- `check_telemetry.bat`: Added one-click diagnostic launcher for Windows.
 
-### Değiştirildi
-- `install.bat` & `run_dash.bat`: Terminal çıktıları İngilizceye çevrilerek standartlaştırıldı; adımlar `[1/3]`, `[2/3]`, `[3/3]` şeklinde satır boşluklarıyla ayrıldı ve kurulum sonu mükerrer bildirimler kaldırıldı.
-- `telemetry_check.py`: Konsol hata ve durum mesajları İngilizce olarak standartlaştırıldı.
-- Kurulum sonu özetinde `telemetry_check` teşhis adımı ve sanal ortam çalıştırma komutları belirginleştirildi.
+### Changed
+- `install.bat` & `run_dash.bat`: Standardized terminal output into structured `[1/3]`, `[2/3]`, `[3/3]` installation steps in English.
+- `telemetry_check.py`: Standardized console status and diagnostic messages to English.
 
 ---
 
 ## [2026-08-15]
 
-### Eklendi
-- Windows için Python 3.12 sanal ortamı oluşturan `install.bat` ve dashboard'u başlatan `run_dash.bat` eklendi.
-- `setup_wizard.py` eklendi; `config.py` ve DiRT Rally 2.0 telemetry XML'i yedeklenerek güncelleniyor. Kurulumda alıcı IP adresi soruluyor; `127.0.0.1` loopback/Firewall uyarısı ile varsayılan olarak sunuluyor.
-- `AGENTS.md` proje talimat dosyası eklendi.
+### Added
+- Added `install.bat` for automated Python 3.12 virtual environment setup on Windows and `run_dash.bat` launcher.
+- Added `setup_wizard.py` to configure `config.py` and patch DiRT Rally 2.0 telemetry XML with automatic timestamped backups.
+- Added `AGENTS.md` local development guideline.
 
-### Değiştirildi
-- Proje dokümantasyonu `docs/` dizini altına taşındı.
-- Windows ve Raspberry Pi bağımlılıkları ayrıldı; Python sürümü 3.12 ile sınırlandırıldı.
-- `README.md`, `CONFIGURATION.md` ve `ARCHITECTURE.md` kurulum akışına göre güncellendi.
+### Changed
+- Moved project documentation under `docs/` directory.
+- Separated Windows and Raspberry Pi dependencies; restricted supported runtime to Python 3.12.
+- Updated `README.md`, `CONFIGURATION.md`, and `ARCHITECTURE.md` to reflect new setup flows.
 
 ---
 
 ## [2026-08-13]
 
-### Değiştirildi
-- Geçmiş temizliği (`git filter-repo`): `venv/` dizini tüm commit geçmişinden kaldırıldı; yazar/committer kimliği `alpivenator` + GitHub noreply e-postasına sabitlendi; `origin` URL'si yeni hesaba güncellendi (repo boyutu ~14 MiB → ~353 KiB).
-- `ROADMAP.md`: Tamamlanan "Hassas veri taraması" maddesi kaldırıldı; Not metnindeki ifade düzeltildi ("hedefler yöneticinin isteğiyle güncellenir").
+### Changed
+- Repository history cleanup via `git filter-repo`: Purged historical `venv/` commits, standardized commit author/committer identity to `alpivenator`, updated remote origin (repo size reduced ~14 MiB → ~353 KiB).
+- `ROADMAP.md`: Removed completed sensitive data scan task; refined notes.
 
 ---
 
 ## [2026-08-05]
 
-### Eklendi
-- `LICENSE`: GPL-3.0 lisansı eklendi (telif: Alperen (alpivenator), 2026).
-- `pyproject.toml`: `[project]` metadata eklendi: `name = "dirtdash"`, `version = "0.1.0a1"`, `license = "GPL-3.0-only"`, `requires-python = ">=3.12"`; gpiozero `optional-dependencies`'e taşındı.
+### Added
+- `LICENSE`: Added GPL-3.0 license (Copyright Alperen / alpivenator, 2026).
+- `pyproject.toml`: Added project metadata (`name = "dirtdash"`, `version = "0.1.0a1"`, `license = "GPL-3.0-only"`, `requires-python = ">=3.12"`).
 
-### Değiştirildi
-- `settings.py` / `digital_dash.py` / `analog_dash.py`: Pencere boyutları `settings.py`'deki `DIGITAL_WIDTH/HEIGHT` ve `ANALOG_WIDTH/HEIGHT` ayarlarına bağlandı (`_BASE_W`, `_BASE_H` sabit değerleri kaldırıldı).
-- `CONFIG.md` → `CONFIGURATION.md`: Dosya yeniden adlandırıldı; İngilizce kapsamlı ayar dokümantasyonu yazıldı: `config.py` (sistem) ve `settings.py` (görsel) tabloları, `0.0.0.0` açıklaması ve "Security Notes" bölümü eklendi.
-- `README.md`: Özellikler, gereksinimler, "3 adımda başlangıç", yapılandırma ve lisans bölümleriyle genişletildi.
+### Changed
+- `settings.py` / `digital_dash.py` / `analog_dash.py`: Bound window dimensions dynamically to `settings.py` parameters (`DIGITAL_WIDTH/HEIGHT`, `ANALOG_WIDTH/HEIGHT`).
+- `CONFIG.md` → `CONFIGURATION.md`: Renamed and expanded with comprehensive configuration references, `0.0.0.0` binding notes, and security considerations.
+- `README.md`: Expanded with feature matrix, system requirements, quick-start guide, and configuration summaries.
 
 ---
 
 ## [2026-07-14 – 2026-07-31]
 
-### Eklendi
-- `ARCHITECTURE.md` (EN), `CHANGELOG.md` (TR), `ROADMAP.md` (TR) dokümantasyon dosyaları oluşturuldu.
-- `pyproject.toml` eklenerek `black` ve `ruff` biçimlendirme/lint yapılandırması projeye dahil edildi.
+### Added
+- Added `ARCHITECTURE.md`, `CHANGELOG.md`, and `ROADMAP.md`.
+- Added `pyproject.toml` with `black` and `ruff` linting/formatting configuration.
 
-### Değiştirildi
-- `udp_listener.py`: Timeout, drain-keep-latest tampon döngüsü, veri ayrıştırma (hız/RPM dönüşümleri, clamp'ler) satır içi teknik açıklamalarla belgelendi.
-- `ROADMAP.md`: Eski alfa fazları sadeleştirilerek 5 ana hedef başlığı altında toplandı.
+### Changed
+- `udp_listener.py`: Added inline documentation for socket timeout handling, buffer drain loop, and telemetry conversion maths.
+- `ROADMAP.md`: Consolidated early alpha phases into five structured milestone categories.
 
 ---
 
-## [Erken Geliştirme Dönemi (2026-02 – 2026-06)]
+## [Early Development Phase (2026-02 – 2026-06)]
 
-`development_log.md` içindeki ilk prototip ve alfa geliştirme sürecinin özeti:
+Summary of initial prototype and alpha development milestones:
 
-- **Telemetri & UDP Altyapısı (`core/udp_listener.py`):** 264 baytlık DiRT Rally 2.0 UDP paketlerini dinleyen `socket` yapısı ve `struct.unpack` ayrıştırıcısı kuruldu. Gecikmeyi önleyen buffer drain mekanizması geliştirildi.
-- **Dijital Gösterge (`dashboards/digital_dash.py`):** Koyu temalı modern arayüz, devir oranına göre renk değiştiren dinamik RPM barı, tekerlek/araç hız farkına dayalı çekiş kaybı (SLIP) uyarısı, gaz/fren pedal göstergeleri ve kompakt WRC/F1 düzeni oluşturuldu.
-- **Analog Gösterge (`dashboards/analog_dash.py`):** Trigonometrik iğne mekanizması, lineer enterpolasyon ile yumuşatma, 9000 RPM sabit kadran ve araca göre dinamik redline sınırı geliştirildi.
-- **Raspberry Pi Vites Işıkları (`core/led_controller.py`):** `gpiozero` ile devir oranına göre Yeşil → Mavi → Kırmızı LED vites ışığı kontrolü eklendi.
-- **Windows Saydam Overlay (`core/overlay_win.py`):** Windows Win32 API (`ctypes`) entegrasyonu ile çerçevesiz, yarı saydam (`alpha` / `chroma`), tıklama geçiren (`WS_EX_TRANSPARENT`) ve her zaman üstte (`HWND_TOPMOST`) oyun üzeri katman modu sağlandı.
-- **Yapılandırma & Temalandırma (`config.py` & `settings.py`):** Sistem ayarları ile görsel temalar ayrıştırıldı; `TARGET_WIDTH` ile orantılı ölçeklendirme ve gösterge stili seçimi (`digital` / `analog`) merkezi hale getirildi.
+- **Telemetry & UDP Listener (`core/udp_listener.py`):** Built raw 264-byte UDP socket listener and `struct.unpack` parser for DiRT Rally 2.0 Extradata=3 format with packet drain mechanism to eliminate latency.
+- **Digital Dashboard (`dashboards/digital_dash.py`):** Implemented compact dark-themed digital UI with dynamic RPM bar, tire slip traction warning, throttle/brake pedal bars, and WRC/F1-inspired layout.
+- **Analog Dashboard (`dashboards/analog_dash.py`):** Implemented analog gauge with trigonometric needle rendering, linear interpolation smoothing, 9000 RPM dial, and dynamic redline scaling.
+- **Raspberry Pi Shift Lights (`core/led_controller.py`):** Implemented Green → Blue → Red shift-light sequence on GPIO pins via `gpiozero`.
+- **Windows Transparent Overlay (`core/overlay_win.py`):** Implemented Win32 API (`ctypes`) integration for borderless, click-through (`WS_EX_TRANSPARENT`), layered (`alpha` / `chroma`), always-on-top (`HWND_TOPMOST`) overlay mode.
+- **Configuration & Theming (`config.py` & `settings.py`):** Decoupled system hardware settings from visual styling parameters with automatic proportional scaling.
+

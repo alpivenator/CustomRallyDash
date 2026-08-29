@@ -127,10 +127,11 @@ def run_theme_selector(
                 selected_key, SETTINGS_PATH, output_func, lang
             )
             if success:
+                t_name = selected_theme["name"]
                 msg = (
-                    f"\n[✓] '{selected_theme['name']}' teması settings.py dosyasına başarıyla uygulandı!"
+                    f"\n[✓] '{t_name}' teması settings.py dosyasına başarıyla uygulandı!"
                     if lang == "tr"
-                    else f"\n[✓] '{selected_theme['name']}' theme successfully applied to settings.py!"
+                    else f"\n[✓] '{t_name}' theme successfully applied to settings.py!"
                 )
                 output_func(msg)
                 output_func(

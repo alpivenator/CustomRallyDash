@@ -247,7 +247,9 @@ def run() -> None:
             gear_radius = _s(50)
             pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), gear_radius)
             pygame.draw.circle(screen, FRAME_COLOR, (center_x, center_y), gear_radius, 2)
-            pygame.draw.circle(screen, needle_color, (center_x, center_y), gear_radius - _s(4), 1)
+            pygame.draw.circle(
+                screen, needle_color, (center_x, center_y), gear_radius - _s(4), 1
+            )
 
             # Gear text
             text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
@@ -258,7 +260,6 @@ def run() -> None:
                     center_y - text_gear.get_height() // 2.1,
                 ),
             )
-
 
             # --- LEFT: BRAKE BAR (vertical, left of gauge) ---
             bar_w, max_h = _s(35), _s(130)

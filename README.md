@@ -17,8 +17,6 @@ shift lights on a Raspberry Pi.
 - Full visual customization through `settings.py` (colours, fonts, sizes,
   scaling, overlay position).
 
-<!-- TODO: add screenshots -->
-
 ## Requirements
 
 - Python **3.12.x** (Python 3.13 and newer are not supported)
@@ -27,55 +25,61 @@ shift lights on a Raspberry Pi.
 
 ## Getting Started
 
-1. **Install Python 3.12**: on Windows, install Python 3.12 x64 and make sure
-   the Python Launcher (`py`) is available.
+### Windows (Quick Start)
 
-2. **Install the dashboard**: extract the project folder and run `install.bat`. The script creates a local `.venv`, installs pygame, and
-   starts the first-run setup wizard.
+1. **Install Python 3.12**: Install Python 3.12 x64 and make sure the Python Launcher (`py`) is added to PATH.
+2. **Run Installer**: Double-click `install.bat`. It creates a `.venv`, installs dependencies, and launches the interactive setup wizard.
+3. **Setup Wizard**:
+   - Select your language (English or Turkish).
+   - Enter your dashboard machine's IP (default `127.0.0.1` for local setup, or local LAN IP like `192.168.1.x` for remote).
+   - Select dashboard style (`digital` or `analog`) and overlay mode.
+4. **Launch Dashboard**: Double-click `run_dash.bat` (or test UDP reception using `check_telemetry.bat`).
 
-3. **Complete the setup wizard**:
-   - Choose your preferred language (English or Turkish).
-   - Enter the dashboard computer's IPv4 address. `127.0.0.1` is the default
-     when the game and dashboard run on the same computer.
-   - For a remote device, enter the device's LAN IPv4 address,
-     such as `192.168.1.x`. The wizard writes this same address to `config.py`
-     and the game's telemetry XML.
-   - Select the dashboard style and Windows overlay setting.
-   - When setup completes, test the telemetry stream with `check_telemetry.bat`
-     (or `python tools/telemetry_check.py`) while DiRT Rally 2.0 is running in a stage.
-     The dashboard must be closed during the test.
+### Linux & Manual Setup
 
-For a manual installation, use a virtual environment and install the base
-requirements:
-
+1. **Clone repository and set up virtual environment**:
    ```sh
-   python -m pip install -r requirements.txt
+   git clone https://github.com/alpivenator/Telemetry-Dashboard-for-Dirt-Rally-2.0.git
+   cd Telemetry-Dashboard-for-Dirt-Rally-2.0
+   python3.12 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
    ```
 
-The game file is normally located at
+2. **Run Interactive Setup or Launch Directly**:
+   ```sh
+   # Run setup wizard
+   python tools/setup_wizard.py
+
+   # Launch dashboard
+   python main.py
+
+   # Or preview instantly with synthetic telemetry
+   python main.py --mock
+   ```
+
+### DiRT Rally 2.0 Telemetry Setup
+
+The game telemetry configuration is stored at:
 `Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml`.
-The required UDP settings are `enabled="true"`, `extradata="3"`, and port
-`20777`. See [CONFIGURATION.md](docs/CONFIGURATION.md) for manual configuration,
-the telemetry check tool, and the Windows Firewall note.
+
+Ensure the `<udp>` block has `enabled="true"`, `extradata="3"`, and `port="20777"`. See [CONFIGURATION.md](docs/CONFIGURATION.md) for full manual configuration details and firewall guidelines.
 
 ## Configuration
 
-- `config.py` — system settings (network, LEDs, overlay behaviour).
-- `settings.py` — visual settings (colours, fonts, sizes, positions).
+- `config.py` — system & hardware settings (network IP/port, LEDs, overlay behaviour).
+- `settings.py` — visual layout & styling (colours, fonts, sizes, positions).
 - `tools/telemetry_check.py` / `check_telemetry.bat` — UDP connection diagnostic.
-
-The setup wizard edits selected values in `config.py` after creating a
-timestamped backup. Visual settings remain manual and are edited in
-`settings.py`.
+- `tools/theme_selector.py` / `select_theme.bat` — Interactive theme switcher.
 
 See [CONFIGURATION.md](docs/CONFIGURATION.md) for a full reference.
 
 ## Docs
 
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — how the project is structured
-- [CONFIGURATION.md](docs/CONFIGURATION.md) — all settings explained
-- [CHANGELOG.md](docs/CHANGELOG.md) — change history (TR)
-- [ROADMAP.md](docs/ROADMAP.md) — planned work (TR)
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — Technical structure and data flow
+- [CONFIGURATION.md](docs/CONFIGURATION.md) — Complete configuration and setup guide
+- [CHANGELOG.md](docs/CHANGELOG.md) — Version change history ([CHANGELOG_TR.md](docs/CHANGELOG_TR.md) for Turkish)
+- [ROADMAP.md](docs/ROADMAP.md) — Planned milestones ([ROADMAP_TR.md](docs/ROADMAP_TR.md) for Turkish)
 
 ## License
 

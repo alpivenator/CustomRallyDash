@@ -67,7 +67,7 @@ def test_apply_theme_to_settings_temp(tmp_path: Path):
     """Test applying a theme safely updates a settings.py file."""
     mock_settings = tmp_path / "settings.py"
     mock_settings.write_text(
-        'COLOR_BG = (0, 0, 0)\nCOLOR_RPM_NORMAL = (10, 20, 30)\n',
+        "COLOR_BG = (0, 0, 0)\nCOLOR_RPM_NORMAL = (10, 20, 30)\n",
         encoding="utf-8",
     )
 

@@ -1,34 +1,30 @@
-# Yol Haritası (Roadmap)
+# Roadmap
 
-Bu dosya **yalnızca tamamlanmamış hedefleri** içerir. Tamamlanan çalışmalar
-`CHANGELOG.md` içinde, mimari bilgi ise `ARCHITECTURE.md` içindedir. Dosya şimdilik Türkçedir.
+This document outlines **planned milestones and future goals** for the project.
+For completed work and version history, see `CHANGELOG.md`. For technical design, see `ARCHITECTURE.md`.
 
-> **Not:** Bu dosyadaki "hedefler" yöneticinin isteğiyle güncellenir.
-> Yapay zeka veya herhangi bir kullanıcı, istenmedikçe, buraya yeni hedef eklemez.
+## Release & Security
 
-## Yayın & Güvenlik
+- [ ] **GitHub Releases:** Publish v0.1.0-alpha (git tag + source archive).
+- [ ] **Security Testing:** Baseline security testing and validation.
+- [ ] **Public Launch:** Make repository publicly available on GitHub.
+- [x] **CI Pipeline:** Automated linting and test workflow via GitHub Actions (`ruff` + `pytest`).
 
-- [ ] **GitHub Releases:** v0.1.0-alpha yayınla (tag + kaynak zip yeterli).
-- [ ] **Güvenlik:** Programın güvenlik testleri (planlanacak).
-- [ ] **GitHub'da public yap** — son adım.
-- [ ] **CI (isteğe bağlı):** Public'e açtıktan sonra GitHub Actions ile ruff + bandit.
+## Usability & Setup
 
+- [x] **Windows Launch Scripts:** One-click launch with `run_dash.bat` and automated virtual environment setup via `install.bat`.
+- [x] **First-Run Setup Wizard:** Interactive CLI wizard to safely configure `config.py` and patch DiRT Rally 2.0 telemetry XML with automatic backups.
 
-## Kullanım Kolaylığı
+## Interface & Customization
 
-- [x] **Windows Başlangıç Betiği:** `run_dash.bat` ile tek tıkla çalıştırma ve `install.bat` ile sanal ortam kurulumu tamamlandı.
-- [x] **Kurulum Sihirbazı:** İlk çalıştırmada `config.py` ve oyun telemetry XML’i yedeklenerek yapılandırılıyor.
+- [x] **Visual Polish (Analog Dash):** Center pivot styling, refined color palette, and dedicated gear indicator dial.
+- [x] **Theme System:** Curated motorsport theme presets in `dashboards/themes.py` (Subaru Classic, GT3 Racing, Night Neon, Retro Amber, Modern Dark).
+- [x] **Theme Selector CLI:** Standalone interactive tool and Windows launcher (`tools/theme_selector.py`, `select_theme.bat`) to switch themes safely.
+- [x] **Mock Telemetry & Live Preview:** Standalone 60 Hz UDP synthetic telemetry generator (`tools/mock_telemetry.py`, `main.py --mock`, `run_mock.bat`).
+- [ ] **Linux Overlay Support:** Transparent click-through overlay on X11/Wayland. **[Priority: Low]**
 
-## Arayüz & Özelleştirme
+## Data & Performance
 
-- [x] **Görsel İyileştirme (analogdash):** Estetik pivot noktası, geliştirilmiş renk paleti ve merkezi vites dairesi.
-- [x] **Tema Sistemi:** Hazır tema paketleri (`dashboards/themes.py` altında Subaru Classic, GT3, Neon, Retro Amber, Modern Dark).
-- [x] **Tema ve Özelleştirme CLI Aracı:** Hazır temaları seçme ve kullanıcı görsel ayarlarını kolayca düzenleme (`tools/theme_selector.py`, `select_theme.bat`).
-- [x] **Mock / Canlı Önizleme Sistemi:** Oyunu açmadan 60 Hz UDP simülasyonu ile canlı önizleme (`tools/mock_telemetry.py`, `main.py --mock`, `run_mock.bat`).
-- [ ] **Linux Overlay Desteği:** X11/Wayland üzerinde saydam overlay penceresi (ileri dönem). **[Öncelik: düşük]**
+- [ ] **Telemetry Logging:** Session recording to CSV/JSON for post-stage telemetry analysis. **[Priority: Low]**
+- [ ] **Performance Profiling:** Frame-time and memory optimization for low-spec embedded hardware.
 
-
-## Veri & Performans
-
-- [ ] **Günlükleme Sistemi:** Analiz için telemetri verilerinin CSV/JSON formatında kaydedilmesi. **[Öncelik: düşük]**
-- [ ] **Performans & Optimizasyon:** Programın daha verimli çalışması için yapılacak düzenlemeler.

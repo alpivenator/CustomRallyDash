@@ -5,3 +5,4 @@ local
 .kilo
 .venv
 *.bak*
+AGENTS.md
