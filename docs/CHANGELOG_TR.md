@@ -3,6 +3,14 @@
 Bu dosyada projede yapılan değişiklikler ters kronolojik sırayla (en yeni en üstte) belgelenir.
 Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz. `ARCHITECTURE.md`.
 
+## [2026-08-31]
+
+### Düzeltildi
+- `pyproject.toml`: Modül içe aktarmalarının (`tools`, `dashboards`, `core`) yerel ortamda ve CI süreçlerinde sorunsuz çözümlenmesi için `pythonpath = ["."]` ve `testpaths = ["tests"]` içeren `[tool.pytest.ini_options]` yapılandırması eklendi.
+- `.github/workflows/ci.yml`: Test çalıştırma adımı çalıştırıcı ortamlarında tutarlı yürütme sağlamak adına `python -m pytest` komutuna uyarlandı.
+
+---
+
 ## [2026-08-29]
 
 ### Değiştirildi

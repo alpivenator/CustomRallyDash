@@ -3,6 +3,14 @@
 All notable changes to this project are documented in this file in reverse chronological order.
 For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
 
+## [2026-08-31]
+
+### Fixed
+- `pyproject.toml`: Added `[tool.pytest.ini_options]` configuration defining `pythonpath = ["."]` and `testpaths = ["tests"]` to resolve module imports (`tools`, `dashboards`, `core`) seamlessly across local and CI test environments.
+- `.github/workflows/ci.yml`: Standardized test execution to `python -m pytest` ensuring consistent runner execution.
+
+---
+
 ## [2026-08-29]
 
 ### Changed

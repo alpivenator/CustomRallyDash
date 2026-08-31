@@ -20,3 +20,8 @@ target-version = ['py312'] # Target Python version for code optimization
 [tool.ruff]
 line-length = 90 # Keep Ruff's line limit consistent with Black
 lint.select = ["E", "F", "I"] # E (Errors), F (Logic Errors), I (Import sorting rules)
+
+# Pytest tool configuration
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
