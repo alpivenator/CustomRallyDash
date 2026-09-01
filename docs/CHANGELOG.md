@@ -9,6 +9,9 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 - `README.md`: Added in-game transparent digital hood HUD screenshot as the primary hero preview banner.
 - `images/`: Converted and optimized screenshot assets to high-compression WebP format, reducing asset footprint by over 90%.
 
+### Changed
+- `pyproject.toml`, `README.md`, `install.bat`, `.github/workflows/ci.yml`, `docs/ARCHITECTURE.md`: Updated Python runtime requirements to support Python 3.11, 3.12, and 3.13 (`>=3.11,<3.14`), set default CI target to Python 3.13, and updated `install.bat` to detect and use Python 3.13, 3.12, or 3.11.
+
 ## [2026-09-01]
 
 ### Added

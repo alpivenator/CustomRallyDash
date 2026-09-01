@@ -19,7 +19,7 @@ A lightweight, real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It 
 
 ## Requirements
 
-- **Python**: `3.12.x` (Python 3.13+ is currently not supported)
+- **Python**: `3.11.x`, `3.12.x`, or `3.13.x` (Python 3.14+ is currently not supported)
 - **Dependencies**: `pygame==2.6.1`, `gpiozero==2.0.1` (optional, Raspberry Pi only)
 
 ---
@@ -44,7 +44,7 @@ Run the provided batch scripts from the repository root:
 
 ```sh
 # 1. Environment Setup
-python3.12 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 

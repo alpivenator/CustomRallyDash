@@ -93,7 +93,7 @@ main.py
             └─ pygame.display.flip()
 ```
 
-On Windows, `install.bat` creates the Python 3.12 virtual environment and runs
+On Windows, `install.bat` creates the Python 3.11/3.12/3.13 virtual environment and runs
 `tools/setup_wizard.py`. The wizard presents a bilingual interface (English / Turkish)
 and updates the existing `config.py` after creating a timestamped backup, so the
 dashboard modules continue to consume the same configuration interface. It also

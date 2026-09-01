@@ -9,6 +9,9 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 - `README.md`: Başlık altına kaput üstü saydam (kroma) dijital HUD göstergesini içeren oyun içi ana önizleme görseli eklendi.
 - `images/`: Ekran görüntüsü varlıkları yüksek sıkıştırmalı WebP formatına dönüştürülerek optimize edildi ve depo varlık boyutu %90'ın üzerinde küçültüldü.
 
+### Değiştirildi
+- `pyproject.toml`, `README.md`, `install.bat`, `.github/workflows/ci.yml`, `docs/ARCHITECTURE.md`: Python çalışma zamanı gereksinimleri Python 3.11, 3.12 ve 3.13 (`>=3.11,<3.14`) sürümlerini destekleyecek şekilde güncellendi, varsayılan CI hedefi Python 3.13 yapıldı ve `install.bat` sırasıyla Python 3.13, 3.12 ve 3.11 sürümlerini algılayacak şekilde esnetildi.
+
 ## [2026-09-01]
 
 ### Eklendi
