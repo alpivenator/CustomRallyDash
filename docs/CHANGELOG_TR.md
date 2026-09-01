@@ -14,12 +14,16 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 ### Değiştirildi
 - `config.py` & `settings.py`: Üst katman mimarisi refaktör edilerek `config.py` içinde yalnızca sistem seviyesindeki `ENABLE_OVERLAY` anahtarı bırakıldı; görsel ve konumlandırma ayarları (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_MARGIN`, `OVERLAY_ALPHA`, `OVERLAY_CHROMA_KEY`) `settings.py` dosyasına taşındı.
 - `settings.py`: Varsayılan `OVERLAY_MODE` değeri `"chroma"` ve `OVERLAY_POSITION` değeri `"bottom-right"` olarak güncellendi; `OVERLAY_CHROMA_KEY = COLOR_BG` şeklinde dinamik bağlanarak seçilen temalarla otomatik eşleşmesi sağlandı.
+- `settings.py` & `dashboards/themes.py`: Varsayılan `COLOR_REDLINE` rengi ibrenin saf kırmızısından ayrışacak şekilde daha açık ve hafif pembemsi kırmızı tona (`(255, 65, 105, 110)`) güncellendi.
 - `core/overlay_win.py`: `apply_overlay` (`mode="chroma"`) ve `position_window` (`position="bottom-right"`) varsayılan parametreleri güncellendi.
 - `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: RPM uyarı eşiği erişimi doğrudan `settings.RPM_WARNING_THRESHOLD` özelliğine bağlanarak sadeleştirildi.
 - `tools/setup_wizard.py`: Kurulum tamamlama ekranındaki yönlendirmelere (EN & TR) çevrimdışı sahte telemetri testi (`run_mock.bat` / `--mock`) ve tema seçici (`select_theme.bat`) adımları eklendi.
 - `README.md`: Dokümantasyon aşırı didaktik anlatımdan arındırılarak kompakt Hızlı Başlangıç tabloları ve yalın CLI akışları içeren açık kaynak ve mühendislik odaklı bir dille yeniden yazıldı.
 - `docs/CONFIGURATION.md`: Yapılandırma kılavuzuna `select_theme.bat` ve `run_mock.bat` kullanım detayları eklendi; üst katman ayarları görsel ayarlar tablosuna taşındı.
 - `docs/ARCHITECTURE.md`: Windows platform notları `settings.py` yapılandırma sorumluluğunu yansıtacak şekilde güncellendi.
+
+### Düzeltildi
+- `dashboards/analog_dash.py`: `draw_redline_zone` fonksiyonunda `pygame.draw.arc` yerine trigonometrik sektör poligon dolgusu (`pygame.draw.polygon`) kullanılarak kalın yay çizimindeki piksel atlama, moiré ve siyah nokta pürüzleri giderildi.
 
 
 ---

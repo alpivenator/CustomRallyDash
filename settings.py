@@ -38,7 +38,7 @@ COLOR_RPM_WARNING = (255, 40, 40)
 COLOR_THROTTLE = (40, 220, 100)
 COLOR_BRAKE = (255, 60, 60)
 COLOR_FRAME = (80, 80, 90)
-COLOR_REDLINE = (255, 40, 40, 100)
+COLOR_REDLINE = (255, 65, 105, 110)
 
 # Chroma-key colour — pixels matching this colour become transparent in "chroma" mode.
 # By default, this dynamically follows COLOR_BG so themes match automatically.

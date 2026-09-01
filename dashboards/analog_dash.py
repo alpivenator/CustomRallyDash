@@ -183,6 +183,9 @@ def run() -> None:
         sweep_angle,
         redline_start_ratio,
     ):
+        if redline_start_ratio >= 1.0:
+            return
+
         redline_end_ratio = 1.00
 
         redline_start_angle = start_angle + (redline_start_ratio * sweep_angle)
@@ -191,19 +194,21 @@ def run() -> None:
         # Use a separate surface with SRCALPHA for transparency
         redline_surface = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
 
-        # pygame.draw.arc uses counterclockwise angles; convert:
-        #   pygame_angle = -needle_angle
-        pygame_start = math.radians(-redline_end_angle)
-        pygame_end = math.radians(-redline_start_angle)
-        pygame.draw.arc(
-            redline_surface,
-            REDLINE_COLOR,
-            (0, 0, radius * 2, radius * 2),
-            pygame_start,
-            pygame_end,
-            radius - _s(10),
-        )
+        # Draw a solid sector polygon to avoid SDL/pygame arc moiré artifacts
+        c_x, c_y = radius, radius
+        arc_radius = radius - 1
+        num_steps = max(2, int(redline_end_angle - redline_start_angle) + 1)
+        points = [(c_x, c_y)]
+        for i in range(num_steps + 1):
+            angle = redline_start_angle + (redline_end_angle - redline_start_angle) * (
+                i / num_steps
+            )
+            rad = math.radians(angle)
+            points.append(
+                (c_x + arc_radius * math.cos(rad), c_y + arc_radius * math.sin(rad))
+            )
 
+        pygame.draw.polygon(redline_surface, REDLINE_COLOR, points)
         surface.blit(redline_surface, (center_x - radius, center_y - radius))
 
     # ------------------------------------------------------------------

@@ -14,12 +14,16 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 ### Changed
 - `config.py` & `settings.py`: Refactored overlay configuration architecture by keeping only `ENABLE_OVERLAY` toggle in `config.py` and migrating all visual/window positioning settings (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_MARGIN`, `OVERLAY_ALPHA`, `OVERLAY_CHROMA_KEY`) into `settings.py`.
 - `settings.py`: Set default `OVERLAY_MODE` to `"chroma"` and `OVERLAY_POSITION` to `"bottom-right"`, dynamically aliasing `OVERLAY_CHROMA_KEY = COLOR_BG` for automatic synchronization with active color themes.
+- `settings.py` & `dashboards/themes.py`: Updated `COLOR_REDLINE` default to a brighter, soft rose-red tone (`(255, 65, 105, 110)`) distinct from the warning needle color.
 - `core/overlay_win.py`: Updated default argument values for `apply_overlay` (`mode="chroma"`) and `position_window` (`position="bottom-right"`).
 - `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: Simplified RPM warning threshold lookup to direct `settings.RPM_WARNING_THRESHOLD` attribute access.
 - `tools/setup_wizard.py`: Expanded setup completion next-steps instructions (EN & TR) to include offline preview (`run_mock.bat` / `--mock`) and theme selector (`select_theme.bat`).
 - `README.md`: Refactored documentation with a clean, engineering-focused structure featuring concise Quick Start tables, clear CLI workflows, and zero boilerplate.
 - `docs/CONFIGURATION.md`: Added dedicated quick-start guidance and documentation for `select_theme.bat` and `run_mock.bat`, and moved overlay settings to the visual settings table.
 - `docs/ARCHITECTURE.md`: Updated Windows overlay architecture documentation to reflect `settings.py` parameter ownership.
+
+### Fixed
+- `dashboards/analog_dash.py`: Replaced `pygame.draw.arc` with a smooth trigonometric pie-sector polygon fill (`pygame.draw.polygon`) in `draw_redline_zone`, eliminating rasterization gaps, moiré patterns, and black pixel artifacts.
 
 
 ---

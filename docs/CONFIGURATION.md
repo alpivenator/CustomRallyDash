@@ -127,7 +127,7 @@ python tools/theme_selector.py
 | `COLOR_THROTTLE` | `(40, 220, 100)` | Throttle bar colour. |
 | `COLOR_BRAKE` | `(255, 60, 60)` | Brake bar colour. |
 | `COLOR_FRAME` | `(80, 80, 90)` | Frame/outline colour. |
-| `COLOR_REDLINE` | `(255, 40, 40, 100)` | Redline marker; the 4th value is alpha (`100` = semi-transparent red). |
+| `COLOR_REDLINE` | `(255, 65, 105, 110)` | Redline marker; the 4th value is alpha (`110` = semi-transparent rose-red). |
 | `RPM_WARNING_THRESHOLD` | `0.90` | Fraction of `max_rpm` (0.0–1.0) at which the needle / RPM bar turns red. |
 | `FONT_HUGE_SIZE` | `82` | Largest font (gear value). |
 | `FONT_LARGE_SIZE` | `50` | Large font (speed values). |
