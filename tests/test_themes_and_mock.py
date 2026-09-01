@@ -82,3 +82,12 @@ def test_apply_theme_to_settings_temp(tmp_path: Path):
     content = mock_settings.read_text(encoding="utf-8")
     assert "COLOR_BG = (12, 18, 32)" in content
     assert "COLOR_RPM_NORMAL = (255, 204, 0)" in content
+
+
+def test_rpm_warning_threshold_setting():
+    """Verify that settings.py defines a valid RPM_WARNING_THRESHOLD float."""
+    import settings
+
+    assert hasattr(settings, "RPM_WARNING_THRESHOLD")
+    assert isinstance(settings.RPM_WARNING_THRESHOLD, (int, float))
+    assert 0.0 < settings.RPM_WARNING_THRESHOLD <= 1.0

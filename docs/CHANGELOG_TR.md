@@ -3,7 +3,27 @@
 Bu dosyada projede yapılan değişiklikler ters kronolojik sırayla (en yeni en üstte) belgelenir.
 Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz. `ARCHITECTURE.md`.
 
+## [2026-09-01]
+
+### Değiştirildi
+- `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: RPM uyarı eşiği erişimi doğrudan `settings.RPM_WARNING_THRESHOLD` özelliğine bağlanarak sadeleştirildi.
+- `tools/setup_wizard.py`: Kurulum tamamlama ekranındaki yönlendirmelere (EN & TR) çevrimdışı sahte telemetri testi (`run_mock.bat` / `--mock`) ve tema seçici (`select_theme.bat`) adımları eklendi.
+- `README.md`: Dokümantasyon aşırı didaktik anlatımdan arındırılarak kompakt Hızlı Başlangıç tabloları ve yalın CLI akışları içeren açık kaynak ve mühendislik odaklı bir dille yeniden yazıldı.
+- `docs/CONFIGURATION.md`: Yapılandırma kılavuzuna `select_theme.bat` ve `run_mock.bat` kullanım detayları eklendi.
+
+---
+
 ## [2026-08-31]
+
+### Eklendi
+- `settings.py`: Göstergelerin uyarı rengine geçiş eşiğini merkezi olarak yöneten `RPM_WARNING_THRESHOLD` yapılandırma parametresi (varsayılan `0.90`) eklendi.
+- `tests/test_themes_and_mock.py`: `settings.RPM_WARNING_THRESHOLD` parametresinin geçerliliğini denetleyen birim testi eklendi.
+
+### Değiştirildi
+- `dashboards/analog_dash.py`: İbre ve gösterge uyarı rengi koşulu, yalnızca %100 kırmızı çizgide değil, motor devri `max_rpm * RPM_WARNING_THRESHOLD` eşiğine ulaştığında tetiklenecek şekilde güncellendi.
+- `dashboards/analog_dash.py`: Vites dairesi merkezindeki iç vurgu çemberinin çizgi kalınlığı artırılarak görsel belirginliği yükseltildi.
+- `dashboards/digital_dash.py`: Devir çubuğunun kırmızı uyarı rengine dönüşümü `settings.RPM_WARNING_THRESHOLD` parametresine bağlandı.
+- `README.md` & `docs/CONFIGURATION.md`: Windows'ta indirilen ZIP arşivlerinin ayıklanıp çalıştırılmadan önce özelliklerden "Engellemeyi kaldır" (Unblock) onayının verilmesi gerektiğine dair kurulum notları eklendi.
 
 ### Düzeltildi
 - `pyproject.toml`: Modül içe aktarmalarının (`tools`, `dashboards`, `core`) yerel ortamda ve CI süreçlerinde sorunsuz çözümlenmesi için `pythonpath = ["."]` ve `testpaths = ["tests"]` içeren `[tool.pytest.ini_options]` yapılandırması eklendi.

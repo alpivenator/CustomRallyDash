@@ -231,8 +231,9 @@ def run() -> None:
             needle_end_x = center_x + (radius - _s(15)) * math.cos(current_angle_rad)
             needle_end_y = center_y + (radius - _s(15)) * math.sin(current_angle_rad)
 
-            # Needle colour: red when in car's redline zone
-            needle_color = RPM_WARNING if rpm_ratio >= redline_start_ratio else RPM_NORMAL
+            # Needle colour: red when RPM reaches warning threshold of car's max_rpm
+            is_warning = rpm >= (max_rpm * settings.RPM_WARNING_THRESHOLD)
+            needle_color = RPM_WARNING if is_warning else RPM_NORMAL
 
             # Draw needle (behind central gear housing)
             pygame.draw.line(
@@ -248,7 +249,11 @@ def run() -> None:
             pygame.draw.circle(screen, BG_COLOR, (center_x, center_y), gear_radius)
             pygame.draw.circle(screen, FRAME_COLOR, (center_x, center_y), gear_radius, 2)
             pygame.draw.circle(
-                screen, needle_color, (center_x, center_y), gear_radius - _s(4), 1
+                screen,
+                needle_color,
+                (center_x, center_y),
+                gear_radius - _s(4),
+                max(2, _s(3)),
             )
 
             # Gear text

@@ -1,87 +1,105 @@
-# Telemetry Dashboard for DiRT Rally 2.0 
+# Telemetry Dashboard for DiRT Rally 2.0
 
-A real-time telemetry dashboard for **DiRT Rally 2.0**. The game broadcasts raw
-UDP packets in the **Extradata=3** format at 60 Hz; this project captures,
-decodes, and renders them live as a compact digital dash or an analog gauge —
-optionally as a click-through overlay on Windows and/or mirrored to physical
-shift lights on a Raspberry Pi.
+A lightweight, real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It decodes 60 Hz UDP (`Extradata=3`) packets from the game's physics engine and renders low-latency visual instrumentation — supporting compact digital HUDs, circular analog tachometers, borderless Windows click-through overlays, and Raspberry Pi GPIO shift lights.
+
+---
 
 ## Features
 
-- Digital dashboard (RPM bar, gear, speed, throttle/brake bars) and analog
-  gauge dashboard (needle, dial ticks, dynamic redline).
-- Windows click-through overlay with `alpha` and `chroma` transparency modes.
-- Interactive theme selector.
-- Standalone 60 Hz mock telemetry generator for live preview.
-- Raspberry Pi shift-light LEDs via `gpiozero` (optional).
-- Full visual customization through `settings.py` (colours, fonts, sizes,
-  scaling, overlay position).
+- **Dashboard Layouts**: Modern horizontal digital bar HUD and circular analog gauge with dynamic redline detection.
+- **Windows Overlay**: Transparent, click-through overlay with `alpha` and `chroma` compositing modes that stays on top during gameplay.
+- **Motorsport Themes**: Interactive theme selector with curated presets (`Modern Dark`, `Subaru WRC`, `GT3 Racing`, `Night Neon`, `Retro Amber`).
+- **Mock Telemetry Broadcaster**: Standalone 60 Hz synthetic packet generator modeling WRC acceleration, sequential shifts, and trail-braking for offline testing and tuning.
+- **Hardware Shift Lights**: Physical LED integration via Raspberry Pi GPIO (`gpiozero`).
+- **Zero-Bloat Configuration**: Plain Python configuration files (`config.py` for system/runtime, `settings.py` for UI/styling).
+
+---
 
 ## Requirements
 
-- Python **3.12.x** (Python 3.13 and newer are not supported)
-- `pygame==2.6.1`
-- Raspberry Pi shift lights: `gpiozero==2.0.1` (optional)
+- **Python**: `3.12.x` (Python 3.13+ is currently not supported)
+- **Dependencies**: `pygame==2.6.1`, `gpiozero==2.0.1` (optional, Raspberry Pi only)
 
-## Getting Started
+---
 
-### Windows (Quick Start)
+## Quick Start
 
-1. **Install Python 3.12**: Install Python 3.12 x64 and make sure the Python Launcher (`py`) is added to PATH.
-2. **Run Installer**: Double-click `install.bat`. It creates a `.venv`, installs dependencies, and launches the interactive setup wizard.
-3. **Setup Wizard**:
-   - Select your language (English or Turkish).
-   - Enter your dashboard machine's IP (default `127.0.0.1` for local setup, or local LAN IP like `192.168.1.x` for remote).
-   - Select dashboard style (`digital` or `analog`) and overlay mode.
-4. **Launch Dashboard**: Double-click `run_dash.bat` (or test UDP reception using `check_telemetry.bat`).
+### Windows
 
-### Linux & Manual Setup
+Run the provided batch scripts from the repository root:
 
-1. **Clone repository and set up virtual environment**:
-   ```sh
-   git clone https://github.com/alpivenator/Telemetry-Dashboard-for-Dirt-Rally-2.0.git
-   cd Telemetry-Dashboard-for-Dirt-Rally-2.0
-   python3.12 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   ```
+| Script | Purpose | Description |
+| :--- | :--- | :--- |
+| `install.bat` | **First-Time Setup** | Creates `.venv`, installs dependencies, and runs the setup wizard. |
+| `run_dash.bat` | **Launch Dashboard** | Starts the telemetry dashboard. |
+| `select_theme.bat` | **Theme Switcher** | Interactive CLI to apply motorsport colour palettes. |
+| `run_mock.bat` | **Offline Preview** | Broadcasts simulated 60 Hz telemetry for offline testing. |
+| `check_telemetry.bat` | **Diagnostics** | Listens for active UDP broadcast packets and verifies connection. |
 
-2. **Run Interactive Setup or Launch Directly**:
-   ```sh
-   # Run setup wizard
-   python tools/setup_wizard.py
+> **Note for ZIP downloads**: If you downloaded this repository as a `.zip` archive on Windows, unblock the file before extracting (*Right Click → Properties → Check "Unblock" → Apply*).
 
-   # Launch dashboard
-   python main.py
+### Linux & Command Line
 
-   # Or preview instantly with synthetic telemetry
-   python main.py --mock
-   ```
+```sh
+# 1. Environment Setup
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 
-### DiRT Rally 2.0 Telemetry Setup
+# 2. Interactive Setup Wizard (configures config.py & game XML)
+python tools/setup_wizard.py
 
-The game telemetry configuration is stored at:
-`Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml`.
+# 3. Launch Dashboard
+python main.py
 
-Ensure the `<udp>` block has `enabled="true"`, `extradata="3"`, and `port="20777"`. See [CONFIGURATION.md](docs/CONFIGURATION.md) for full manual configuration details and firewall guidelines.
+# Optional: Launch dashboard with synthetic mock telemetry
+python main.py --mock
 
-## Configuration
+# Optional: Switch visual theme
+python tools/theme_selector.py
+```
 
-- `config.py` — system & hardware settings (network IP/port, LEDs, overlay behaviour).
-- `settings.py` — visual layout & styling (colours, fonts, sizes, positions).
-- `tools/telemetry_check.py` / `check_telemetry.bat` — UDP connection diagnostic.
-- `tools/theme_selector.py` / `select_theme.bat` — Interactive theme switcher.
+---
 
-See [CONFIGURATION.md](docs/CONFIGURATION.md) for a full reference.
+## Game UDP Configuration
 
-## Docs
+DiRT Rally 2.0 outputs telemetry via UDP when configured in `hardware_settings_config.xml`:
 
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — Technical structure and data flow
-- [CONFIGURATION.md](docs/CONFIGURATION.md) — Complete configuration and setup guide
-- [CHANGELOG.md](docs/CHANGELOG.md) — Version change history ([CHANGELOG_TR.md](docs/CHANGELOG_TR.md) for Turkish)
-- [ROADMAP.md](docs/ROADMAP.md) — Planned milestones ([ROADMAP_TR.md](docs/ROADMAP_TR.md) for Turkish)
+```text
+Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml
+```
+
+Ensure the `<motion_platform>` section contains the following entry:
+
+```xml
+<udp enabled="true" extradata="3" ip="127.0.0.1" port="20777" delay="1" />
+```
+
+*For multi-machine setups (dashboard running on a separate machine or Raspberry Pi), set `ip` to the dashboard machine's local LAN IPv4 address.*
+
+---
+
+## Architecture & Configuration
+
+- `config.py` — Network interface (`LISTEN_IP`, `LISTEN_PORT`), overlay behavior, and hardware flags.
+- `settings.py` — Window dimensions, scaling (`TARGET_SCALE`), color themes, RPM warning threshold (`RPM_WARNING_THRESHOLD`), and font sizes.
+- `core/` — Telemetry packet parser (`udp_listener.py`), Windows overlay hooks (`overlay_win.py`), and GPIO LED controller (`led_controller.py`).
+- `dashboards/` — Pygame renderers (`digital_dash.py`, `analog_dash.py`) and color definitions (`themes.py`).
+- `tools/` — First-run wizard (`setup_wizard.py`), packet diagnostics (`telemetry_check.py`), synthetic telemetry generator (`mock_telemetry.py`), and theme CLI (`theme_selector.py`).
+
+For full configuration options and firewall guidelines, see [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
+
+---
+
+## Documentation
+
+- [Architecture & Data Flow](docs/ARCHITECTURE.md)
+- [Configuration Reference](docs/CONFIGURATION.md)
+- [Changelog](docs/CHANGELOG.md) ([Türkçe](docs/CHANGELOG_TR.md))
+- [Roadmap](docs/ROADMAP.md) ([Türkçe](docs/ROADMAP_TR.md))
+
+---
 
 ## License
 
-This project is licensed under the **GPL-3.0** license. See
-[LICENSE](LICENSE).
+This project is licensed under the **GPL-3.0** license. See [LICENSE](LICENSE).

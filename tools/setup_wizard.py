@@ -88,7 +88,12 @@ MESSAGES: dict[str, dict[str, str]] = {
             "     run check_telemetry.bat  (or: .venv\\Scripts\\python.exe "
             "tools\\telemetry_check.py)\n"
             "     Note: The dashboard must be closed while testing.\n\n"
-            "  2. Launch the dashboard:\n"
+            "  2. Preview without the game (mock telemetry):\n"
+            "     run run_mock.bat  (or: python main.py --mock)\n\n"
+            "  3. Customise visual theme:\n"
+            "     run select_theme.bat  (or: .venv\\Scripts\\python.exe "
+            "tools\\theme_selector.py)\n\n"
+            "  4. Launch the dashboard:\n"
             "     run run_dash.bat\n"
         ),
         "yes_label": "Yes",
@@ -148,7 +153,12 @@ MESSAGES: dict[str, dict[str, str]] = {
             "     check_telemetry.bat çalıştırın  (veya: .venv\\Scripts\\python.exe "
             "tools\\telemetry_check.py)\n"
             "     Not: Test sırasında dashboard kapalı olmalıdır.\n\n"
-            "  2. Dashboard'u başlatın:\n"
+            "  2. Oyun olmadan sahte telemetri ile test edin / önizleyin:\n"
+            "     run_mock.bat çalıştırın  (veya: python main.py --mock)\n\n"
+            "  3. Görsel temayı özelleştirin:\n"
+            "     select_theme.bat çalıştırın  (veya: .venv\\Scripts\\python.exe "
+            "tools\\theme_selector.py)\n\n"
+            "  4. Dashboard'u başlatın:\n"
             "     run_dash.bat çalıştırın\n"
         ),
         "yes_label": "Evet",

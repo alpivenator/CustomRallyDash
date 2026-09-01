@@ -3,7 +3,27 @@
 All notable changes to this project are documented in this file in reverse chronological order.
 For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
 
+## [2026-09-01]
+
+### Changed
+- `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: Simplified RPM warning threshold lookup to direct `settings.RPM_WARNING_THRESHOLD` attribute access.
+- `tools/setup_wizard.py`: Expanded setup completion next-steps instructions (EN & TR) to include offline preview (`run_mock.bat` / `--mock`) and theme selector (`select_theme.bat`).
+- `README.md`: Refactored documentation with a clean, engineering-focused structure featuring concise Quick Start tables, clear CLI workflows, and zero boilerplate.
+- `docs/CONFIGURATION.md`: Added dedicated quick-start guidance and documentation for `select_theme.bat` and `run_mock.bat`.
+
+---
+
 ## [2026-08-31]
+
+### Added
+- `settings.py`: Added `RPM_WARNING_THRESHOLD` configuration setting (default `0.90`) to centrally configure the threshold at which tachometers shift to warning colour.
+- `tests/test_themes_and_mock.py`: Added unit test verifying the `settings.RPM_WARNING_THRESHOLD` configuration value.
+
+### Changed
+- `dashboards/analog_dash.py`: Updated needle warning colour trigger to switch to `RPM_WARNING` when engine RPM reaches `max_rpm * RPM_WARNING_THRESHOLD` rather than only at 100% redline.
+- `dashboards/analog_dash.py`: Increased stroke width of the central gear housing accent ring for enhanced contrast and visual prominence.
+- `dashboards/digital_dash.py`: Standardised the RPM bar warning color transition against `settings.RPM_WARNING_THRESHOLD`.
+- `README.md` & `docs/CONFIGURATION.md`: Added Windows installation instructions on unblocking downloaded ZIP archives before extracting and running batch scripts.
 
 ### Fixed
 - `pyproject.toml`: Added `[tool.pytest.ini_options]` configuration defining `pythonpath = ["."]` and `testpaths = ["tests"]` to resolve module imports (`tools`, `dashboards`, `core`) seamlessly across local and CI test environments.

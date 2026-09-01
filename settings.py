@@ -31,6 +31,10 @@ COLOR_BRAKE = (255, 60, 60)
 COLOR_FRAME = (80, 80, 90)
 COLOR_REDLINE = (255, 40, 40, 100)
 
+# RPM warning threshold ratio (0.0 – 1.0) relative to max_rpm.
+# Gauge needle or digital bar switches to RPM_WARNING colour when RPM reaches this ratio.
+RPM_WARNING_THRESHOLD = 0.90
+
 # Font sizes (base values, scaled automatically when TARGET_SCALE is set)
 FONT_HUGE_SIZE = 80
 FONT_LARGE_SIZE = 48

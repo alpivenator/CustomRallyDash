@@ -6,10 +6,13 @@ time the program is started (there is no hot-reload).
 - `config.py` — **system settings** (network, hardware, overlay behaviour).
 - `settings.py` — **visual settings** (sizes, colours, fonts, overlay position).
 
-`install.bat` runs `tools/setup_wizard.py`. The setup wizard prompts for language
-(English or Turkish). After the setup summary is approved, the wizard creates a
-timestamped backup and changes selected system settings directly in `config.py`;
-it does not create a second configuration file. Visual settings remain manual.
+`install.bat` runs `tools/setup_wizard.py`. If you downloaded the repository
+as a ZIP file on Windows, make sure to unblock the archive (Right Click ->
+Properties -> check Unblock / *Engellemeyi kaldır*) before extracting and
+running batch files. The setup wizard prompts for language (English or Turkish).
+After the setup summary is approved, the wizard creates a timestamped backup
+and changes selected system settings directly in `config.py`; it does not
+create a second configuration file. Visual settings remain manual.
 
 ## System Settings (`config.py`)
 
@@ -76,6 +79,35 @@ check the firewall, the game's XML IP/port values, and that DiRT Rally 2.0 is
 running and in a stage. The dashboard must remain closed because both programs
 cannot bind the same UDP port at the same time.
 
+### Offline preview with mock telemetry
+
+To test or preview dashboard styles without running DiRT Rally 2.0:
+
+On Windows:
+```sh
+run_mock.bat
+```
+Keep this broadcaster window open, and double-click `run_dash.bat`.
+
+Alternatively, launch both together:
+```sh
+python main.py --mock
+```
+
+### Visual theme customization
+
+To switch between motorsport-inspired colour presets safely without editing `settings.py` by hand:
+
+On Windows:
+```sh
+select_theme.bat
+```
+
+Or run via Python in your active virtual environment:
+```sh
+python tools/theme_selector.py
+```
+
 ## Visual Settings (`settings.py`)
 
 | Setting | Default | Description |
@@ -94,6 +126,7 @@ cannot bind the same UDP port at the same time.
 | `COLOR_BRAKE` | `(255, 60, 60)` | Brake bar colour. |
 | `COLOR_FRAME` | `(80, 80, 90)` | Frame/outline colour. |
 | `COLOR_REDLINE` | `(255, 40, 40, 100)` | Redline marker; the 4th value is alpha (`100` = semi-transparent red). |
+| `RPM_WARNING_THRESHOLD` | `0.90` | Fraction of `max_rpm` (0.0–1.0) at which the needle / RPM bar turns red. |
 | `FONT_HUGE_SIZE` | `80` | Largest font (main values). |
 | `FONT_LARGE_SIZE` | `48` | Large font (labels). |
 | `FONT_MEDIUM_SIZE` | `20` | Medium font (digital dashboard only). |

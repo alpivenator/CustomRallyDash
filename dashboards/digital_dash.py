@@ -106,8 +106,10 @@ def run() -> None:
             # Update physical shift-light LEDs
             led_controller.update_leds(rpm_ratio)
 
-            # Colour changes to red when above 90% redline
-            bar_color = RPM_WARNING if rpm_ratio >= 0.90 else RPM_NORMAL
+            # Colour changes to red when reaching warning threshold
+            bar_color = (
+                RPM_WARNING if rpm_ratio >= settings.RPM_WARNING_THRESHOLD else RPM_NORMAL
+            )
 
             pygame.draw.rect(screen, bar_color, (bar_x, bar_y, bar_current_w, bar_h))
             pygame.draw.rect(screen, FRAME_COLOR, (bar_x, bar_y, bar_max_w, bar_h), 2)
