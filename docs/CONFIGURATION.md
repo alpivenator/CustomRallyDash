@@ -40,10 +40,6 @@ dashboard computer's LAN IPv4 address (for example, `192.168.1.25`) in the setup
 wizard. The wizard writes that same address to both `config.py` and the game's
 telemetry XML.
 
-Existing users with `LISTEN_IP = "0.0.0.0"` are not changed automatically. This
-value listens on every interface; replace it with a specific address when you
-want to restrict the listener.
-
 ### Game telemetry configuration
 
 The game file is normally located at:

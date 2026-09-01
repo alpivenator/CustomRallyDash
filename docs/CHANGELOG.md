@@ -3,6 +3,11 @@
 All notable changes to this project are documented in this file in reverse chronological order.
 For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
 
+## [2026-09-02]
+
+### Added
+- `README.md`: Added in-game transparent digital hood HUD screenshot as the primary hero preview banner.
+
 ## [2026-09-01]
 
 ### Added

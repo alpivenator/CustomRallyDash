@@ -3,6 +3,11 @@
 Bu dosyada projede yapılan değişiklikler ters kronolojik sırayla (en yeni en üstte) belgelenir.
 Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz. `ARCHITECTURE.md`.
 
+## [2026-09-02]
+
+### Eklendi
+- `README.md`: Başlık altına kaput üstü saydam (kroma) dijital HUD göstergesini içeren oyun içi ana önizleme görseli eklendi.
+
 ## [2026-09-01]
 
 ### Eklendi
