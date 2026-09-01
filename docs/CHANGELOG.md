@@ -19,7 +19,8 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 - `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: Simplified RPM warning threshold lookup to direct `settings.RPM_WARNING_THRESHOLD` attribute access.
 - `tools/setup_wizard.py`: Expanded setup completion next-steps instructions (EN & TR) to include offline preview (`run_mock.bat` / `--mock`) and theme selector (`select_theme.bat`).
 - `README.md`: Refactored documentation with a clean, engineering-focused structure featuring concise Quick Start tables, clear CLI workflows, and zero boilerplate.
-- `docs/CONFIGURATION.md`: Added dedicated quick-start guidance and documentation for `select_theme.bat` and `run_mock.bat`, and moved overlay settings to the visual settings table.
+- `config.py`: Set default `DASH_STYLE` to `"digital"` as the recommended compact horizontal bar HUD layout.
+- `docs/CONFIGURATION.md`: Added dedicated quick-start guidance and documentation for `select_theme.bat` and `run_mock.bat`, added dashboard style section detailing digital HUD as default, and moved overlay settings to the visual settings table.
 - `docs/ARCHITECTURE.md`: Updated Windows overlay architecture documentation to reflect `settings.py` parameter ownership.
 
 ### Fixed

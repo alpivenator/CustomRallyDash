@@ -19,7 +19,8 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 - `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: RPM uyarı eşiği erişimi doğrudan `settings.RPM_WARNING_THRESHOLD` özelliğine bağlanarak sadeleştirildi.
 - `tools/setup_wizard.py`: Kurulum tamamlama ekranındaki yönlendirmelere (EN & TR) çevrimdışı sahte telemetri testi (`run_mock.bat` / `--mock`) ve tema seçici (`select_theme.bat`) adımları eklendi.
 - `README.md`: Dokümantasyon aşırı didaktik anlatımdan arındırılarak kompakt Hızlı Başlangıç tabloları ve yalın CLI akışları içeren açık kaynak ve mühendislik odaklı bir dille yeniden yazıldı.
-- `docs/CONFIGURATION.md`: Yapılandırma kılavuzuna `select_theme.bat` ve `run_mock.bat` kullanım detayları eklendi; üst katman ayarları görsel ayarlar tablosuna taşındı.
+- `config.py`: Varsayılan gösterge türü (`DASH_STYLE`), projenin asıl odak noktası olan modern yatay HUD düzenini sunmak üzere `"digital"` olarak ayarlandı.
+- `docs/CONFIGURATION.md`: Yapılandırma kılavuzuna `select_theme.bat` ve `run_mock.bat` kullanım detayları eklendi; varsayılan dijital HUD'ı detaylandıran gösterge türü bölümü eklendi ve üst katman ayarları görsel ayarlar tablosuna taşındı.
 - `docs/ARCHITECTURE.md`: Windows platform notları `settings.py` yapılandırma sorumluluğunu yansıtacak şekilde güncellendi.
 
 ### Düzeltildi

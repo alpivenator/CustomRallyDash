@@ -8,7 +8,7 @@ time the program is started (there is no hot-reload).
 
 `install.bat` runs `tools/setup_wizard.py`. If you downloaded the repository
 as a ZIP file on Windows, make sure to unblock the archive (Right Click ->
-Properties -> check Unblock / *Engellemeyi kaldır*) before extracting and
+Properties -> check Unblock) before extracting and
 running batch files. The setup wizard prompts for language (English or Turkish).
 After the setup summary is approved, the wizard creates a timestamped backup
 and changes selected system settings directly in `config.py`; it does not
@@ -21,8 +21,15 @@ create a second configuration file. Visual settings remain manual.
 | `ENABLE_LEDS` | `False` | Enable Raspberry Pi shift-light LEDs (requires `gpiozero`). |
 | `LISTEN_IP` | `"127.0.0.1"` | Network interface for the dashboard UDP listener. Use the dashboard computer's LAN IPv4 address for a remote game computer. |
 | `LISTEN_PORT` | `20777` | UDP port the game broadcasts telemetry to. |
-| `DASH_STYLE` | `"digital"` | Dashboard variant: `"digital"` or `"analog"`. |
+| `DASH_STYLE` | `"digital"` | Dashboard variant: `"digital"` (compact horizontal HUD, default) or `"analog"` (circular gauge). |
 | `ENABLE_OVERLAY` | `True` | Enable the borderless, transparent, click-through overlay window (Windows only; silently ignored elsewhere). |
+
+
+### Dashboard style
+
+`DASH_STYLE` in `config.py` selects the active display layout:
+- `"digital"` (**Default / Recommended**): Compact horizontal bar HUD (600×200 px) designed for high-visibility stage awareness and transparent in-game overlay placement.
+- `"analog"`: Circular tachometer gauge (600×350 px) with needle, dial markings, dynamic redline zone, and central gear readout.
 
 
 ### Network address
