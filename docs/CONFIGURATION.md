@@ -149,5 +149,5 @@ Font sizes are scaled automatically when `TARGET_SCALE` is set.
 
 The telemetry stream is unauthenticated UDP broadcast on the local network.
 Only run the program on networks you trust. Set `LISTEN_IP` to the machine's
-LAN IP instead of `0.0.0.0` if you want to restrict which interface receives
+LAN IP if you want to restrict which interface receives
 packets.
