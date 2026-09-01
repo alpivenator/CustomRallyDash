@@ -7,6 +7,7 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 
 ### Added
 - `README.md`: Added in-game transparent digital hood HUD screenshot as the primary hero preview banner.
+- `images/`: Converted and optimized screenshot assets to high-compression WebP format, reducing asset footprint by over 90%.
 
 ## [2026-09-01]
 

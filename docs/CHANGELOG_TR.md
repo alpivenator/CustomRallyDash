@@ -7,6 +7,7 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 
 ### Eklendi
 - `README.md`: Başlık altına kaput üstü saydam (kroma) dijital HUD göstergesini içeren oyun içi ana önizleme görseli eklendi.
+- `images/`: Ekran görüntüsü varlıkları yüksek sıkıştırmalı WebP formatına dönüştürülerek optimize edildi ve depo varlık boyutu %90'ın üzerinde küçültüldü.
 
 ## [2026-09-01]
 
