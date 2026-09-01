@@ -26,22 +26,10 @@ LISTEN_PORT = 20777
 DASH_STYLE = "analog"
 
 # ----------------------------------------------------------------------
-# Overlay Settings (Windows only)
+# Overlay Toggle (Windows only)
 # ----------------------------------------------------------------------
 # Enable a borderless, transparent, click-through window that stays
-# on top of the game.  Only functional on Windows; silently ignored
-# elsewhere.
+# on top of the game. Only functional on Windows; silently ignored
+# elsewhere. Visual and positioning settings are located in settings.py.
 ENABLE_OVERLAY = True
 
-# Chroma-key colour — pixels matching this exact colour become
-# fully transparent.  Default (0, 0, 0) = pure black.
-OVERLAY_CHROMA_KEY = (0, 0, 0)
-
-# Transparency mode (Windows only):
-#   "alpha"  — entire window semi-transparent at OVERLAY_ALPHA level
-#   "chroma" — background colour fully transparent (original behaviour)
-OVERLAY_MODE = "alpha"
-
-# Window opacity (0 = fully transparent, 255 = fully opaque).
-# Only used when OVERLAY_MODE == "alpha".
-OVERLAY_ALPHA = 220

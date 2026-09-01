@@ -31,6 +31,27 @@ def _s(value):
     return int(value * _scale)
 
 
+def draw_text_outlined(
+    surface: pygame.Surface,
+    font: pygame.font.Font,
+    text: str,
+    pos: tuple[int, int],
+    color: tuple[int, int, int],
+    outline_color: tuple[int, int, int] = (0, 0, 0),
+    outline_px: int = 1,
+) -> pygame.Rect:
+    """Render text with a dark outer stroke for high readability on transparent HUD overlays."""
+    x, y = pos
+    px = max(1, _s(outline_px))
+    outline_surf = font.render(text, True, outline_color)
+    for dx in (-px, 0, px):
+        for dy in (-px, 0, px):
+            if dx != 0 or dy != 0:
+                surface.blit(outline_surf, (x + dx, y + dy))
+    text_surf = font.render(text, True, color)
+    return surface.blit(text_surf, (x, y))
+
+
 def run() -> None:
     """Initialise pygame, start the telemetry loop and render the digital dashboard."""
     pygame.init()
@@ -41,9 +62,9 @@ def run() -> None:
     if sys.platform == "win32" and config.ENABLE_OVERLAY and overlay_win:
         overlay_win.apply_overlay(
             screen,
-            chroma_key=config.OVERLAY_CHROMA_KEY,
-            mode=config.OVERLAY_MODE,
-            alpha=config.OVERLAY_ALPHA,
+            chroma_key=settings.OVERLAY_CHROMA_KEY,
+            mode=settings.OVERLAY_MODE,
+            alpha=settings.OVERLAY_ALPHA,
         )
         overlay_win.position_window(
             screen, settings.OVERLAY_POSITION, settings.OVERLAY_MARGIN
@@ -53,6 +74,7 @@ def run() -> None:
     BG_COLOR = settings.COLOR_BG
     TEXT_MAIN = settings.COLOR_TEXT_MAIN
     TEXT_DIM = settings.COLOR_TEXT_DIM
+    TEXT_OUTLINE = getattr(settings, "COLOR_TEXT_OUTLINE", (0, 0, 0))
     RPM_NORMAL = settings.COLOR_RPM_NORMAL
     RPM_WARNING = settings.COLOR_RPM_WARNING
     THR_COLOR = settings.COLOR_THROTTLE
@@ -63,8 +85,8 @@ def run() -> None:
     font_huge = pygame.font.SysFont("arial", _s(settings.FONT_HUGE_SIZE), bold=True)
     font_large = pygame.font.SysFont("arial", _s(settings.FONT_LARGE_SIZE), bold=True)
     font_medium = pygame.font.SysFont("arial", _s(settings.FONT_MEDIUM_SIZE), bold=True)
-    font_small = pygame.font.SysFont("arial", _s(settings.FONT_SMALL_SIZE))
-    font_tiny = pygame.font.SysFont("arial", _s(settings.FONT_TINY_SIZE))
+    font_small = pygame.font.SysFont("arial", _s(settings.FONT_SMALL_SIZE), bold=True)
+    font_tiny = pygame.font.SysFont("arial", _s(settings.FONT_TINY_SIZE), bold=True)
 
     # Initialise UDP listener and clock
     listener = UDPListener(config.LISTEN_IP, config.LISTEN_PORT)
@@ -115,29 +137,61 @@ def run() -> None:
             pygame.draw.rect(screen, FRAME_COLOR, (bar_x, bar_y, bar_max_w, bar_h), 2)
 
             # RPM label — bottom-right of the bar
-            text_rpm = font_medium.render(f"{rpm} RPM", True, TEXT_MAIN)
-            screen.blit(
-                text_rpm,
-                (bar_x + bar_max_w - text_rpm.get_width(), bar_y + bar_h + _s(5)),
+            rpm_text_str = f"{rpm} RPM"
+            rpm_text_w = font_medium.size(rpm_text_str)[0]
+            draw_text_outlined(
+                screen,
+                font_medium,
+                rpm_text_str,
+                (bar_x + bar_max_w - rpm_text_w, bar_y + bar_h + _s(5)),
+                TEXT_MAIN,
+                TEXT_OUTLINE,
+                outline_px=1,
             )
 
             # 2. LEFT: SPEED
-            text_speed_lbl = font_small.render("SPEED", True, TEXT_DIM)
-            text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
-            screen.blit(text_speed_lbl, (_s(30), _s(60)))
-            screen.blit(text_speed, (_s(30), _s(85)))
+            speed_str = f"{wheel_speed_kmh:03d}"
+            draw_text_outlined(
+                screen,
+                font_small,
+                "SPEED",
+                (_s(30), _s(60)),
+                TEXT_DIM,
+                TEXT_OUTLINE,
+                outline_px=1,
+            )
+            draw_text_outlined(
+                screen,
+                font_large,
+                speed_str,
+                (_s(30), _s(85)),
+                TEXT_MAIN,
+                TEXT_OUTLINE,
+                outline_px=1,
+            )
 
             # 3. CENTRE: GEAR
-            text_gear_lbl = font_small.render("GEAR", True, TEXT_DIM)
-            text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
             gear_cx = _s(260)
-            screen.blit(
-                text_gear_lbl,
-                (gear_cx - text_gear_lbl.get_width() // 2, _s(60)),
+            gear_lbl_w = font_small.size("GEAR")[0]
+            draw_text_outlined(
+                screen,
+                font_small,
+                "GEAR",
+                (gear_cx - gear_lbl_w // 2, _s(60)),
+                TEXT_DIM,
+                TEXT_OUTLINE,
+                outline_px=1,
             )
-            screen.blit(
-                text_gear,
-                (gear_cx - text_gear.get_width() // 2, _s(80)),
+
+            gear_w = font_huge.size(gear_str)[0]
+            draw_text_outlined(
+                screen,
+                font_huge,
+                gear_str,
+                (gear_cx - gear_w // 2, _s(80)),
+                TEXT_MAIN,
+                TEXT_OUTLINE,
+                outline_px=2,
             )
 
             # 4. RIGHT: HORIZONTAL PEDAL BARS
@@ -154,8 +208,15 @@ def run() -> None:
                 screen, FRAME_COLOR, (thr_bar_x, thr_bar_y, thr_bar_w, thr_bar_h), 2
             )
 
-            text_thr = font_tiny.render("THR", True, TEXT_DIM)
-            screen.blit(text_thr, (thr_bar_x + thr_bar_w + _s(5), thr_bar_y + _s(3)))
+            draw_text_outlined(
+                screen,
+                font_tiny,
+                "THR",
+                (thr_bar_x + thr_bar_w + _s(5), thr_bar_y + _s(3)),
+                TEXT_DIM,
+                TEXT_OUTLINE,
+                outline_px=1,
+            )
 
             # Brake (bottom bar)
             brk_bar_x, brk_bar_y = _s(350), _s(120)
@@ -170,11 +231,19 @@ def run() -> None:
                 screen, FRAME_COLOR, (brk_bar_x, brk_bar_y, brk_bar_w, brk_bar_h), 2
             )
 
-            text_brk = font_tiny.render("BRK", True, TEXT_DIM)
-            screen.blit(text_brk, (brk_bar_x + brk_bar_w + _s(5), brk_bar_y + _s(3)))
+            draw_text_outlined(
+                screen,
+                font_tiny,
+                "BRK",
+                (brk_bar_x + brk_bar_w + _s(5), brk_bar_y + _s(3)),
+                TEXT_DIM,
+                TEXT_OUTLINE,
+                outline_px=1,
+            )
 
             pygame.display.flip()
             clock.tick(60)
+
 
     finally:
         led_controller.cleanup()

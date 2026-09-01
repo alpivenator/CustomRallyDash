@@ -128,12 +128,13 @@ TelemetryData (namedtuple)
 ## Platform notes
 
 - **Windows** — the dashboards can attach to a Win32 overlay window through
-  `core/overlay_win.py`. The window is borderless (`WS_POPUP`), layered
+  `core/overlay_win.py` when `ENABLE_OVERLAY = True` in `config.py`. The window is borderless (`WS_POPUP`), layered
   (`WS_EX_LAYERED`), click-through (`WS_EX_TRANSPARENT`), and kept on top
-  (`HWND_TOPMOST`). Two transparency modes are available:
+  (`HWND_TOPMOST`). Two transparency modes are available (configured in `settings.py`):
+  - `chroma` (default) — single key color (`OVERLAY_CHROMA_KEY`, dynamically following `COLOR_BG`) made fully transparent via `LWA_COLORKEY`.
   - `alpha` — per-pixel alpha via `LWA_ALPHA`; opacity set by `OVERLAY_ALPHA` (0–255).
-  - `chroma` — single key color made fully transparent via `LWA_COLORKEY`.
 - **Linux** — `overlay_win` is only imported on `sys.platform.startswith("win")`.
+
   The dashboards run in a normal pygame window.
 - **Raspberry Pi (optional)** — `core/led_controller.py` drives GPIO shift lights
   based on `rpm / max_rpm`.

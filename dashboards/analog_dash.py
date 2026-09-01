@@ -34,6 +34,44 @@ def _s(value):
     return int(value * _scale)
 
 
+def draw_text_outlined(
+    surface: pygame.Surface,
+    font: pygame.font.Font,
+    text: str,
+    pos: tuple[int, int],
+    color: tuple[int, int, int],
+    outline_color: tuple[int, int, int] = (0, 0, 0),
+    outline_px: int = 1,
+) -> pygame.Rect:
+    """Render text with a dark outer stroke for high readability on transparent HUD overlays."""
+    x, y = pos
+    px = max(1, _s(outline_px))
+    outline_surf = font.render(text, True, outline_color)
+    for dx in (-px, 0, px):
+        for dy in (-px, 0, px):
+            if dx != 0 or dy != 0:
+                surface.blit(outline_surf, (x + dx, y + dy))
+    text_surf = font.render(text, True, color)
+    return surface.blit(text_surf, (x, y))
+
+
+def draw_text_outlined_center(
+    surface: pygame.Surface,
+    font: pygame.font.Font,
+    text: str,
+    center_pos: tuple[int, int],
+    color: tuple[int, int, int],
+    outline_color: tuple[int, int, int] = (0, 0, 0),
+    outline_px: int = 1,
+) -> pygame.Rect:
+    """Render centred text with a dark outer stroke."""
+    w, h = font.size(text)
+    topleft = (int(center_pos[0] - w // 2), int(center_pos[1] - h // 2))
+    return draw_text_outlined(
+        surface, font, text, topleft, color, outline_color, outline_px
+    )
+
+
 def run() -> None:
     """Initialise pygame, start the telemetry loop and render the analog dashboard."""
     pygame.init()
@@ -44,9 +82,9 @@ def run() -> None:
     if sys.platform == "win32" and config.ENABLE_OVERLAY and overlay_win:
         overlay_win.apply_overlay(
             screen,
-            chroma_key=config.OVERLAY_CHROMA_KEY,
-            mode=config.OVERLAY_MODE,
-            alpha=config.OVERLAY_ALPHA,
+            chroma_key=settings.OVERLAY_CHROMA_KEY,
+            mode=settings.OVERLAY_MODE,
+            alpha=settings.OVERLAY_ALPHA,
         )
         overlay_win.position_window(
             screen, settings.OVERLAY_POSITION, settings.OVERLAY_MARGIN
@@ -56,6 +94,7 @@ def run() -> None:
     BG_COLOR = settings.COLOR_BG
     TEXT_MAIN = settings.COLOR_TEXT_MAIN
     TEXT_DIM = settings.COLOR_TEXT_DIM
+    TEXT_OUTLINE = getattr(settings, "COLOR_TEXT_OUTLINE", (0, 0, 0))
     RPM_NORMAL = settings.COLOR_RPM_NORMAL
     RPM_WARNING = settings.COLOR_RPM_WARNING
     THR_COLOR = settings.COLOR_THROTTLE
@@ -66,8 +105,8 @@ def run() -> None:
     # Fonts
     font_huge = pygame.font.SysFont("arial", _s(settings.FONT_HUGE_SIZE), bold=True)
     font_large = pygame.font.SysFont("arial", _s(settings.FONT_LARGE_SIZE), bold=True)
-    font_small = pygame.font.SysFont("arial", _s(settings.FONT_SMALL_SIZE))
-    font_tiny = pygame.font.SysFont("arial", _s(settings.FONT_TINY_SIZE))
+    font_small = pygame.font.SysFont("arial", _s(settings.FONT_SMALL_SIZE), bold=True)
+    font_tiny = pygame.font.SysFont("arial", _s(settings.FONT_TINY_SIZE), bold=True)
 
     # UDP listener and smoothing state
     listener = UDPListener(config.LISTEN_IP, config.LISTEN_PORT)
@@ -103,11 +142,18 @@ def run() -> None:
 
             rpm_value = i * GAUGE_MAX_RPM // 9
             if rpm_value <= GAUGE_MAX_RPM:
-                label = font_tiny.render(f"{rpm_value // 1000}k", True, TEXT_MAIN)
+                label_text = f"{rpm_value // 1000}k"
                 label_x = center_x + (radius - _s(40)) * math.cos(angle_rad)
                 label_y = center_y + (radius - _s(40)) * math.sin(angle_rad)
-                label_rect = label.get_rect(center=(label_x, label_y))
-                surface.blit(label, label_rect)
+                draw_text_outlined_center(
+                    surface,
+                    font_tiny,
+                    label_text,
+                    (label_x, label_y),
+                    TEXT_MAIN,
+                    TEXT_OUTLINE,
+                    outline_px=1,
+                )
 
         # Minor ticks
         for i in range(1, 18, 2):
@@ -257,13 +303,18 @@ def run() -> None:
             )
 
             # Gear text
-            text_gear = font_huge.render(gear_str, True, TEXT_MAIN)
-            screen.blit(
-                text_gear,
+            gear_w, gear_h = font_huge.size(gear_str)
+            draw_text_outlined(
+                screen,
+                font_huge,
+                gear_str,
                 (
-                    center_x - text_gear.get_width() // 2,
-                    center_y - text_gear.get_height() // 2.1,
+                    center_x - gear_w // 2,
+                    int(center_y - gear_h // 2.1),
                 ),
+                TEXT_MAIN,
+                TEXT_OUTLINE,
+                outline_px=2,
             )
 
             # --- LEFT: BRAKE BAR (vertical, left of gauge) ---
@@ -277,12 +328,18 @@ def run() -> None:
                 screen, BRK_COLOR, (brk_x, brk_y + (max_h - brk_h), bar_w, brk_h)
             )
             pygame.draw.rect(screen, FRAME_COLOR, (brk_x, brk_y, bar_w, max_h), 2)
-            screen.blit(
-                font_small.render("BRK", True, TEXT_DIM),
+            brk_lbl_w = font_small.size("BRK")[0]
+            draw_text_outlined(
+                screen,
+                font_small,
+                "BRK",
                 (
-                    brk_x + bar_w // 2 - font_small.size("BRK")[0] // 2,
+                    brk_x + bar_w // 2 - brk_lbl_w // 2,
                     brk_y + max_h + _s(8),
                 ),
+                TEXT_DIM,
+                TEXT_OUTLINE,
+                outline_px=1,
             )
 
             # --- RIGHT: THROTTLE BAR (vertical, right of gauge) ---
@@ -295,24 +352,41 @@ def run() -> None:
                 screen, THR_COLOR, (thr_x, thr_y + (max_h - thr_h), bar_w, thr_h)
             )
             pygame.draw.rect(screen, FRAME_COLOR, (thr_x, thr_y, bar_w, max_h), 2)
-            screen.blit(
-                font_small.render("THR", True, TEXT_DIM),
+            thr_lbl_w = font_small.size("THR")[0]
+            draw_text_outlined(
+                screen,
+                font_small,
+                "THR",
                 (
-                    thr_x + bar_w // 2 - font_small.size("THR")[0] // 2,
+                    thr_x + bar_w // 2 - thr_lbl_w // 2,
                     thr_y + max_h + _s(8),
                 ),
+                TEXT_DIM,
+                TEXT_OUTLINE,
+                outline_px=1,
             )
 
             # --- BOTTOM CENTRE: DIGITAL SPEED (in needle-free arc) ---
-            text_speed_lbl = font_small.render("KM/H", True, TEXT_DIM)
-            text_speed = font_large.render(f"{wheel_speed_kmh:03d}", True, TEXT_MAIN)
-            screen.blit(
-                text_speed_lbl,
-                (center_x - text_speed_lbl.get_width() // 2, center_y + radius - _s(75)),
+            speed_lbl_w = font_small.size("KM/H")[0]
+            draw_text_outlined(
+                screen,
+                font_small,
+                "KM/H",
+                (center_x - speed_lbl_w // 2, center_y + radius - _s(75)),
+                TEXT_DIM,
+                TEXT_OUTLINE,
+                outline_px=1,
             )
-            screen.blit(
-                text_speed,
-                (center_x - text_speed.get_width() // 2, center_y + radius - _s(50)),
+            speed_str = f"{wheel_speed_kmh:03d}"
+            speed_w = font_large.size(speed_str)[0]
+            draw_text_outlined(
+                screen,
+                font_large,
+                speed_str,
+                (center_x - speed_w // 2, center_y + radius - _s(50)),
+                TEXT_MAIN,
+                TEXT_OUTLINE,
+                outline_px=1,
             )
 
             pygame.display.flip()
@@ -321,6 +395,7 @@ def run() -> None:
     finally:
         led_controller.cleanup()
         listener.close()
+
 
 
 if __name__ == "__main__":

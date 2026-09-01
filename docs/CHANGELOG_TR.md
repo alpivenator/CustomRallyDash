@@ -5,11 +5,22 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 
 ## [2026-09-01]
 
+### Eklendi
+- `dashboards/digital_dash.py` & `dashboards/analog_dash.py`: Saydam (kroma) üst katman HUD modunda karlı ve aydınlık oyun etaplarında kusursuz okunabilirlik sağlamak için tüm metin, etiket ve gösterge rakamlarına yüksek kontrastlı koyu dış kontur (`draw_text_outlined`, `draw_text_outlined_center`) desteği eklendi.
+- `settings.py`: Metin kontur kontrastını yapılandırmak için `COLOR_TEXT_OUTLINE` ayarı (varsayılan `(0, 0, 0)`) eklendi.
+- `README.md`: Windows üst katmanının oyunun üzerinde kesintisiz kalabilmesi için DiRT Rally 2.0'ın Pencere veya Çerçevesiz Pencere modunda çalıştırılması gerektiğine dair bilgilendirme notu eklendi.
+- `tests/test_themes_and_mock.py`: Üst katman yapılandırma yapısını ve metin kontur çizim fonksiyonunu doğrulayan birim testleri eklendi.
+
 ### Değiştirildi
+- `config.py` & `settings.py`: Üst katman mimarisi refaktör edilerek `config.py` içinde yalnızca sistem seviyesindeki `ENABLE_OVERLAY` anahtarı bırakıldı; görsel ve konumlandırma ayarları (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_MARGIN`, `OVERLAY_ALPHA`, `OVERLAY_CHROMA_KEY`) `settings.py` dosyasına taşındı.
+- `settings.py`: Varsayılan `OVERLAY_MODE` değeri `"chroma"` ve `OVERLAY_POSITION` değeri `"bottom-right"` olarak güncellendi; `OVERLAY_CHROMA_KEY = COLOR_BG` şeklinde dinamik bağlanarak seçilen temalarla otomatik eşleşmesi sağlandı.
+- `core/overlay_win.py`: `apply_overlay` (`mode="chroma"`) ve `position_window` (`position="bottom-right"`) varsayılan parametreleri güncellendi.
 - `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: RPM uyarı eşiği erişimi doğrudan `settings.RPM_WARNING_THRESHOLD` özelliğine bağlanarak sadeleştirildi.
 - `tools/setup_wizard.py`: Kurulum tamamlama ekranındaki yönlendirmelere (EN & TR) çevrimdışı sahte telemetri testi (`run_mock.bat` / `--mock`) ve tema seçici (`select_theme.bat`) adımları eklendi.
 - `README.md`: Dokümantasyon aşırı didaktik anlatımdan arındırılarak kompakt Hızlı Başlangıç tabloları ve yalın CLI akışları içeren açık kaynak ve mühendislik odaklı bir dille yeniden yazıldı.
-- `docs/CONFIGURATION.md`: Yapılandırma kılavuzuna `select_theme.bat` ve `run_mock.bat` kullanım detayları eklendi.
+- `docs/CONFIGURATION.md`: Yapılandırma kılavuzuna `select_theme.bat` ve `run_mock.bat` kullanım detayları eklendi; üst katman ayarları görsel ayarlar tablosuna taşındı.
+- `docs/ARCHITECTURE.md`: Windows platform notları `settings.py` yapılandırma sorumluluğunu yansıtacak şekilde güncellendi.
+
 
 ---
 

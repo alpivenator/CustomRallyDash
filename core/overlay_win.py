@@ -111,7 +111,7 @@ def _get_screen_size():
 # ----------------------------------------------------------------------
 # Public API
 # ----------------------------------------------------------------------
-def apply_overlay(pygame_screen, chroma_key=(0, 0, 0), mode="alpha", alpha=200):
+def apply_overlay(pygame_screen, chroma_key=(25, 25, 30), mode="chroma", alpha=220):
     """Make the given pygame window a borderless, transparent,
     click-through overlay that stays on top.
 
@@ -122,8 +122,8 @@ def apply_overlay(pygame_screen, chroma_key=(0, 0, 0), mode="alpha", alpha=200):
     chroma_key : tuple (R, G, B)
         The colour that will become fully transparent (used in "chroma" mode).
     mode : str
+        "chroma" — background colour fully transparent (default).
         "alpha"  — entire window semi-transparent at *alpha* level (LWA_ALPHA).
-        "chroma" — background colour fully transparent (LWA_COLORKEY).
     alpha : int
         Window opacity 0–255.  Only used when mode == "alpha".
 
@@ -165,7 +165,7 @@ def apply_overlay(pygame_screen, chroma_key=(0, 0, 0), mode="alpha", alpha=200):
     return True
 
 
-def position_window(pygame_screen, position="bottom-center", margin=20):
+def position_window(pygame_screen, position="bottom-right", margin=20):
     """Move the window to the specified position on the primary display.
 
     Parameters

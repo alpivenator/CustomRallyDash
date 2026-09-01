@@ -91,3 +91,41 @@ def test_rpm_warning_threshold_setting():
     assert hasattr(settings, "RPM_WARNING_THRESHOLD")
     assert isinstance(settings.RPM_WARNING_THRESHOLD, (int, float))
     assert 0.0 < settings.RPM_WARNING_THRESHOLD <= 1.0
+
+
+def test_overlay_settings_structure():
+    """Verify that overlay visual settings are properly located in settings.py."""
+    import config
+    import settings
+
+    # config.py must contain ENABLE_OVERLAY
+    assert hasattr(config, "ENABLE_OVERLAY")
+    assert isinstance(config.ENABLE_OVERLAY, bool)
+
+    # settings.py must contain overlay layout and transparency options
+    assert hasattr(settings, "OVERLAY_MODE")
+    assert settings.OVERLAY_MODE in ("chroma", "alpha")
+    assert hasattr(settings, "OVERLAY_POSITION")
+    assert settings.OVERLAY_POSITION in ("bottom-left", "bottom-center", "bottom-right")
+    assert hasattr(settings, "OVERLAY_MARGIN")
+    assert isinstance(settings.OVERLAY_MARGIN, int)
+    assert hasattr(settings, "OVERLAY_CHROMA_KEY")
+    assert settings.OVERLAY_CHROMA_KEY == settings.COLOR_BG
+
+
+def test_text_outline_rendering():
+    """Verify that draw_text_outlined executes and returns a valid rect."""
+    import pygame
+
+    from dashboards.digital_dash import draw_text_outlined
+
+    pygame.init()
+    surface = pygame.Surface((200, 100))
+    font = pygame.font.SysFont("arial", 20)
+    rect = draw_text_outlined(
+        surface, font, "TEST", (10, 10), (255, 255, 255), (0, 0, 0), outline_px=1
+    )
+    assert isinstance(rect, pygame.Rect)
+    assert rect.width > 0
+    assert rect.height > 0
+

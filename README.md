@@ -61,7 +61,7 @@ python tools/theme_selector.py
 
 ---
 
-## Game UDP Configuration
+## Game UDP & Display Configuration
 
 DiRT Rally 2.0 outputs telemetry via UDP when configured in `hardware_settings_config.xml`:
 
@@ -77,17 +77,20 @@ Ensure the `<motion_platform>` section contains the following entry:
 
 *For multi-machine setups (dashboard running on a separate machine or Raspberry Pi), set `ip` to the dashboard machine's local LAN IPv4 address.*
 
+> **Important (Windows Overlay)**: To allow the click-through overlay to stay rendered on top of gameplay, configure DiRT Rally 2.0 video settings to **Windowed** or **Borderless Windowed** mode.
+
 ---
 
 ## Architecture & Configuration
 
-- `config.py` — Network interface (`LISTEN_IP`, `LISTEN_PORT`), overlay behavior, and hardware flags.
-- `settings.py` — Window dimensions, scaling (`TARGET_SCALE`), color themes, RPM warning threshold (`RPM_WARNING_THRESHOLD`), and font sizes.
+- `config.py` — System settings: Network interface (`LISTEN_IP`, `LISTEN_PORT`), dashboard style (`DASH_STYLE`), overlay toggle (`ENABLE_OVERLAY`), and hardware flags.
+- `settings.py` — Visual & overlay settings: Window dimensions, scaling (`TARGET_SCALE`), overlay positioning & transparency mode (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_CHROMA_KEY`), color palettes, and font sizes.
 - `core/` — Telemetry packet parser (`udp_listener.py`), Windows overlay hooks (`overlay_win.py`), and GPIO LED controller (`led_controller.py`).
-- `dashboards/` — Pygame renderers (`digital_dash.py`, `analog_dash.py`) and color definitions (`themes.py`).
+- `dashboards/` — Pygame renderers (`digital_dash.py`, `analog_dash.py`) with theme definitions (`themes.py`).
 - `tools/` — First-run wizard (`setup_wizard.py`), packet diagnostics (`telemetry_check.py`), synthetic telemetry generator (`mock_telemetry.py`), and theme CLI (`theme_selector.py`).
 
 For full configuration options and firewall guidelines, see [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
+
 
 ---
 

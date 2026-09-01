@@ -22,10 +22,8 @@ create a second configuration file. Visual settings remain manual.
 | `LISTEN_IP` | `"127.0.0.1"` | Network interface for the dashboard UDP listener. Use the dashboard computer's LAN IPv4 address for a remote game computer. |
 | `LISTEN_PORT` | `20777` | UDP port the game broadcasts telemetry to. |
 | `DASH_STYLE` | `"digital"` | Dashboard variant: `"digital"` or `"analog"`. |
-| `ENABLE_OVERLAY` | `True` | Use the borderless, transparent, click-through overlay window (Windows only; silently ignored elsewhere). |
-| `OVERLAY_CHROMA_KEY` | `(0, 0, 0)` | Colour made fully transparent in `chroma` mode. |
-| `OVERLAY_MODE` | `"alpha"` | Transparency mode: `"alpha"` (semi-transparent window) or `"chroma"` (key colour transparent). |
-| `OVERLAY_ALPHA` | `220` | Window opacity in `alpha` mode (`0` = fully transparent, `255` = fully opaque). |
+| `ENABLE_OVERLAY` | `True` | Enable the borderless, transparent, click-through overlay window (Windows only; silently ignored elsewhere). |
+
 
 ### Network address
 
@@ -108,18 +106,22 @@ Or run via Python in your active virtual environment:
 python tools/theme_selector.py
 ```
 
-## Visual Settings (`settings.py`)
+## Visual & Overlay Settings (`settings.py`)
 
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `DIGITAL_WIDTH` / `DIGITAL_HEIGHT` | `600` / `200` | Base resolution of the digital dashboard. |
 | `ANALOG_WIDTH` / `ANALOG_HEIGHT` | `600` / `350` | Base resolution of the analog dashboard. |
 | `TARGET_SCALE` | `None` | Proportional scale factor applied to the base resolution. Example: `1.5` → the 600 px wide digital dashboard becomes 900 px; `0.5` shrinks it to 300 px. Set to `None` for no scaling. |
-| `OVERLAY_POSITION` | `"bottom-center"` | Overlay position: `"bottom-left"`, `"bottom-center"` or `"bottom-right"` (Windows only). |
-| `OVERLAY_MARGIN` | `20` | Distance from the screen edge in pixels (used for left/right positions). |
+| `OVERLAY_POSITION` | `"bottom-right"` | Overlay position on display: `"bottom-left"`, `"bottom-center"` or `"bottom-right"` (Windows only). |
+| `OVERLAY_MARGIN` | `20` | Distance from screen edge in pixels (used for left/right positions). |
+| `OVERLAY_MODE` | `"chroma"` | Transparency mode: `"chroma"` (background colour transparent HUD) or `"alpha"` (semi-transparent window). |
+| `OVERLAY_ALPHA` | `220` | Window opacity in `alpha` mode (`0` = fully transparent, `255` = fully opaque). |
+| `OVERLAY_CHROMA_KEY` | `COLOR_BG` | Colour made fully transparent in `chroma` mode. By default points dynamically to `COLOR_BG`. |
 | `COLOR_BG` | `(25, 25, 30)` | Background colour (RGB 0–255). |
 | `COLOR_TEXT_MAIN` | `(240, 240, 240)` | Primary text colour. |
 | `COLOR_TEXT_DIM` | `(180, 180, 180)` | Dimmed/secondary text colour. |
+| `COLOR_TEXT_OUTLINE` | `(0, 0, 0)` | Contrast outline colour rendered around text for high readability. |
 | `COLOR_RPM_NORMAL` | `(0, 150, 255)` | RPM bar/needle colour below the redline. |
 | `COLOR_RPM_WARNING` | `(255, 40, 40)` | RPM colour at/above the redline. |
 | `COLOR_THROTTLE` | `(40, 220, 100)` | Throttle bar colour. |
@@ -127,13 +129,14 @@ python tools/theme_selector.py
 | `COLOR_FRAME` | `(80, 80, 90)` | Frame/outline colour. |
 | `COLOR_REDLINE` | `(255, 40, 40, 100)` | Redline marker; the 4th value is alpha (`100` = semi-transparent red). |
 | `RPM_WARNING_THRESHOLD` | `0.90` | Fraction of `max_rpm` (0.0–1.0) at which the needle / RPM bar turns red. |
-| `FONT_HUGE_SIZE` | `80` | Largest font (main values). |
-| `FONT_LARGE_SIZE` | `48` | Large font (labels). |
-| `FONT_MEDIUM_SIZE` | `20` | Medium font (digital dashboard only). |
-| `FONT_SMALL_SIZE` | `18` | Small font. |
-| `FONT_TINY_SIZE` | `14` | Tiny font. |
+| `FONT_HUGE_SIZE` | `82` | Largest font (gear value). |
+| `FONT_LARGE_SIZE` | `50` | Large font (speed values). |
+| `FONT_MEDIUM_SIZE` | `22` | Medium font (RPM text in digital dashboard). |
+| `FONT_SMALL_SIZE` | `18` | Small font (labels). |
+| `FONT_TINY_SIZE` | `14` | Tiny font (markings / pedal labels). |
 
 Font sizes are scaled automatically when `TARGET_SCALE` is set.
+
 
 ## Security Notes
 

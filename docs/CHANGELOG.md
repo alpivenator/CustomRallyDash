@@ -5,11 +5,22 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 
 ## [2026-09-01]
 
+### Added
+- `dashboards/digital_dash.py` & `dashboards/analog_dash.py`: Added high-contrast dark text outline strokes (`draw_text_outlined`, `draw_text_outlined_center`) across all gauge readouts, labels, and markings for crystal-clear readability over bright in-game stages in transparent overlay HUD mode.
+- `settings.py`: Added `COLOR_TEXT_OUTLINE` setting (default `(0, 0, 0)`) for customising text outline contrast.
+- `README.md`: Added note specifying DiRT Rally 2.0 must run in Windowed or Borderless Windowed mode for the Windows click-through overlay to remain visible.
+- `tests/test_themes_and_mock.py`: Added unit tests verifying overlay settings structure and text outline rendering.
+
 ### Changed
+- `config.py` & `settings.py`: Refactored overlay configuration architecture by keeping only `ENABLE_OVERLAY` toggle in `config.py` and migrating all visual/window positioning settings (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_MARGIN`, `OVERLAY_ALPHA`, `OVERLAY_CHROMA_KEY`) into `settings.py`.
+- `settings.py`: Set default `OVERLAY_MODE` to `"chroma"` and `OVERLAY_POSITION` to `"bottom-right"`, dynamically aliasing `OVERLAY_CHROMA_KEY = COLOR_BG` for automatic synchronization with active color themes.
+- `core/overlay_win.py`: Updated default argument values for `apply_overlay` (`mode="chroma"`) and `position_window` (`position="bottom-right"`).
 - `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: Simplified RPM warning threshold lookup to direct `settings.RPM_WARNING_THRESHOLD` attribute access.
 - `tools/setup_wizard.py`: Expanded setup completion next-steps instructions (EN & TR) to include offline preview (`run_mock.bat` / `--mock`) and theme selector (`select_theme.bat`).
 - `README.md`: Refactored documentation with a clean, engineering-focused structure featuring concise Quick Start tables, clear CLI workflows, and zero boilerplate.
-- `docs/CONFIGURATION.md`: Added dedicated quick-start guidance and documentation for `select_theme.bat` and `run_mock.bat`.
+- `docs/CONFIGURATION.md`: Added dedicated quick-start guidance and documentation for `select_theme.bat` and `run_mock.bat`, and moved overlay settings to the visual settings table.
+- `docs/ARCHITECTURE.md`: Updated Windows overlay architecture documentation to reflect `settings.py` parameter ownership.
+
 
 ---
 
