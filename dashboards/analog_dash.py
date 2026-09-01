@@ -43,7 +43,8 @@ def draw_text_outlined(
     outline_color: tuple[int, int, int] = (0, 0, 0),
     outline_px: int = 1,
 ) -> pygame.Rect:
-    """Render text with a dark outer stroke for high readability on transparent HUD overlays."""
+    """Render text with a dark outer stroke for high readability
+    on transparent HUD overlays."""
     x, y = pos
     px = max(1, _s(outline_px))
     outline_surf = font.render(text, True, outline_color)
@@ -395,7 +396,6 @@ def run() -> None:
     finally:
         led_controller.cleanup()
         listener.close()
-
 
 
 if __name__ == "__main__":

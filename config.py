@@ -32,4 +32,3 @@ DASH_STYLE = "analog"
 # on top of the game. Only functional on Windows; silently ignored
 # elsewhere. Visual and positioning settings are located in settings.py.
 ENABLE_OVERLAY = True
-

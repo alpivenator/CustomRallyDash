@@ -128,4 +128,3 @@ def test_text_outline_rendering():
     assert isinstance(rect, pygame.Rect)
     assert rect.width > 0
     assert rect.height > 0
-

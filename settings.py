@@ -20,10 +20,12 @@ OVERLAY_POSITION = "bottom-right"
 # Margin from screen edge in pixels (used for left/right positions)
 OVERLAY_MARGIN = 20
 
-# Transparency mode: "chroma" (background colour transparent) or "alpha" (semi-transparent window)
+# Transparency mode: "chroma" (background colour transparent)
+# or "alpha" (semi-transparent window)
 OVERLAY_MODE = "chroma"
 
-# Window opacity (0 = fully transparent, 255 = fully opaque). Only used when OVERLAY_MODE == "alpha".
+# Window opacity (0 = fully transparent, 255 = fully opaque).
+# Only used when OVERLAY_MODE == "alpha".
 OVERLAY_ALPHA = 220
 
 # Color palette (R, G, B)
@@ -52,4 +54,3 @@ FONT_LARGE_SIZE = 50
 FONT_MEDIUM_SIZE = 22
 FONT_SMALL_SIZE = 18
 FONT_TINY_SIZE = 14
-
