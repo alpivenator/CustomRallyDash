@@ -107,4 +107,4 @@ For full configuration options and firewall guidelines, see [docs/CONFIGURATION.
 
 ## License
 
-This project is licensed under the **GPL-3.0** license. See [LICENSE](LICENSE).
+This project is licensed under the **MIT** license. See [LICENSE](LICENSE).

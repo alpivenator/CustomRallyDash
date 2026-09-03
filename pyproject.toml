@@ -3,7 +3,7 @@ name = "custom-rally-dash"
 version = "0.1.0"
 description = "Custom real-time telemetry dashboard & overlay for DiRT Rally 2.0 (60 Hz UDP)"
 readme = "README.md"
-license = "GPL-3.0-only"
+license = "MIT"
 requires-python = ">=3.11,<3.14"
 authors = [{ name = "Alperen (alpivenator)" }]
 dependencies = ["pygame==2.6.1"]

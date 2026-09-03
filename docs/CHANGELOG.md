@@ -9,6 +9,7 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 - Renamed project to **CustomRallyDash** and updated `pyproject.toml` package metadata (`name = "custom-rally-dash"`, `version = "0.1.0"`).
 - Updated project documentation (`README.md`, `ARCHITECTURE.md`, `CONFIGURATION.md`).
 - Updated CLI setup wizard banner headers in `tools/setup_wizard.py`.
+- Updated project license from GPL-3.0 to MIT in `LICENSE`, `README.md`, and `pyproject.toml`.
 
 ## [2026-09-02]
 

@@ -9,6 +9,7 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 - Proje adı **CustomRallyDash** olarak güncellendi ve `pyproject.toml` paket meta verisi yenilendi (`name = "custom-rally-dash"`, `version = "0.1.0"`).
 - `README.md`, `ARCHITECTURE.md` ve `CONFIGURATION.md` dokümantasyon başlıkları yeni proje adına göre güncellendi.
 - `tools/setup_wizard.py` içerisindeki kurulum sihirbazı CLI başlıkları güncellendi.
+- Proje lisansı `LICENSE`, `README.md` ve `pyproject.toml` dosyalarında GPL-3.0'dan MIT'ye güncellendi.
 
 ## [2026-09-02]
 
