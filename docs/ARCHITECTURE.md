@@ -1,6 +1,6 @@
-# Architecture
+# Architecture — CustomRallyDash
 
-A custom real-time dashboard for **DiRT Rally 2.0**. The game broadcasts raw
+**CustomRallyDash** is a custom real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. The game broadcasts raw
 264-byte UDP packets in the **Extradata=3** format at 60 Hz; this project
 captures them, decodes the relevant fields, and renders the result either as a
 compact **digital dash** or an **analog gauge**, optionally layered as a

@@ -1,4 +1,4 @@
-# Configuration
+# Configuration Reference — CustomRallyDash
 
 All settings are plain Python values in two files. Changes take effect the next
 time the program is started (there is no hot-reload).

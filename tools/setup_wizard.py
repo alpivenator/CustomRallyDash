@@ -37,7 +37,7 @@ MESSAGES: dict[str, dict[str, str]] = {
     "en": {
         "lang_prompt": "Select language / Dil seçin [en/tr] (en): ",
         "lang_invalid": "Invalid choice. Please enter 'en' or 'tr'.",
-        "banner_title": "DiRT Rally 2.0 Telemetry Dashboard - Initial Setup",
+        "banner_title": "CustomRallyDash - Initial Setup",
         "banner_note": (
             "DiRT Rally 2.0 must be closed. Configuration files will be backed up "
             "before updating.\n"
@@ -104,7 +104,7 @@ MESSAGES: dict[str, dict[str, str]] = {
     "tr": {
         "lang_prompt": "Select language / Dil seçin [en/tr] (en): ",
         "lang_invalid": "Geçersiz seçim. Lütfen 'en' veya 'tr' girin.",
-        "banner_title": "DiRT Rally 2.0 Telemetry Dashboard - İlk Kurulum",
+        "banner_title": "CustomRallyDash - İlk Kurulum",
         "banner_note": (
             "DiRT Rally 2.0 kapalı olmalıdır; yapılandırma dosyaları onayınızdan sonra "
             "yedeklenerek güncellenir.\n"

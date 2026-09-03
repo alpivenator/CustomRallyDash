@@ -3,6 +3,13 @@
 All notable changes to this project are documented in this file in reverse chronological order.
 For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
 
+## [v0.1.0] - 2026-09-03
+
+### Changed
+- Renamed project to **CustomRallyDash** and updated `pyproject.toml` package metadata (`name = "custom-rally-dash"`, `version = "0.1.0"`).
+- Updated project documentation (`README.md`, `ARCHITECTURE.md`, `CONFIGURATION.md`).
+- Updated CLI setup wizard banner headers in `tools/setup_wizard.py`.
+
 ## [2026-09-02]
 
 ### Added

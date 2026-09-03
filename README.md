@@ -1,6 +1,6 @@
-# Telemetry Dashboard for DiRT Rally 2.0
+# CustomRallyDash — Telemetry Dashboard for DiRT Rally 2.0
 
-A lightweight, real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It decodes 60 Hz UDP (`Extradata=3`) packets from the game's physics engine and renders low-latency visual instrumentation — supporting compact digital HUDs, circular analog tachometers, borderless Windows click-through overlays, and Raspberry Pi GPIO shift lights.
+**CustomRallyDash** is a lightweight, real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It decodes 60 Hz UDP (`Extradata=3`) packets from the game's physics engine and renders low-latency visual instrumentation — supporting compact digital HUDs, circular analog tachometers, borderless Windows click-through overlays, and Raspberry Pi GPIO shift lights.
 
 ![DiRT Rally 2.0 Telemetry Overlay Preview](images/digital_hood_chroma.webp)
 

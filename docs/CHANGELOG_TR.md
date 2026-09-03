@@ -3,6 +3,13 @@
 Bu dosyada projede yapılan değişiklikler ters kronolojik sırayla (en yeni en üstte) belgelenir.
 Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz. `ARCHITECTURE.md`.
 
+## [v0.1.0] - 2026-09-03
+
+### Değiştirildi
+- Proje adı **CustomRallyDash** olarak güncellendi ve `pyproject.toml` paket meta verisi yenilendi (`name = "custom-rally-dash"`, `version = "0.1.0"`).
+- `README.md`, `ARCHITECTURE.md` ve `CONFIGURATION.md` dokümantasyon başlıkları yeni proje adına göre güncellendi.
+- `tools/setup_wizard.py` içerisindeki kurulum sihirbazı CLI başlıkları güncellendi.
+
 ## [2026-09-02]
 
 ### Eklendi
