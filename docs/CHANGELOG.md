@@ -5,9 +5,16 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 
 ## [v0.1.0] - 2026-09-03
 
+### Added
+- `README_TR.md`: Added comprehensive Turkish translation of project overview and quick-start guide with cross-language navigation.
+- `docs/CONFIGURATION_TR.md`: Added full Turkish translation of configuration reference with clear technical terminology.
+- `docs/ARCHITECTURE_TR.md`: Added full Turkish translation of technical architecture and runtime/data flow specifications.
+
 ### Changed
+- `docs/CONFIGURATION.md`: Restructured and streamlined configuration reference with a high-priority "Quick Configuration" table upfront, logical categorization of settings, and objective technical phrasing.
+- `README.md` & `docs/ARCHITECTURE.md`: Added header language switcher links and replaced promotional wording with precise technical descriptions.
+- `AGENTS.md`: Updated developer guidelines to maintain full synchronization across all English and Turkish documentation counterparts.
 - Renamed project to **CustomRallyDash** and updated `pyproject.toml` package metadata (`name = "custom-rally-dash"`, `version = "0.1.0"`).
-- Updated project documentation (`README.md`, `ARCHITECTURE.md`, `CONFIGURATION.md`).
 - Updated CLI setup wizard banner headers in `tools/setup_wizard.py`.
 - Updated project license from GPL-3.0 to MIT in `LICENSE`, `README.md`, and `pyproject.toml`.
 

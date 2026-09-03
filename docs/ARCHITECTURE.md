@@ -1,5 +1,7 @@
 # Architecture — CustomRallyDash
 
+[Türkçe](ARCHITECTURE_TR.md) | **English**
+
 **CustomRallyDash** is a custom real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. The game broadcasts raw
 264-byte UDP packets in the **Extradata=3** format at 60 Hz; this project
 captures them, decodes the relevant fields, and renders the result either as a
@@ -32,13 +34,17 @@ ralli-codex/
 │   ├── mock_telemetry.py     # 60 Hz synthetic UDP packet generator
 │   └── theme_selector.py     # Standalone CLI theme switcher
 ├── docs/                     # Architecture, configuration, roadmap, and changelog docs
-│   ├── ARCHITECTURE.md       # Technical design and architecture reference
-│   ├── CONFIGURATION.md      # Configuration options and hardware setup
+│   ├── ARCHITECTURE.md       # Technical design and architecture reference (English)
+│   ├── ARCHITECTURE_TR.md    # Technical design and architecture reference (Turkish)
+│   ├── CONFIGURATION.md      # Configuration options and hardware setup (English)
+│   ├── CONFIGURATION_TR.md   # Configuration options and hardware setup (Turkish)
 │   ├── CHANGELOG.md          # Version history (English)
 │   ├── CHANGELOG_TR.md       # Version history (Turkish)
 │   ├── ROADMAP.md            # Planned milestones (English)
 │   └── ROADMAP_TR.md         # Planned milestones (Turkish)
 ├── tests/                    # Unit tests (pytest)
+├── README.md                 # Project overview and quick start (English)
+├── README_TR.md              # Project overview and quick start (Turkish)
 ├── main.py                   # Unified application entry point (supports --mock)
 ├── config.py                 # Central system/hardware configuration
 ├── settings.py               # Visual layout & styling configuration

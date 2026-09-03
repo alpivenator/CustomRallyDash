@@ -5,9 +5,16 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 
 ## [v0.1.0] - 2026-09-03
 
+### Eklendi
+- `README_TR.md`: Çapraz dil geçiş bağlantılarıyla birlikte projenin genel bakış ve hızlı başlangıç kılavuzunun eksiksiz Türkçe çevirisi eklendi.
+- `docs/CONFIGURATION_TR.md`: Anlaşılır teknik terminolojiyle hazırlanan yapılandırma başvuru kılavuzunun tam Türkçe çevirisi eklendi.
+- `docs/ARCHITECTURE_TR.md`: Teknik mimari, çalışma zamanı ve veri akışı özelliklerini detaylandıran mimari belgesinin tam Türkçe çevirisi eklendi.
+
 ### Değiştirildi
+- `docs/CONFIGURATION.md`: Yapılandırma kılavuzu, en sık kullanılan ayarları öne çıkaran "Hızlı Yapılandırma" tablosu, mantıksal gruplandırmalar ve pazarlama jargonundan arındırılmış yalın teknik dille yeniden düzenlendi.
+- `README.md` & `docs/ARCHITECTURE.md`: Belgelerin başlarına dil geçiş bağlantıları eklendi ve abartılı ifadeler ölçülü teknik tanımlarla değiştirildi.
+- `AGENTS.md`: Geliştirici kuralları tüm İngilizce ve Türkçe doküman çiftlerinin eşzamanlı güncellenmesini kapsayacak şekilde genişletildi.
 - Proje adı **CustomRallyDash** olarak güncellendi ve `pyproject.toml` paket meta verisi yenilendi (`name = "custom-rally-dash"`, `version = "0.1.0"`).
-- `README.md`, `ARCHITECTURE.md` ve `CONFIGURATION.md` dokümantasyon başlıkları yeni proje adına göre güncellendi.
 - `tools/setup_wizard.py` içerisindeki kurulum sihirbazı CLI başlıkları güncellendi.
 - Proje lisansı `LICENSE`, `README.md` ve `pyproject.toml` dosyalarında GPL-3.0'dan MIT'ye güncellendi.
 

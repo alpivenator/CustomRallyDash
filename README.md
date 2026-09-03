@@ -1,5 +1,7 @@
 # CustomRallyDash — Telemetry Dashboard for DiRT Rally 2.0
 
+[Türkçe](README_TR.md) | **English**
+
 **CustomRallyDash** is a lightweight, real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It decodes 60 Hz UDP (`Extradata=3`) packets from the game's physics engine and renders low-latency visual instrumentation — supporting compact digital HUDs, circular analog tachometers, borderless Windows click-through overlays, and Raspberry Pi GPIO shift lights.
 
 ![DiRT Rally 2.0 Telemetry Overlay Preview](images/digital_hood_chroma.webp)
@@ -13,7 +15,7 @@
 - **Motorsport Themes**: Interactive theme selector with curated presets (`Modern Dark`, `Subaru WRC`, `GT3 Racing`, `Night Neon`, `Retro Amber`).
 - **Mock Telemetry Broadcaster**: Standalone 60 Hz synthetic packet generator modeling WRC acceleration, sequential shifts, and trail-braking for offline testing and tuning.
 - **Hardware Shift Lights**: Physical LED integration via Raspberry Pi GPIO (`gpiozero`).
-- **Zero-Bloat Configuration**: Plain Python configuration files (`config.py` for system/runtime, `settings.py` for UI/styling).
+- **Direct Python Configuration**: Configured directly through standard Python files (`config.py` for system/runtime, `settings.py` for UI/styling) without extra configuration parsers.
 
 ---
 
@@ -98,8 +100,8 @@ For full configuration options and firewall guidelines, see [docs/CONFIGURATION.
 
 ## Documentation
 
-- [Architecture & Data Flow](docs/ARCHITECTURE.md)
-- [Configuration Reference](docs/CONFIGURATION.md)
+- [Architecture & Data Flow](docs/ARCHITECTURE.md) ([Türkçe](docs/ARCHITECTURE_TR.md))
+- [Configuration Reference](docs/CONFIGURATION.md) ([Türkçe](docs/CONFIGURATION_TR.md))
 - [Changelog](docs/CHANGELOG.md) ([Türkçe](docs/CHANGELOG_TR.md))
 - [Roadmap](docs/ROADMAP.md) ([Türkçe](docs/ROADMAP_TR.md))
 
