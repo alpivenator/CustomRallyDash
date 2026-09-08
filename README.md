@@ -21,7 +21,7 @@
 
 ## Requirements
 
-- **Python**: `3.11+` (Python 3.11 or higher)
+- **Python**: `3.11.x`, `3.12.x`, or `3.13.x` (Python 3.14+ is currently not supported)
 - **Dependencies**: `pygame==2.6.1`, `gpiozero==2.0.1` (optional, Raspberry Pi only)
 
 ---

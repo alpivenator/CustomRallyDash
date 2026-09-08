@@ -13,8 +13,8 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 - `core/udp_listener.py` & `tools/mock_telemetry.py`: Soket bağlama bastırmaları Ruff `# noqa: S104` formatına dönüştürüldü.
 - `tools/setup_wizard.py`: Yerel oyun konfigürasyonu XML okumaları `# noqa: S314` açıklaması ile etiketlendi.
 
-### Değiştirildi
-- `pyproject.toml`, `README.md`, `install.bat`, `.github/workflows/ci.yml`, `docs/ARCHITECTURE.md`: Python sürümü üst sınırı kaldırıldı (`>=3.11`), Python 3.14 desteği eklendi, Windows yükleyici `py -3` ile dinamik Python `>=3.11` algılayacak şekilde yenilendi ve varsayılan CI hedefi Python 3.14 olarak ayarlandı.
+### Not
+- Python 3.14 uyumluluğu değerlendirildi; PyPI üzerinde Pygame 2.6.1 hazır wheel paketlerinin bulunmaması nedeniyle destek ertelendi. Python çalışma zamanı kısıtlaması `>=3.11,<3.14` olarak korunmaktadır.
 
 ## [v0.1.0] - 2026-09-03
 
