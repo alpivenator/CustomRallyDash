@@ -2,7 +2,7 @@
 
 [Türkçe](README_TR.md) | **English**
 
-**CustomRallyDash** is a lightweight, real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It decodes 60 Hz UDP (`Extradata=3`) packets from the game's physics engine and renders low-latency visual instrumentation — supporting compact digital HUDs, circular analog tachometers, borderless Windows click-through overlays, and Raspberry Pi GPIO shift lights.
+**CustomRallyDash** is a real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It decodes 60 Hz UDP (`Extradata=3`) packets from the game's physics engine and renders low-latency visual instrumentation — supporting compact digital HUDs, circular analog tachometers, borderless Windows click-through overlays, and Raspberry Pi GPIO shift lights.
 
 ![DiRT Rally 2.0 Telemetry Overlay Preview](images/digital_hood_chroma.webp)
 
@@ -12,7 +12,7 @@
 
 - **Dashboard Layouts**: Modern horizontal digital bar HUD and circular analog gauge with dynamic redline detection.
 - **Windows Overlay**: Transparent, click-through overlay with `alpha` and `chroma` compositing modes that stays on top during gameplay.
-- **Motorsport Themes**: Interactive theme selector with curated presets (`Modern Dark`, `Subaru WRC`, `GT3 Racing`, `Night Neon`, `Retro Amber`).
+- **Motorsport Themes**: Interactive theme selector with a number of presets (`Modern Dark`, `Subaru WRC`, `GT3 Racing`, `Night Neon`, `Retro Amber`).
 - **Mock Telemetry Broadcaster**: Standalone 60 Hz synthetic packet generator modeling WRC acceleration, sequential shifts, and trail-braking for offline testing and tuning.
 - **Hardware Shift Lights**: Physical LED integration via Raspberry Pi GPIO (`gpiozero`).
 - **Direct Python Configuration**: Configured directly through standard Python files (`config.py` for system/runtime, `settings.py` for UI/styling) without extra configuration parsers.

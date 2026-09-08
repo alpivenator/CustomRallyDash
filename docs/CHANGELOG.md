@@ -3,6 +3,16 @@
 All notable changes to this project are documented in this file in reverse chronological order.
 For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
 
+## [2026-09-08]
+
+### Added
+- `.github/workflows/ci.yml`: Added `pip-audit` step to automate dependency vulnerability scanning in CI/CD pipeline.
+- `pyproject.toml`: Added Ruff security rules (`"S"`) to `lint.select` and configured `per-file-ignores` for test assert statements and XML parses (`tests/* = ["S101", "S314"]`).
+
+### Security
+- `core/udp_listener.py` & `tools/mock_telemetry.py`: Updated socket binding suppressions to Ruff `# noqa: S104` format.
+- `tools/setup_wizard.py`: Annotated local game configuration XML parsing with `# noqa: S314`.
+
 ## [v0.1.0] - 2026-09-03
 
 ### Added

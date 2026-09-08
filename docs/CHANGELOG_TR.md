@@ -3,6 +3,16 @@
 Bu dosyada projede yapılan değişiklikler ters kronolojik sırayla (en yeni en üstte) belgelenir.
 Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz. `ARCHITECTURE.md`.
 
+## [2026-09-08]
+
+### Eklendi
+- `.github/workflows/ci.yml`: CI/CD hattında bağımlılık zafiyet taramasını otomatikleştirmek için `pip-audit` adımı eklendi.
+- `pyproject.toml`: Ruff güvenlik kuralları (`"S"`) `lint.select` listesine eklendi ve test dosyaları için `per-file-ignores` (`tests/* = ["S101", "S314"]`) yapılandırıldı.
+
+### Güvenlik
+- `core/udp_listener.py` & `tools/mock_telemetry.py`: Soket bağlama bastırmaları Ruff `# noqa: S104` formatına dönüştürüldü.
+- `tools/setup_wizard.py`: Yerel oyun konfigürasyonu XML okumaları `# noqa: S314` açıklaması ile etiketlendi.
+
 ## [v0.1.0] - 2026-09-03
 
 ### Eklendi

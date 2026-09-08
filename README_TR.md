@@ -2,7 +2,7 @@
 
 [English](README.md) | **Türkçe**
 
-**CustomRallyDash**, **DiRT Rally 2.0** için geliştirilmiş hafif ve gerçek zamanlı bir telemetri gösterge paneli ve baş üstü göstergesidir (HUD). Oyunun fizik motorundan gelen 60 Hz UDP (`Extradata=3`) paketlerini çözümler ve son derece düşük gecikmeli görsel enstrümantasyon sunar. Kompakt dijital HUD, dairesel analog devir saati (takometre), Windows için çerçevesiz ve tıklama geçirgen kaplama modu (click-through overlay) ile Raspberry Pi GPIO vites ışıklarını (shift lights) destekler.
+**CustomRallyDash**, **DiRT Rally 2.0** için geliştirilmiş gerçek zamanlı bir telemetri gösterge panelidir (HUD). Oyunun fizik motorundan gelen 60 Hz UDP (`Extradata=3`) paketlerini çözümler ve son derece düşük gecikmeli görsel enstrümantasyon sunar. Kompakt dijital HUD, dairesel analog devir saati, Windows için çerçevesiz ve tıklama geçirgen kaplama modu ile Raspberry Pi GPIO ile yakılan vites ışıklarını destekler.
 
 ![DiRT Rally 2.0 Telemetri Kaplama Önizlemesi](images/digital_hood_chroma.webp)
 
@@ -10,9 +10,9 @@
 
 ## Özellikler
 
-- **Gösterge Düzenleri**: Modern yatay dijital çubuk HUD ve dinamik devir kesici (redline) algılamalı dairesel analog kadran.
-- **Windows Pencere Kaplaması (Overlay)**: Oyun sırasında daima üstte kalan, `alpha` (yarı saydam) ve `chroma` (renk anahtarlı tam şeffaf) kompozitleme modlarına sahip tıklama geçirgen pencere (click-through).
-- **Motor Sporları Temaları**: Özenle seçilmiş renk paletlerini içeren etkileşimli tema seçici (`Modern Dark`, `Subaru WRC`, `GT3 Racing`, `Night Neon`, `Retro Amber`).
+- **Gösterge Düzenleri**: Modern yatay dijital çubuk HUD ve dinamik dairesel analog kadran.
+- **Windows Pencere Kaplaması (Overlay)**: Oyun sırasında daima üstte kalan, `alpha` (yarı saydam) ve `chroma` (renk anahtarlı tam şeffaf) kompozitleme modlarına sahip tıklama geçirgen pencere.
+- **Motor Sporları Temaları**: Seçilmiş renk paletlerini içeren etkileşimli tema seçici (`Modern Dark`, `Subaru WRC`, `GT3 Racing`, `Night Neon`, `Retro Amber`).
 - **Simüle Telemetri Yayıncısı (Mock Broadcaster)**: Oyunu açmadan çevrimdışı test ve görsel ayar yapabilmeniz için WRC hızlanma, sıralı vites geçişleri ve sol ayak frenajını taklit eden 60 Hz bağımsız sentetik paket üreteci.
 - **Donanımsal Vites Işıkları**: Raspberry Pi GPIO (`gpiozero`) üzerinden fiziksel LED entegrasyonu.
 - **Doğrudan Python Yapılandırması**: Harici dosya ayrıştırıcı yükü olmaksızın doğrudan standart Python dosyaları (`config.py` çalışma zamanı ve sistem için, `settings.py` arayüz ve stil için) üzerinden yapılandırma.

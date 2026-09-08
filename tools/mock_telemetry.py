@@ -115,7 +115,7 @@ def run_mock_server(
     target_port = port or config.LISTEN_PORT
 
     # If configured as 0.0.0.0, send to localhost
-    if target_ip == "0.0.0.0":  # nosec B104
+    if target_ip == "0.0.0.0":  # noqa: S104
         target_ip = "127.0.0.1"
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

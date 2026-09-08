@@ -24,7 +24,7 @@ TelemetryData = namedtuple(
 
 
 class UDPListener:
-    def __init__(self, ip: str = "0.0.0.0", port: int = 20777) -> None:  # nosec B104
+    def __init__(self, ip: str = "0.0.0.0", port: int = 20777) -> None:  # noqa: S104
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((ip, port))
         # Short timeout so receive() never blocks the 60 FPS UI loop; the

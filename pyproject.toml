@@ -19,7 +19,10 @@ target-version = ['py311', 'py312', 'py313'] # Target Python version for code op
 # Ruff tool configuration
 [tool.ruff]
 line-length = 90 # Keep Ruff's line limit consistent with Black
-lint.select = ["E", "F", "I"] # E (Errors), F (Logic Errors), I (Import sorting rules)
+lint.select = ["E", "F", "I", "S"] # E (Errors), F (Logic Errors), I (Import sorting rules), S (Security rules)
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S314"] # Pytest relies on assert statements and parses test XML files
 
 # Pytest tool configuration
 [tool.pytest.ini_options]

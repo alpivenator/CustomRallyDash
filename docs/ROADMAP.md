@@ -1,12 +1,12 @@
 # Roadmap
 
-This document outlines **planned milestones and future goals** for the project.
+This document outlines **planned milestones and future goals** along with some recently competed goals for the project.
 For completed work and version history, see `CHANGELOG.md`. For technical design, see `ARCHITECTURE.md`.
 
 ## Release & Security
 
 - [ ] **GitHub Releases:** Publish v0.1.0-alpha (git tag + source archive).
-- [ ] **Security Testing:** Baseline security testing and validation.
+- [x] **Security Testing:** Baseline security testing and validation.
 - [ ] **Public Launch:** Make repository publicly available on GitHub.
 - [x] **CI Pipeline:** Automated linting and test workflow via GitHub Actions (`ruff` + `pytest`).
 

@@ -6,7 +6,7 @@ Bu dosya tamamlanmamış veya yakın zamanda tamamlanmış hedefleri içerir. Ta
 ## Yayın & Güvenlik
 
 - [ ] **GitHub Releases:** v0.1.0-alpha yayınla (tag + kaynak zip yeterli).
-- [ ] **Güvenlik:** Programın güvenlik testleri (planlanacak).
+- [x] **Güvenlik:** Programın güvenlik testleri (planlanacak).
 - [ ] **GitHub'da public yap** — son adım.
 - [x] **CI:** GitHub Actions ile otomatik ruff + pytest iş akışı.
 

@@ -287,7 +287,7 @@ def update_config_file(path: Path, updates: dict[str, object]) -> Path:
 def configure_game_xml(path: Path, ip: str, port: int = DEFAULT_PORT) -> Path:
     """Back up and update the game's motion-platform UDP configuration."""
     try:
-        tree = ET.parse(path)
+        tree = ET.parse(path)  # noqa: S314 — Local game config XML
     except (ET.ParseError, OSError) as error:
         raise SetupError(f"Could not read game configuration: {path}") from error
 
@@ -323,7 +323,7 @@ def configure_game_xml(path: Path, ip: str, port: int = DEFAULT_PORT) -> Path:
 def _validate_game_config(path: Path) -> None:
     """Validate the game XML before the user approves any file changes."""
     try:
-        tree = ET.parse(path)
+        tree = ET.parse(path)  # noqa: S314 — Local game config XML
     except (ET.ParseError, OSError) as error:
         raise SetupError(f"Could not read game configuration: {path}") from error
     if tree.getroot().find(".//motion_platform") is None:
