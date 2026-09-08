@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Custom real-time telemetry dashboard & overlay for DiRT Rally 2.0 (60 Hz UDP)"
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11"
 authors = [{ name = "Alperen (alpivenator)" }]
 dependencies = ["pygame==2.6.1"]
 
@@ -14,7 +14,7 @@ pi = ["gpiozero==2.0.1"]
 # Black tool configuration
 [tool.black]
 line-length = 90 # Maximum allowed line length
-target-version = ['py311', 'py312', 'py313'] # Target Python version for code optimization
+target-version = ['py311', 'py312', 'py313', 'py314'] # Target Python version for code optimization
 
 # Ruff tool configuration
 [tool.ruff]

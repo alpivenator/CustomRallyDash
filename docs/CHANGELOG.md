@@ -13,6 +13,9 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 - `core/udp_listener.py` & `tools/mock_telemetry.py`: Updated socket binding suppressions to Ruff `# noqa: S104` format.
 - `tools/setup_wizard.py`: Annotated local game configuration XML parsing with `# noqa: S314`.
 
+### Changed
+- `pyproject.toml`, `README.md`, `install.bat`, `.github/workflows/ci.yml`, `docs/ARCHITECTURE.md`: Removed upper Python version bound (`>=3.11`), added Python 3.14 support, refactored Windows installer to dynamically detect any Python `>=3.11`, and set default CI target to Python 3.14.
+
 ## [v0.1.0] - 2026-09-03
 
 ### Added

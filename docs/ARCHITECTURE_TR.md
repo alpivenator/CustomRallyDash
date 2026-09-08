@@ -94,7 +94,7 @@ main.py
             └─ pygame.display.flip()
 ```
 
-Windows platformunda `install.bat`, Python 3.11/3.12/3.13 sanal ortamını oluşturur ve `tools/setup_wizard.py` sihirbazını çalıştırır. Sihirbaz iki dilli bir arayüz (İngilizce / Türkçe) sunar; zaman damgalı bir yedek oluşturduktan sonra mevcut `config.py` dosyasını günceller. Böylece gösterge modülleri standart yapılandırma arayüzünü kesintisiz tüketmeye devam eder. Sihirbaz ayrıca tespit edildiğinde oyunun `hardwaresettings/hardware_settings_config.xml` dosyasını da yedekler ve günceller.
+Windows platformunda `install.bat`, Python 3.11+ (3.11, 3.12, 3.13, 3.14+) sanal ortamını oluşturur ve `tools/setup_wizard.py` sihirbazını çalıştırır. Sihirbaz iki dilli bir arayüz (İngilizce / Türkçe) sunar; zaman damgalı bir yedek oluşturduktan sonra mevcut `config.py` dosyasını günceller. Böylece gösterge modülleri standart yapılandırma arayüzünü kesintisiz tüketmeye devam eder. Sihirbaz ayrıca tespit edildiğinde oyunun `hardwaresettings/hardware_settings_config.xml` dosyasını da yedekler ve günceller.
 
 ## Veri Akışı (Data Flow)
 

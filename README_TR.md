@@ -21,7 +21,7 @@
 
 ## Gereksinimler
 
-- **Python**: `3.11.x`, `3.12.x` veya `3.13.x` (Python 3.14+ şu an için desteklenmemektedir)
+- **Python**: `3.11+` (Python 3.11 ve üzeri)
 - **Bağımlılıklar**: `pygame==2.6.1`, `gpiozero==2.0.1` (isteğe bağlı, yalnızca Raspberry Pi için)
 
 ---
