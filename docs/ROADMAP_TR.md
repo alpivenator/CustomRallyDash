@@ -7,7 +7,7 @@ Bu dosya tamamlanmamış veya yakın zamanda tamamlanmış hedefleri içerir. Ta
 
 - [x] **GitHub Releases:** v0.1.0-alpha yayınla (tag + kaynak zip yeterli).
 - [x] **Güvenlik:** Programın güvenlik testleri (planlanacak).
-- [ ] **GitHub'da public yap** — son adım.
+- [x] **GitHub'da public yap** — son adım.
 - [x] **CI:** GitHub Actions ile otomatik ruff + pytest iş akışı.
 
 ## Kullanım Kolaylığı

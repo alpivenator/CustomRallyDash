@@ -7,7 +7,7 @@ For completed work and version history, see `CHANGELOG.md`. For technical design
 
 - [x] **GitHub Releases:** Publish v0.1.0-alpha (git tag + source archive).
 - [x] **Security Testing:** Baseline security testing and validation.
-- [ ] **Public Launch:** Make repository publicly available on GitHub.
+- [x] **Public Launch:** Make repository publicly available on GitHub.
 - [x] **CI Pipeline:** Automated linting and test workflow via GitHub Actions (`ruff` + `pytest`).
 
 ## Usability & Setup

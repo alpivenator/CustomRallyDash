@@ -3,6 +3,14 @@
 All notable changes to this project are documented in this file in reverse chronological order.
 For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
 
+## [v0.1.1] - 2026-09-09
+
+### Changed
+- `pyproject.toml`: Bumped version to `0.1.1`.
+
+### Fixed
+- `install.bat`: Resolved an issue where Python version detection failed on systems without Python 3.13 due to signed `errorlevel` handling in Windows Batch, and added a fallback to default `python` on PATH.
+
 ## [v0.1.0] - 2026-09-08
 
 ### Added

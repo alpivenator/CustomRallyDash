@@ -3,6 +3,14 @@
 Bu dosyada projede yapılan değişiklikler ters kronolojik sırayla (en yeni en üstte) belgelenir.
 Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz. `ARCHITECTURE.md`.
 
+## [v0.1.1] - 2026-09-09
+
+### Değiştirildi
+- `pyproject.toml`: Sürüm `0.1.1` olarak güncellendi.
+
+### Düzeltildi
+- `install.bat`: Python 3.13 yüklü olmayan sistemlerde Windows Batch `errorlevel` işleme mantığından kaynaklanan sürüm algılama hatası düzeltildi; PATH üzerindeki varsayılan `python` için fallback desteği eklendi.
+
 ## [v0.1.0] - 2026-09-08
 
 ### Eklendi
