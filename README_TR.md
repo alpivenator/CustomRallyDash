@@ -2,6 +2,10 @@
 
 [English](README.md) | **Türkçe**
 
+[![GitHub Release](https://img.shields.io/github/v/release/alpivenator/CustomRallyDash?label=S%C3%BCr%C3%BCm)](https://github.com/alpivenator/CustomRallyDash/releases)
+[![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
+[![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-green.svg)](LICENSE)
+
 **CustomRallyDash**, **DiRT Rally 2.0** için geliştirilmiş gerçek zamanlı bir telemetri gösterge panelidir (HUD). Oyunun fizik motorundan gelen 60 Hz UDP (`Extradata=3`) paketlerini çözümler ve son derece düşük gecikmeli görsel enstrümantasyon sunar. Kompakt dijital HUD, dairesel analog devir saati, Windows için çerçevesiz ve tıklama geçirgen kaplama modu ile Raspberry Pi GPIO ile yakılan vites ışıklarını destekler.
 
 ![DiRT Rally 2.0 Telemetri Kaplama Önizlemesi](images/digital_hood_chroma.webp)
@@ -28,9 +32,28 @@
 
 ## Hızlı Başlangıç
 
-### Windows
+### 1. Projeyi Edinin
 
-Depo kök dizininde yer alan hazır toplu işlem (.bat) betiklerini kullanabilirsiniz:
+Depoyu klonlayabilir veya sürüm kaynak kodu arşivini indirebilirsiniz:
+
+- **Git ile Klonlama:**
+  ```sh
+  git clone https://github.com/alpivenator/CustomRallyDash.git
+  cd CustomRallyDash
+  ```
+- **Sürüm Arşivi:** [GitHub Releases](https://github.com/alpivenator/CustomRallyDash/releases/latest) sayfasından `.zip` dosyasını indirip bir klasöre çıkartın.
+  > **ZIP olarak indirenler için Windows notu:** Arşiv dosyasına sağ tıklayıp *Özellikler → "Engellemeyi Kaldır" (Unblock) → Uygula* adımlarını uyguladıktan sonra çıkartın.
+
+### 2. Kurulum ve Çalıştırma
+
+#### Windows
+
+1. **Kurulum:** `install.bat` dosyasına çift tıklayın. Bu işlem otomatik olarak `.venv` sanal ortamını oluşturur, bağımlılıkları yükler ve etkileşimli DiRT Rally 2.0 yapılandırma sihirbazını başlatır.
+2. **Çalıştırma:** DiRT Rally 2.0'ın açık olduğundan emin olun (kaplama modunun görünür kalması için oyun **Pencereli** veya **Çerçevesiz Pencereli** modda olmalıdır), ardından `run_dash.bat` dosyasına çift tıklayın.
+
+##### Yardımcı Betikler
+
+Windows kullanıcılarının kolaylığı için depo kök dizininde hazır toplu işlem (.bat) betikleri yer almaktadır:
 
 | Betik | Amaç | Açıklama |
 | :--- | :--- | :--- |
@@ -40,9 +63,7 @@ Depo kök dizininde yer alan hazır toplu işlem (.bat) betiklerini kullanabilir
 | `run_mock.bat` | **Çevrimdışı Önizleme** | Test amaçlı 60 Hz simüle telemetri yayını yapar. |
 | `check_telemetry.bat` | **Tanılama** | Oyundan UDP paketlerinin gelip gelmediğini dinler ve bağlantıyı doğrular. |
 
-> **ZIP olarak indirenler için not**: Projeyi Windows'a `.zip` olarak indirdiyseniz, arşiv dosyasına sağ tıklayıp *Özellikler → "Engellemeyi Kaldır" (Unblock) → Uygula* adımlarını uyguladıktan sonra çıkartın.
-
-### Linux ve Komut Satırı
+#### Linux ve Komut Satırı
 
 ```sh
 # 1. Ortam Kurulumu

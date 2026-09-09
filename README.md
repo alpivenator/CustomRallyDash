@@ -2,6 +2,10 @@
 
 [Türkçe](README_TR.md) | **English**
 
+[![GitHub Release](https://img.shields.io/github/v/release/alpivenator/CustomRallyDash?label=Release)](https://github.com/alpivenator/CustomRallyDash/releases)
+[![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 **CustomRallyDash** is a real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It decodes 60 Hz UDP (`Extradata=3`) packets from the game's physics engine and renders low-latency visual instrumentation — supporting compact digital HUDs, circular analog tachometers, borderless Windows click-through overlays, and Raspberry Pi GPIO shift lights.
 
 ![DiRT Rally 2.0 Telemetry Overlay Preview](images/digital_hood_chroma.webp)
@@ -28,21 +32,38 @@
 
 ## Quick Start
 
-### Windows
+### 1. Get the Code
 
-Run the provided batch scripts from the repository root:
+Clone the repository or download the release source archive:
+
+- **Git Clone:**
+  ```sh
+  git clone https://github.com/alpivenator/CustomRallyDash.git
+  cd CustomRallyDash
+  ```
+- **Release Archive:** Download the `.zip` from [GitHub Releases](https://github.com/alpivenator/CustomRallyDash/releases/latest) and extract it.
+  > **Windows note for ZIP archives:** Right-click the `.zip` file → *Properties* → check **"Unblock"** → *Apply* before extracting.
+
+### 2. Setup & Launch
+
+#### Windows
+
+1. **Setup:** Double-click `install.bat`. This automatically creates the virtual environment, installs dependencies, and launches the interactive DiRT Rally 2.0 configuration wizard.
+2. **Launch:** Ensure DiRT Rally 2.0 is running (in **Windowed** or **Borderless Windowed** mode for the click-through overlay to stay visible), then double-click `run_dash.bat`.
+
+##### Utility Scripts
+
+Ready-to-use batch scripts are available in the repository root:
 
 | Script | Purpose | Description |
 | :--- | :--- | :--- |
-| `install.bat` | **First-Time Setup** | Creates `.venv`, installs dependencies, and runs the setup wizard. |
+| `install.bat` | **First-Time Setup** | Creates `.venv`, installs dependencies, and launches setup wizard. |
 | `run_dash.bat` | **Launch Dashboard** | Starts the telemetry dashboard. |
 | `select_theme.bat` | **Theme Switcher** | Interactive CLI to apply motorsport colour palettes. |
 | `run_mock.bat` | **Offline Preview** | Broadcasts simulated 60 Hz telemetry for offline testing. |
 | `check_telemetry.bat` | **Diagnostics** | Listens for active UDP broadcast packets and verifies connection. |
 
-> **Note for ZIP downloads**: If you downloaded this repository as a `.zip` archive on Windows, unblock the file before extracting (*Right Click → Properties → Check "Unblock" → Apply*).
-
-### Linux & Command Line
+#### Linux & CLI
 
 ```sh
 # 1. Environment Setup
