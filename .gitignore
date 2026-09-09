@@ -1,6 +1,7 @@
 __pycache__/
 venv/
 .ruff_cache/
+.pytest_cache/
 local
 .kilo
 .venv
