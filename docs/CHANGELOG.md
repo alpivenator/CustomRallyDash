@@ -3,7 +3,7 @@
 All notable changes to this project are documented in this file in reverse chronological order.
 For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
 
-## [2026-09-08]
+## [v0.1.0] - 2026-09-08
 
 ### Added
 - `.github/workflows/ci.yml`: Added `pip-audit` step to automate dependency vulnerability scanning in CI/CD pipeline.
@@ -16,7 +16,7 @@ For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHI
 ### Note
 - Evaluated Python 3.14 compatibility; support is currently deferred due to Pygame 2.6.1 prebuilt wheel availability constraints on PyPI. Python runtime requirement remains locked to `>=3.11,<3.14`.
 
-## [v0.1.0] - 2026-09-03
+## 2026-09-03
 
 ### Added
 - `README_TR.md`: Added comprehensive Turkish translation of project overview and quick-start guide with cross-language navigation.

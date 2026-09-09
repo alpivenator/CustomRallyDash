@@ -3,7 +3,7 @@
 Bu dosyada projede yapılan değişiklikler ters kronolojik sırayla (en yeni en üstte) belgelenir.
 Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz. `ARCHITECTURE.md`.
 
-## [2026-09-08]
+## [v0.1.0] - 2026-09-08
 
 ### Eklendi
 - `.github/workflows/ci.yml`: CI/CD hattında bağımlılık zafiyet taramasını otomatikleştirmek için `pip-audit` adımı eklendi.
@@ -16,7 +16,7 @@ Gelecekteki hedefler için bkz. `ROADMAP_TR.md`. Mimari açıklamalar için bkz.
 ### Not
 - Python 3.14 uyumluluğu değerlendirildi; PyPI üzerinde Pygame 2.6.1 hazır wheel paketlerinin bulunmaması nedeniyle destek ertelendi. Python çalışma zamanı kısıtlaması `>=3.11,<3.14` olarak korunmaktadır.
 
-## [v0.1.0] - 2026-09-03
+## 2026-09-03
 
 ### Eklendi
 - `README_TR.md`: Çapraz dil geçiş bağlantılarıyla birlikte projenin genel bakış ve hızlı başlangıç kılavuzunun eksiksiz Türkçe çevirisi eklendi.
