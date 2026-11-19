@@ -7,7 +7,7 @@ CustomRallyDash reads its configuration directly from two Python files. Changes 
 - `config.py`: Runtime and hardware settings (network, dashboard style, Windows overlay toggle, Raspberry Pi LEDs).
 - `settings.py`: Visual styling (dimensions, scale, colors, fonts, overlay position, and transparency).
 
-You rarely need to edit these files by hand. Run `install.bat` (or `python tools/setup_wizard.py`) for first-time setup, and `select_theme.bat` (or `python tools/theme_selector.py`) to switch color themes.
+You rarely need to edit these files by hand. For first-time setup, run `install.bat` on Windows, `./install.sh` on Linux/Raspberry Pi, or `python tools/setup_wizard.py` directly. To switch color themes, run `select_theme.bat` or `python tools/theme_selector.py`.
 
 ## Quick configuration
 
@@ -19,7 +19,7 @@ Most users only need to adjust the options below:
 | Scale dashboard size | `settings.py` | `TARGET_SCALE` | `None` (native size), `1.25` (+25%), `0.8` (-20%) |
 | Toggle Windows overlay | `config.py` | `ENABLE_OVERLAY` | `True` (borderless click-through overlay on Windows) |
 | Change overlay position | `settings.py` | `OVERLAY_POSITION` | `"bottom-right"`, `"bottom-center"`, or `"bottom-left"` |
-| Switch color theme | `settings.py` | *(via CLI)* | Run `select_theme.bat` to apply motorsport presets |
+| Switch color theme | `settings.py` | *(via CLI)* | Run `select_theme.bat` or `python tools/theme_selector.py` to apply presets |
 | Telemetry IP address | `config.py` | `LISTEN_IP` | `"127.0.0.1"` (same PC) or dashboard LAN IP (separate device) |
 
 ## Game setup (DiRT Rally 2.0)

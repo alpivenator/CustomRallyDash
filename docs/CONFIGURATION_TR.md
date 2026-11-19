@@ -7,7 +7,7 @@ CustomRallyDash tüm ayarları doğrudan iki Python dosyasından okur. Değişik
 - `config.py`: Sistem, ağ, gösterge stili, Windows overlay ve Raspberry Pi LED ayarları.
 - `settings.py`: Çözünürlük, ölçekleme, renk paleti, yazı tipi boyutları ve overlay yerleşim ayarları.
 
-İlk kurulumu `install.bat` (veya `python tools/setup_wizard.py`), renk temasını ise `select_theme.bat` (veya `python tools/theme_selector.py`) ile değiştirebileceğiniz için bu dosyaları çoğu zaman elle düzenlemeniz gerekmez.
+Bu dosyaları çoğu zaman elle düzenlemeniz gerekmez. İlk kurulum için Windows'ta `install.bat`, Linux ve Raspberry Pi'de `./install.sh` betiğini ya da doğrudan `python tools/setup_wizard.py` komutunu çalıştırabilirsiniz. Renk temasını değiştirmek için `select_theme.bat` veya `python tools/theme_selector.py` kullanabilirsiniz.
 
 ## Hızlı yapılandırma
 
@@ -19,7 +19,7 @@ Günlük kullanımda genellikle yalnızca aşağıdaki ayarlara ihtiyaç duyulur
 | Boyutu ölçekleme | `settings.py` | `TARGET_SCALE` | `None` (özgün boyut), `1.25` (+%25), `0.8` (-%20) |
 | Windows overlay'i açma/kapatma | `config.py` | `ENABLE_OVERLAY` | `True` (Windows'ta şeffaf ve tıklama geçirgen pencere) |
 | Overlay konumunu değiştirme | `settings.py` | `OVERLAY_POSITION` | `"bottom-right"`, `"bottom-center"` veya `"bottom-left"` |
-| Renk temasını seçme | `settings.py` | *(CLI aracı)* | Hazır paletleri uygulamak için `select_theme.bat` çalıştırın |
+| Renk temasını seçme | `settings.py` | *(CLI aracı)* | Hazır paletleri uygulamak için `select_theme.bat` veya `python tools/theme_selector.py` çalıştırın |
 | Telemetri IP adresi | `config.py` | `LISTEN_IP` | `"127.0.0.1"` (aynı PC) veya göstergenin LAN IP'si (ayrı cihaz) |
 
 ## Oyun kurulumu (DiRT Rally 2.0)

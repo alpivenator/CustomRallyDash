@@ -14,7 +14,8 @@ CustomRallyDash is a real-time telemetry dashboard and overlay for DiRT Rally 2.
 
 - Horizontal digital bar HUD and circular analog tachometer with dynamic redline detection
 - Borderless, click-through Windows overlay supporting `chroma` (transparent background) and `alpha` (semi-transparent) modes
-- Interactive theme selector with five presets: `Modern Dark (Default)`, `Subaru Classic WRC`, `GT3 Competition`, `Night Stage Neon (Cyberpunk)`, and `Retro 90s Amber`
+- Terminal UI tools built with `rich` and `questionary`: bilingual (EN/TR) setup wizard and theme selector, plus a UDP telemetry checker
+- Five built-in color presets: `Modern Dark (Default)`, `Subaru Classic WRC`, `GT3 Competition`, `Night Stage Neon (Cyberpunk)`, and `Retro 90s Amber`
 - Standalone 60 Hz mock telemetry broadcaster modeling WRC acceleration, sequential shifts, and braking for offline testing
 - Physical GPIO shift-light support on Raspberry Pi via `gpiozero`
 - Plain Python configuration in `config.py` (system and runtime) and `settings.py` (layout and colors)
@@ -22,7 +23,11 @@ CustomRallyDash is a real-time telemetry dashboard and overlay for DiRT Rally 2.
 ## Requirements
 
 - Python `3.11.x`, `3.12.x`, or `3.13.x` (Python 3.14+ is not supported yet)
-- `pygame==2.6.1`, plus `gpiozero==2.0.1` on Raspberry Pi if physical LEDs are enabled
+- Core packages (`requirements.txt`):
+  - `pygame==2.6.1` (dashboard rendering)
+  - `rich>=13.9,<16` (terminal UI panels, tables, and status output)
+  - `questionary>=2.0,<3` (arrow-key CLI prompts)
+- Optional (`requirements-pi.txt`): `gpiozero==2.0.1` (physical GPIO shift lights on Raspberry Pi)
 
 ## Quick start
 
@@ -102,7 +107,7 @@ When running the dashboard on another PC or a Raspberry Pi, set `ip` to that dev
 - `settings.py`: Visual settings including window size, scaling (`TARGET_SCALE`), overlay placement and transparency (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_CHROMA_KEY`), colors, and font sizes.
 - `core/`: UDP packet parser (`udp_listener.py`), Win32 overlay helpers (`overlay_win.py`), and GPIO LED driver (`led_controller.py`).
 - `dashboards/`: Pygame renderers (`digital_dash.py`, `analog_dash.py`) and theme presets (`themes.py`).
-- `tools/`: Setup wizard (`setup_wizard.py`), packet checker (`telemetry_check.py`), mock telemetry generator (`mock_telemetry.py`), and theme CLI (`theme_selector.py`).
+- `tools/`: Shared TUI helpers (`cli_ui.py`), setup wizard (`setup_wizard.py`), packet checker (`telemetry_check.py`), mock telemetry generator (`mock_telemetry.py`), and theme CLI (`theme_selector.py`).
 
 See [docs/CONFIGURATION.md](docs/CONFIGURATION.md) for all configuration options and network notes.
 

@@ -10,8 +10,9 @@ CustomRallyDash, DiRT Rally 2.0 için geliştirilmiş gerçek zamanlı bir telem
 CustomRallyDash/
 ├── .github/
 │   ├── workflows/
-│   │   └── ci.yml            # GitHub Actions CI (ruff, pytest, pip-audit)
+│   │   └── ci.yml            # GitHub Actions CI (ruff, pytest, pip-audit, bash -n install.sh)
 │   └── ISSUE_TEMPLATE/       # Hata bildirimi ve özellik talebi şablonları
+├── .gitattributes            # Git satır sonu kuralları (.bat için CRLF, .sh için LF)
 ├── core/
 │   ├── __init__.py           # Telemetri ve platform yardımcıları için paket dışa aktarımları
 │   ├── udp_listener.py       # UDP soket dinleyicisi ve Extradata=3 paket çözücüsü
@@ -39,6 +40,7 @@ CustomRallyDash/
 ├── requirements.txt          # Temel Python bağımlılıkları (pygame, rich, questionary)
 ├── requirements-pi.txt       # İsteğe bağlı Raspberry Pi bağımlılığı (gpiozero)
 ├── LICENSE                   # MIT lisansı
+├── AGENTS.md                 # Katkı sağlayanlar ve kodlama ajanları için proje kılavuzu
 ├── README.md                 # Proje genel bakışı ve hızlı başlangıç (İngilizce)
 ├── README_TR.md              # Proje genel bakışı ve hızlı başlangıç (Türkçe)
 ├── install.bat               # Windows ortam kurulumu ve sihirbaz başlatıcısı
@@ -96,7 +98,7 @@ main.py
             └─ pygame.display.flip()
 ```
 
-Windows'ta `install.bat` betiği Python 3.11, 3.12 veya 3.13 için bir sanal ortam oluşturup `tools/setup_wizard.py` sihirbazını çalıştırır. Sihirbaz, yeni değerleri yazmadan önce `config.py`'nin zaman damgalı bir yedeğini alarak gösterge modüllerinin beklediği yapılandırma arayüzünü korur. DiRT Rally 2.0'ın `hardware_settings_config.xml` dosyası bulunduğunda onu da yedekleyip `<udp>` satırını günceller.
+Windows'ta `install.bat`, Linux ve Raspberry Pi'de ise `install.sh` Python 3.11, 3.12 veya 3.13 ile sanal ortam oluşturup bağımlılıkları kurar ve `tools/setup_wizard.py` sihirbazını başlatır. Sihirbaz, donanım adımını işletim sistemine göre belirler: Windows'ta overlay (`ENABLE_OVERLAY`) ayarını, diğer sistemlerde ise `config.py` içinde tanımlıysa Raspberry Pi GPIO vites ışıklarını (`ENABLE_LEDS`) sorar. Yeni değerleri yazmadan önce `config.py`'nin zaman damgalı yedeğini alır ve mevcut yapılandırma arayüzünü bozmadan yalnızca seçili alanları günceller. DiRT Rally 2.0'ın `hardware_settings_config.xml` dosyası bulunduğunda onu da yedekleyip `<udp>` satırını günceller.
 
 ## Veri akışı
 

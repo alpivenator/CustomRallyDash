@@ -14,15 +14,20 @@ CustomRallyDash, DiRT Rally 2.0 için hazırlanmış bir telemetri göstergesi v
 
 - Yatay dijital HUD ve araca göre redline belirleyen dairesel analog devir saati
 - Windows'ta oyun üzerinde kalan, `chroma` (arka planı tamamen şeffaf) ve `alpha` (yarı saydam) modlu çerçevesiz tıklama geçirgen overlay
-- Beş hazır palet içeren etkileşimli tema seçici: `Modern Dark (Default)`, `Subaru Classic WRC`, `GT3 Competition`, `Night Stage Neon (Cyberpunk)` ve `Retro 90s Amber`
-- Oyunu açmadan test ve görsel ayar yapabilmek için WRC hızlanma, sıralı vites geçişi ve frenleme üreten 60 Hz mock telemetri yayıncısı
+- `rich` ve `questionary` tabanlı TUI araçları: Türkçe/İngilizce kurulum sihirbazı ve tema seçici, ayrıca UDP paket kontrolü
+- Beş hazır renk paleti: `Modern Dark (Default)`, `Subaru Classic WRC`, `GT3 Competition`, `Night Stage Neon (Cyberpunk)` ve `Retro 90s Amber`
+- Oyunu açmadan test ve görsel ayar yapabilmek için arabanın hızlanma, sıralı vites geçişi ve frenlemesini benzetimleyen 60 Hz mock telemetri yayıncısı
 - Raspberry Pi üzerinde `gpiozero` ile fiziksel GPIO vites ışığı desteği
 - Ek dosya ayrıştırıcısı kullanmadan doğrudan `config.py` (sistem ve ağ) ile `settings.py` (arayüz ve renk) üzerinden yapılandırma
 
 ## Gereksinimler
 
 - Python `3.11.x`, `3.12.x` veya `3.13.x` (Python 3.14+ henüz desteklenmiyor)
-- `pygame==2.6.1`, Raspberry Pi üzerinde LED kullanılacaksa ek olarak `gpiozero==2.0.1`
+- Temel paketler (`requirements.txt`):
+  - `pygame==2.6.1` (gösterge çizimi)
+  - `rich>=13.9,<16` (terminal panelleri, tablolar ve durum çıktıları)
+  - `questionary>=2.0,<3` (ok tuşlu CLI menüleri)
+- İsteğe bağlı (`requirements-pi.txt`): `gpiozero==2.0.1` (Raspberry Pi'de fiziksel GPIO vites ışıkları için)
 
 ## Hızlı başlangıç
 
@@ -102,7 +107,7 @@ Gösterge ayrı bir bilgisayarda veya Raspberry Pi'de çalışıyorsa `ip` alan�
 - `settings.py`: Pencere boyutları, ölçekleme (`TARGET_SCALE`), overlay konumu ve saydamlık ayarları (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_CHROMA_KEY`), renk paleti ve yazı boyutları.
 - `core/`: UDP paket çözücüsü (`udp_listener.py`), Windows Win32 overlay yardımcıları (`overlay_win.py`) ve GPIO LED sürücüsü (`led_controller.py`).
 - `dashboards/`: Pygame çizim modülleri (`digital_dash.py`, `analog_dash.py`) ve hazır temalar (`themes.py`).
-- `tools/`: Kurulum sihirbazı (`setup_wizard.py`), paket kontrol aracı (`telemetry_check.py`), mock telemetri üreteci (`mock_telemetry.py`) ve tema seçici (`theme_selector.py`).
+- `tools/`: Ortak TUI yardımcıları (`cli_ui.py`), kurulum sihirbazı (`setup_wizard.py`), paket kontrol aracı (`telemetry_check.py`), mock telemetri üreteci (`mock_telemetry.py`) ve tema seçici (`theme_selector.py`).
 
 Tüm ayarlar ve ağ notları için [docs/CONFIGURATION_TR.md](docs/CONFIGURATION_TR.md) dosyasına bakın.
 

@@ -10,8 +10,9 @@ CustomRallyDash is a real-time telemetry dashboard and overlay for DiRT Rally 2.
 CustomRallyDash/
 ├── .github/
 │   ├── workflows/
-│   │   └── ci.yml            # GitHub Actions CI (ruff, pytest, pip-audit)
+│   │   └── ci.yml            # GitHub Actions CI (ruff, pytest, pip-audit, bash -n install.sh)
 │   └── ISSUE_TEMPLATE/       # Bug report and feature request forms
+├── .gitattributes            # Git line-ending rules (CRLF for .bat, LF for .sh)
 ├── core/
 │   ├── __init__.py           # Package exports for telemetry and platform helpers
 │   ├── udp_listener.py       # UDP socket listener and Extradata=3 packet decoder
@@ -39,6 +40,7 @@ CustomRallyDash/
 ├── requirements.txt          # Base Python dependencies (pygame, rich, questionary)
 ├── requirements-pi.txt       # Optional Raspberry Pi dependency (gpiozero)
 ├── LICENSE                   # MIT license
+├── AGENTS.md                 # Project guidelines for contributors and coding agents
 ├── README.md                 # Project overview and quick start (English)
 ├── README_TR.md              # Project overview and quick start (Turkish)
 ├── install.bat               # Windows environment setup and wizard launcher
@@ -96,7 +98,7 @@ main.py
             └─ pygame.display.flip()
 ```
 
-On Windows, `install.bat` creates a Python 3.11, 3.12, or 3.13 virtual environment and runs `tools/setup_wizard.py`. The wizard creates a timestamped backup of `config.py` before writing new values, keeping the existing module interface intact. When DiRT Rally 2.0's `hardware_settings_config.xml` is found, the wizard backs it up and updates its `<udp>` entry as well.
+`install.bat` (Windows) and `install.sh` (Linux/Raspberry Pi) create a Python 3.11, 3.12, or 3.13 virtual environment, install dependencies, and run `tools/setup_wizard.py`. The wizard adjusts its hardware step to the OS: on Windows it asks about the overlay (`ENABLE_OVERLAY`), and on other systems it asks about Raspberry Pi GPIO shift lights (`ENABLE_LEDS`) if `config.py` defines that key. Before writing new values, it creates a timestamped backup of `config.py` and updates only the selected settings in place so the module interface stays intact. When DiRT Rally 2.0's `hardware_settings_config.xml` is found, the wizard backs it up and updates its `<udp>` entry as well.
 
 ## Data flow
 
