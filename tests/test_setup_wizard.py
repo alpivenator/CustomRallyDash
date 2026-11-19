@@ -1,9 +1,12 @@
+import socket
 import tempfile
+import threading
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
+from tools.cli_ui import ChoiceItem, CliUI, UserCancelled
 from tools.setup_wizard import (
     _ask_language,
     configure_game_xml,
@@ -138,6 +141,7 @@ class SetupWizardTests(unittest.TestCase):
                     project_root=project_root,
                     input_fn=lambda _prompt: next(answers),
                     output_fn=output.append,
+                    platform="win32",
                 )
 
             self.assertEqual(result, 0)
@@ -154,6 +158,7 @@ class SetupWizardTests(unittest.TestCase):
             self.assertTrue(
                 any("Setup Completed Successfully" in line for line in output)
             )
+            self.assertTrue(any("run_dash.bat" in line for line in output))
 
     def test_run_setup_updates_listen_ip_and_xml_after_confirmation_turkish(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -179,6 +184,7 @@ class SetupWizardTests(unittest.TestCase):
                     project_root=project_root,
                     input_fn=lambda _prompt: next(answers),
                     output_fn=output.append,
+                    platform="win32",
                 )
 
             self.assertEqual(result, 0)
@@ -205,6 +211,7 @@ class SetupWizardTests(unittest.TestCase):
                     project_root=project_root,
                     input_fn=lambda _prompt: next(answers),
                     output_fn=output.append,
+                    platform="win32",
                 )
 
             self.assertEqual(result, 0)
@@ -229,11 +236,171 @@ class SetupWizardTests(unittest.TestCase):
                     project_root=project_root,
                     input_fn=lambda _prompt: next(answers),
                     output_fn=lambda _message: None,
+                    platform="win32",
                 )
 
             self.assertEqual(result, 0)
             self.assertEqual(config_path.read_text(encoding="utf-8"), original)
             self.assertEqual(list(project_root.glob("*.bak-*")), [])
+
+    def test_run_setup_linux_updates_leds_and_warns_when_gpiozero_missing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project_root = Path(directory)
+            config_path = project_root / "config.py"
+            config_path.write_text(
+                "ENABLE_LEDS = False\n"
+                'LISTEN_IP = "127.0.0.1"\n'
+                'DASH_STYLE = "digital"\n'
+                "ENABLE_OVERLAY = True\n",
+                encoding="utf-8",
+            )
+            answers = iter(["tr", "192.168.1.30", "digital", "E", "E"])
+            output = []
+
+            with (
+                patch("tools.setup_wizard.find_game_config", return_value=None),
+                patch("tools.setup_wizard.importlib.util.find_spec", return_value=None),
+            ):
+                result = run_setup(
+                    project_root=project_root,
+                    input_fn=lambda _prompt: next(answers),
+                    output_fn=output.append,
+                    platform="linux",
+                )
+
+            self.assertEqual(result, 0)
+            updated = config_path.read_text(encoding="utf-8")
+            self.assertIn("ENABLE_LEDS = True", updated)
+            self.assertIn('LISTEN_IP = "192.168.1.30"', updated)
+            self.assertIn("ENABLE_OVERLAY = True", updated)
+            self.assertTrue(any(".venv/bin/python main.py" in line for line in output))
+            self.assertFalse(any("run_dash.bat" in line for line in output))
+            self.assertTrue(any("gpiozero" in line for line in output))
+
+    def test_run_setup_linux_skips_gpiozero_warning_when_installed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project_root = Path(directory)
+            config_path = project_root / "config.py"
+            config_path.write_text(
+                "ENABLE_LEDS = False\n"
+                'LISTEN_IP = "127.0.0.1"\n'
+                'DASH_STYLE = "digital"\n'
+                "ENABLE_OVERLAY = True\n",
+                encoding="utf-8",
+            )
+            answers = iter(["en", "192.168.1.30", "analog", "Y", "Y"])
+            output = []
+
+            with (
+                patch("tools.setup_wizard.find_game_config", return_value=None),
+                patch(
+                    "tools.setup_wizard.importlib.util.find_spec",
+                    return_value=object(),
+                ),
+            ):
+                result = run_setup(
+                    project_root=project_root,
+                    input_fn=lambda _prompt: next(answers),
+                    output_fn=output.append,
+                    platform="linux",
+                )
+
+            self.assertEqual(result, 0)
+            self.assertIn("ENABLE_LEDS = True", config_path.read_text(encoding="utf-8"))
+            self.assertFalse(any("gpiozero" in line for line in output))
+
+    def test_run_setup_exits_cleanly_on_interrupt_without_changes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project_root = Path(directory)
+            config_path = project_root / "config.py"
+            original = (
+                'LISTEN_IP = "127.0.0.1"\nDASH_STYLE = "digital"\nENABLE_OVERLAY = True\n'
+            )
+            config_path.write_text(original, encoding="utf-8")
+            output = []
+
+            def interrupt(_prompt: str) -> str:
+                raise KeyboardInterrupt
+
+            result = run_setup(
+                project_root=project_root,
+                input_fn=interrupt,
+                output_fn=output.append,
+                platform="win32",
+            )
+
+            self.assertEqual(result, 0)
+            self.assertEqual(config_path.read_text(encoding="utf-8"), original)
+            self.assertTrue(any("cancelled" in line.lower() for line in output))
+
+    def test_telemetry_check_receives_valid_264_byte_packet(self):
+        test_port = 29997
+        output = []
+
+        def send_later() -> None:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            try:
+                sock.sendto(b"\x00" * 264, ("127.0.0.1", test_port))
+            finally:
+                sock.close()
+
+        timer = threading.Timer(0.05, send_later)
+        timer.start()
+        try:
+            result = check_telemetry(
+                listen_ip="127.0.0.1",
+                listen_port=test_port,
+                timeout=1.0,
+                output_fn=output.append,
+            )
+        finally:
+            timer.join(timeout=1.0)
+
+        self.assertEqual(result, 0)
+        self.assertTrue(any("Telemetry packet received" in line for line in output))
+
+    def test_cli_ui_uses_questionary_arrow_menu_on_tty(self):
+        mock_prompt = MagicMock()
+        mock_prompt.ask.return_value = "analog"
+        ui = CliUI(input_fn=input, output_fn=print)
+
+        with (
+            patch("sys.stdin.isatty", return_value=True),
+            patch("sys.stdout.isatty", return_value=True),
+            patch(
+                "tools.cli_ui.questionary.select", return_value=mock_prompt
+            ) as select_mock,
+        ):
+            selected = ui.ask_select(
+                "Style",
+                choices=[
+                    ChoiceItem("digital", "Digital"),
+                    ChoiceItem("analog", "Analog"),
+                ],
+                default="digital",
+                invalid_message="Invalid",
+            )
+
+        self.assertEqual(selected, "analog")
+        self.assertEqual(select_mock.call_args.kwargs["pointer"], ">")
+
+    def test_cli_ui_raises_user_cancelled_when_questionary_aborted(self):
+        mock_prompt = MagicMock()
+        mock_prompt.ask.return_value = None
+        ui = CliUI(input_fn=input, output_fn=print)
+
+        with (
+            patch("sys.stdin.isatty", return_value=True),
+            patch("sys.stdout.isatty", return_value=True),
+            patch("tools.cli_ui.questionary.select", return_value=mock_prompt),
+            self.assertRaises(UserCancelled),
+        ):
+            ui.ask_select(
+                "Style",
+                choices=[ChoiceItem("digital", "Digital")],
+                default="digital",
+                invalid_message="Invalid",
+            )
 
 
 if __name__ == "__main__":

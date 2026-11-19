@@ -9,9 +9,14 @@ from typing import Any
 THEMES: dict[str, dict[str, Any]] = {
     "modern_dark": {
         "name": "Modern Dark (Default)",
+        "name_tr": "Modern Koyu (Varsayılan)",
         "description": (
             "Sleek dark grey cockpit with high-visibility cyan/blue RPM "
             "and red rev limiter."
+        ),
+        "description_tr": (
+            "Koyu antrasit zemin üzerinde belirgin mavi devir bandı ve "
+            "kırmızı kesici uyarısı."
         ),
         "colors": {
             "COLOR_BG": (25, 25, 30),
@@ -27,9 +32,14 @@ THEMES: dict[str, dict[str, Any]] = {
     },
     "subaru_classic": {
         "name": "Subaru Classic WRC",
+        "name_tr": "Subaru Klasik Ralli",
         "description": (
             "Iconic World Rally Championship 555 heritage: World Rally Blue, "
             "Gold/Yellow accents, and STi Cherry Red alerts."
+        ),
+        "description_tr": (
+            "Klasik 555 ralli mavisi üzerine altın sarısı vurgular ve "
+            "kiraz kırmızısı uyarılar."
         ),
         "colors": {
             "COLOR_BG": (12, 18, 32),
@@ -45,9 +55,14 @@ THEMES: dict[str, dict[str, Any]] = {
     },
     "gt3_racing": {
         "name": "GT3 Competition",
+        "name_tr": "GT3 Yarış Kokpiti",
         "description": (
             "Modern endurance cockpit: Matte asphalt slate, high-contrast vibrant "
             "orange, and turquoise telemetry lines."
+        ),
+        "description_tr": (
+            "Mat asfalt zemin, parlak GT turuncusu devir göstergesi ve "
+            "turkuaz gaz çizgileri."
         ),
         "colors": {
             "COLOR_BG": (20, 22, 25),
@@ -63,9 +78,14 @@ THEMES: dict[str, dict[str, Any]] = {
     },
     "night_neon": {
         "name": "Night Stage Neon (Cyberpunk)",
+        "name_tr": "Gece Etabı Neon",
         "description": (
             "OLED deep black night stage theme with electric cyan and "
             "vivid magenta shift warnings."
+        ),
+        "description_tr": (
+            "Karanlık etaplar için koyu siyah zemin, parlak turkuaz ve "
+            "eflatun vites uyarıları."
         ),
         "colors": {
             "COLOR_BG": (10, 10, 14),
@@ -81,9 +101,13 @@ THEMES: dict[str, dict[str, Any]] = {
     },
     "retro_amber": {
         "name": "Retro 90s Amber",
+        "name_tr": "Retro 90'lar Amber",
         "description": (
             "Classic 1990s analogue instrument cluster with soothing monochrome "
             "warm amber illumination."
+        ),
+        "description_tr": (
+            "90'ların analog kadranlarını andıran sıcak kehribar aydınlatma."
         ),
         "colors": {
             "COLOR_BG": (18, 16, 14),

@@ -3,24 +3,42 @@
 from __future__ import annotations
 
 import ast
+import importlib.util
 import ipaddress
 import re
 import shutil
+import sys
 import tempfile
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
+
+# Ensure project root is in sys.path when executed directly
+_PROJECT_ROOT = str(Path(__file__).resolve().parent.parent)
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+
+from tools.cli_ui import (  # noqa: E402
+    ChoiceItem,
+    CliUI,
+    InputFunction,
+    OutputFunction,
+    Text,
+    UserCancelled,
+)
 
 DEFAULT_IP = "127.0.0.1"
 DEFAULT_PORT = 20777
 DEFAULT_DASH_STYLE = "digital"
 DEFAULT_ENABLE_OVERLAY = True
-CONFIG_KEYS = ("LISTEN_IP", "DASH_STYLE", "ENABLE_OVERLAY")
+DEFAULT_ENABLE_LEDS = False
+CONFIG_KEYS = ("LISTEN_IP", "DASH_STYLE", "ENABLE_OVERLAY", "ENABLE_LEDS")
 CONFIG_DEFAULTS: dict[str, object] = {
     "LISTEN_IP": DEFAULT_IP,
     "DASH_STYLE": DEFAULT_DASH_STYLE,
     "ENABLE_OVERLAY": DEFAULT_ENABLE_OVERLAY,
+    "ENABLE_LEDS": DEFAULT_ENABLE_LEDS,
 }
 GAME_CONFIG_RELATIVE_PATH = Path(
     "Documents",
@@ -30,9 +48,6 @@ GAME_CONFIG_RELATIVE_PATH = Path(
     "hardware_settings_config.xml",
 )
 
-InputFunction = Callable[[str], str]
-OutputFunction = Callable[[str], Any]
-
 MESSAGES: dict[str, dict[str, str]] = {
     "en": {
         "lang_prompt": "Select language / Dil seçin [en/tr] (en): ",
@@ -40,25 +55,35 @@ MESSAGES: dict[str, dict[str, str]] = {
         "banner_title": "CustomRallyDash - Initial Setup",
         "banner_note": (
             "DiRT Rally 2.0 must be closed. Configuration files will be backed up "
-            "before updating.\n"
+            "before updating."
         ),
-        "prompt_ip": "Dashboard computer IPv4 address [{default}]: ",
+        "step_network": "Network Configuration",
+        "step_style": "Dashboard Style",
+        "step_overlay": "Windows Overlay",
+        "step_leds": "Raspberry Pi GPIO LEDs",
+        "step_confirm": "Review & Confirm",
+        "prompt_ip": "Dashboard computer IPv4 address",
         "invalid_ip": "Invalid IPv4 address. Example: 127.0.0.1 or 192.168.1.25",
         "prompt_dash_style": "Dashboard style",
+        "style_digital": "digital  (Modern gear + RPM bar)",
+        "style_analog": "analog   (Classic needle tachometer)",
         "invalid_choice": "Invalid choice. Please choose one of: {choices}",
         "prompt_overlay": "Enable Windows overlay?",
+        "overlay_windows_only": "Windows only (skipped on this OS)",
+        "prompt_leds": "Enable Raspberry Pi GPIO shift-light LEDs?",
         "invalid_yes_no": "Invalid answer. Please enter {yes} or {no}.",
         "config_read_error": "Could not read config.py: {error}",
         "game_xml_invalid": "Game XML could not be verified: {error}",
-        "summary_title": "\nSelected settings:",
-        "summary_ip": "- Dashboard computer IPv4 address: {ip}",
-        "summary_style": "- Dashboard style: {style}",
-        "summary_overlay": "- Windows overlay: {overlay}",
-        "summary_port": "- UDP port: {port}",
-        "summary_xml_found": "- Game XML: {path}",
-        "summary_xml_missing": (
-            "- Game XML: not found automatically (manual configuration required)"
-        ),
+        "summary_title": "Selected Settings",
+        "table_setting": "Setting",
+        "table_value": "Selected Value",
+        "label_ip": "Dashboard IPv4",
+        "label_style": "Dashboard style",
+        "label_overlay": "Windows overlay",
+        "label_leds": "Raspberry Pi LEDs",
+        "label_port": "UDP port",
+        "label_xml": "Game XML",
+        "summary_xml_missing": "not found automatically (manual steps below)",
         "prompt_confirm": "Proceed with these settings?",
         "setup_cancelled": "Setup cancelled. No files were modified.",
         "config_update_error": "Failed to update config.py: {error}",
@@ -71,31 +96,33 @@ MESSAGES: dict[str, dict[str, str]] = {
             "Expected location: Documents\\My Games\\DiRT Rally 2.0\\"
             "hardwaresettings\\hardware_settings_config.xml"
         ),
-        "game_xml_manual_instruction": (
-            "Manually add this UDP element:\n"
-            '<udp enabled="true" extradata="3" ip="{ip}" port="{port}" delay="1" />'
+        "game_xml_manual_prefix": "Manually add this UDP element:",
+        "game_xml_updated": "Game XML updated.",
+        "config_updated": "config.py updated.",
+        "backup_detail": "backup: {path}",
+        "leds_missing_gpiozero": (
+            "ENABLE_LEDS is True, but 'gpiozero' is not installed in this environment."
         ),
-        "game_xml_updated": "Game XML updated. Backup: {path}",
-        "config_updated": "config.py updated. Backup: {path}",
-        "completion_banner": (
-            "\n======================================================\n"
-            "  Setup Completed Successfully!\n"
-            "======================================================"
+        "leds_install_hint": "Install it with:",
+        "leds_install_cmd": "pip install -r requirements-pi.txt (or ./install.sh --pi)",
+        "completion_banner": "Setup Completed Successfully!",
+        "next_steps_header": "Next steps:",
+        "step_hint_telemetry": "1. Telemetry check (stage on, dash off):",
+        "step_hint_mock": "2. Mock telemetry preview:",
+        "step_hint_theme": "3. Theme selector:",
+        "step_hint_launch": "4. Launch dashboard:",
+        "cmd_telemetry_win": (
+            "check_telemetry.bat  (.venv\\Scripts\\python.exe tools\\telemetry_check.py)"
         ),
-        "completion_instructions": (
-            "\nNext steps:\n"
-            "  1. Test telemetry connection (with DiRT Rally 2.0 in a stage):\n"
-            "     run check_telemetry.bat  (or: .venv\\Scripts\\python.exe "
-            "tools\\telemetry_check.py)\n"
-            "     Note: The dashboard must be closed while testing.\n\n"
-            "  2. Preview without the game (mock telemetry):\n"
-            "     run run_mock.bat  (or: python main.py --mock)\n\n"
-            "  3. Customise visual theme:\n"
-            "     run select_theme.bat  (or: .venv\\Scripts\\python.exe "
-            "tools\\theme_selector.py)\n\n"
-            "  4. Launch the dashboard:\n"
-            "     run run_dash.bat\n"
+        "cmd_mock_win": "run_mock.bat  (python main.py --mock)",
+        "cmd_theme_win": (
+            "select_theme.bat  (.venv\\Scripts\\python.exe tools\\theme_selector.py)"
         ),
+        "cmd_launch_win": "run_dash.bat",
+        "cmd_telemetry_unix": ".venv/bin/python tools/telemetry_check.py",
+        "cmd_mock_unix": ".venv/bin/python main.py --mock",
+        "cmd_theme_unix": ".venv/bin/python tools/theme_selector.py",
+        "cmd_launch_unix": ".venv/bin/python main.py",
         "yes_label": "Yes",
         "no_label": "No",
         "yes_short": "Y",
@@ -107,60 +134,72 @@ MESSAGES: dict[str, dict[str, str]] = {
         "banner_title": "CustomRallyDash - İlk Kurulum",
         "banner_note": (
             "DiRT Rally 2.0 kapalı olmalıdır; yapılandırma dosyaları onayınızdan sonra "
-            "yedeklenerek güncellenir.\n"
+            "yedeklenerek güncellenir."
         ),
-        "prompt_ip": "Dashboard bilgisayarının IPv4 adresi [{default}]: ",
+        "step_network": "Ağ Yapılandırması",
+        "step_style": "Dashboard Türü",
+        "step_overlay": "Windows Overlay",
+        "step_leds": "Raspberry Pi GPIO LED",
+        "step_confirm": "Özet ve Onay",
+        "prompt_ip": "Dashboard bilgisayarının IPv4 adresi",
         "invalid_ip": "Geçersiz IPv4 adresi. Örnek: 127.0.0.1 veya 192.168.1.25",
         "prompt_dash_style": "Dashboard türü",
+        "style_digital": "digital  (Modern vites + devir şeridi)",
+        "style_analog": "analog   (Klasik ibreli takometre)",
         "invalid_choice": "Geçersiz seçim. Şunlardan birini kullanın: {choices}",
         "prompt_overlay": "Windows overlay etkinleştirilsin mi?",
+        "overlay_windows_only": "Yalnızca Windows'ta desteklenir (atlandı)",
+        "prompt_leds": "Raspberry Pi GPIO vites ışıkları (LED) etkinleştirilsin mi?",
         "invalid_yes_no": "Geçersiz cevap. Lütfen {yes} veya {no} girin.",
         "config_read_error": "Mevcut config.py okunamadı: {error}",
         "game_xml_invalid": "Oyun XML'i doğrulanamadı: {error}",
-        "summary_title": "\nSeçilen ayarlar:",
-        "summary_ip": "- Dashboard bilgisayarının IPv4 adresi: {ip}",
-        "summary_style": "- Dashboard türü: {style}",
-        "summary_overlay": "- Windows overlay: {overlay}",
-        "summary_port": "- UDP portu: {port}",
-        "summary_xml_found": "- Oyun XML'i: {path}",
-        "summary_xml_missing": (
-            "- Oyun XML'i: otomatik bulunamadı (manuel yapılandırma gerekiyor)"
-        ),
+        "summary_title": "Seçilen Ayarlar",
+        "table_setting": "Ayar",
+        "table_value": "Seçilen Değer",
+        "label_ip": "Dashboard IPv4",
+        "label_style": "Dashboard türü",
+        "label_overlay": "Windows overlay",
+        "label_leds": "Raspberry Pi LED'leri",
+        "label_port": "UDP portu",
+        "label_xml": "Oyun XML'i",
+        "summary_xml_missing": "otomatik bulunamadı (manuel adımlar aşağıda)",
         "prompt_confirm": "Bu ayarlarla devam edilsin mi?",
         "setup_cancelled": "Kurulum iptal edildi. Dosyalarda değişiklik yapılmadı.",
         "config_update_error": "config.py güncellenemedi: {error}",
         "game_xml_update_error": "Oyun XML'i güncellenemedi: {error}",
         "config_backup_info": "config.py yedeği: {path}",
-        "game_xml_not_found_header": ("DiRT Rally 2.0 XML dosyası otomatik bulunamadı."),
+        "game_xml_not_found_header": "DiRT Rally 2.0 XML dosyası otomatik bulunamadı.",
         "game_xml_expected_location": (
             "Beklenen konum: Documents\\My Games\\DiRT Rally 2.0\\"
             "hardwaresettings\\hardware_settings_config.xml"
         ),
-        "game_xml_manual_instruction": (
-            "Manuel olarak şu UDP satırını ekleyin:\n"
-            '<udp enabled="true" extradata="3" ip="{ip}" port="{port}" delay="1" />'
+        "game_xml_manual_prefix": "Manuel olarak şu UDP satırını ekleyin:",
+        "game_xml_updated": "Oyun XML'i güncellendi.",
+        "config_updated": "config.py güncellendi.",
+        "backup_detail": "yedek: {path}",
+        "leds_missing_gpiozero": (
+            "ENABLE_LEDS etkin ancak bu ortamda 'gpiozero' kurulu değil."
         ),
-        "game_xml_updated": "Oyun XML'i güncellendi. Yedek: {path}",
-        "config_updated": "config.py güncellendi. Yedek: {path}",
-        "completion_banner": (
-            "\n======================================================\n"
-            "  Kurulum Başarıyla Tamamlandı!\n"
-            "======================================================"
+        "leds_install_hint": "Kurmak için:",
+        "leds_install_cmd": "pip install -r requirements-pi.txt (veya ./install.sh --pi)",
+        "completion_banner": "Kurulum Başarıyla Tamamlandı!",
+        "next_steps_header": "Sonraki adımlar:",
+        "step_hint_telemetry": "1. Telemetri testi (etap açık, dash kapalı):",
+        "step_hint_mock": "2. Mock telemetri önizleme:",
+        "step_hint_theme": "3. Tema seçici:",
+        "step_hint_launch": "4. Göstergeyi başlat:",
+        "cmd_telemetry_win": (
+            "check_telemetry.bat  (.venv\\Scripts\\python.exe tools\\telemetry_check.py)"
         ),
-        "completion_instructions": (
-            "\nSonraki adımlar:\n"
-            "  1. Telemetri bağlantısını test edin (DiRT Rally 2.0 yarıştayken):\n"
-            "     check_telemetry.bat çalıştırın  (veya: .venv\\Scripts\\python.exe "
-            "tools\\telemetry_check.py)\n"
-            "     Not: Test sırasında dashboard kapalı olmalıdır.\n\n"
-            "  2. Oyun olmadan sahte telemetri ile test edin / önizleyin:\n"
-            "     run_mock.bat çalıştırın  (veya: python main.py --mock)\n\n"
-            "  3. Görsel temayı özelleştirin:\n"
-            "     select_theme.bat çalıştırın  (veya: .venv\\Scripts\\python.exe "
-            "tools\\theme_selector.py)\n\n"
-            "  4. Dashboard'u başlatın:\n"
-            "     run_dash.bat çalıştırın\n"
+        "cmd_mock_win": "run_mock.bat  (python main.py --mock)",
+        "cmd_theme_win": (
+            "select_theme.bat  (.venv\\Scripts\\python.exe tools\\theme_selector.py)"
         ),
+        "cmd_launch_win": "run_dash.bat",
+        "cmd_telemetry_unix": ".venv/bin/python tools/telemetry_check.py",
+        "cmd_mock_unix": ".venv/bin/python main.py --mock",
+        "cmd_theme_unix": ".venv/bin/python tools/theme_selector.py",
+        "cmd_launch_unix": ".venv/bin/python main.py",
         "yes_label": "Evet",
         "no_label": "Hayır",
         "yes_short": "E",
@@ -247,8 +286,16 @@ def read_config_defaults(path: Path) -> dict[str, object]:
         raise SetupError("DASH_STYLE in config.py must be digital or analog.")
     if not isinstance(values["ENABLE_OVERLAY"], bool):
         raise SetupError("ENABLE_OVERLAY in config.py must be True or False.")
+    if not isinstance(values["ENABLE_LEDS"], bool):
+        raise SetupError("ENABLE_LEDS in config.py must be True or False.")
 
     return values
+
+
+def _config_has_key(path: Path, key: str) -> bool:
+    """Return True if path contains a top-level assignment for key."""
+    content = path.read_text(encoding="utf-8")
+    return bool(re.search(rf"^\s*{re.escape(key)}\s*=", content, re.MULTILINE))
 
 
 def update_config_file(path: Path, updates: dict[str, object]) -> Path:
@@ -348,78 +395,112 @@ def find_game_config(home: Path | None = None) -> Path | None:
 def _ask_language(
     input_fn: InputFunction,
     output_fn: OutputFunction,
+    ui: CliUI | None = None,
 ) -> str:
     """Ask user to select interface language, defaulting to English."""
-    while True:
-        answer = input_fn(MESSAGES["en"]["lang_prompt"]).strip().lower()
-        if not answer or answer in {"en", "1", "english", "ingilizce"}:
-            return "en"
-        if answer in {"tr", "2", "turkish", "türkçe", "turkce"}:
-            return "tr"
-        output_fn(MESSAGES["en"]["lang_invalid"])
+    active_ui = ui or CliUI(input_fn=input_fn, output_fn=output_fn)
+    choices = [
+        ChoiceItem("en", "English", ("1", "english", "ingilizce")),
+        ChoiceItem("tr", "Türkçe", ("2", "turkish", "türkçe", "turkce")),
+    ]
+    return active_ui.ask_select(
+        "Select language / Dil seçin",
+        choices=choices,
+        default="en",
+        invalid_message=MESSAGES["en"]["lang_invalid"],
+        fallback_prompt=MESSAGES["en"]["lang_prompt"],
+    )
 
 
 def _ask_ip(
-    input_fn: InputFunction,
-    output_fn: OutputFunction,
+    ui: CliUI,
     default_ip: str = DEFAULT_IP,
     lang: str = "en",
 ) -> str:
     msg = MESSAGES[lang]
-    prompt_text = msg["prompt_ip"].format(default=default_ip)
     while True:
-        answer = input_fn(prompt_text).strip()
+        answer = ui.ask_text(msg["prompt_ip"], default=default_ip).strip()
         value = answer or default_ip
         try:
-            normalized = validate_ipv4(value)
+            return validate_ipv4(value)
         except ValueError:
-            output_fn(msg["invalid_ip"])
-            continue
-
-        return normalized
-
-
-def _ask_choice(
-    prompt: str,
-    choices: tuple[str, ...],
-    default: str,
-    input_fn: InputFunction,
-    output_fn: OutputFunction,
-    lang: str = "en",
-) -> str:
-    msg = MESSAGES[lang]
-    choices_text = "/".join(choices)
-    prompt_text = f"{prompt} ({choices_text}) [{default}]: "
-    while True:
-        answer = input_fn(prompt_text).strip().lower()
-        value = answer or default
-        if value in choices:
-            return value
-        output_fn(msg["invalid_choice"].format(choices=choices_text))
+            ui.status("err", msg["invalid_ip"])
 
 
 def _ask_yes_no(
+    ui: CliUI,
     prompt: str,
     default: bool,
-    input_fn: InputFunction,
-    output_fn: OutputFunction = print,
     lang: str = "en",
 ) -> bool:
     msg = MESSAGES[lang]
-    yes_short = msg["yes_short"]
-    no_short = msg["no_short"]
-    default_text = yes_short if default else no_short
-    prompt_text = f"{prompt} ({yes_short}/{no_short}) [{default_text}]: "
+    return ui.ask_yes_no(
+        prompt,
+        default=default,
+        yes_label=msg["yes_label"],
+        no_label=msg["no_label"],
+        yes_short=msg["yes_short"],
+        no_short=msg["no_short"],
+        invalid_message=msg["invalid_yes_no"].format(
+            yes=msg["yes_short"], no=msg["no_short"]
+        ),
+    )
 
-    while True:
-        answer = input_fn(prompt_text).strip().lower()
-        if not answer:
-            return default
-        if answer in {"y", "yes", "e", "evet", "1", "true"}:
-            return True
-        if answer in {"n", "no", "h", "hayır", "hayir", "0", "false"}:
-            return False
-        output_fn(msg["invalid_yes_no"].format(yes=yes_short, no=no_short))
+
+def _print_summary(
+    ui: CliUI,
+    msg: dict[str, str],
+    destination_ip: str,
+    dash_style: str,
+    enable_overlay: bool | None,
+    enable_leds: bool | None,
+    game_config: Path | None,
+) -> None:
+    """Render chosen configuration values as a clean horizontal-rule table."""
+    overlay_val: Any = (
+        (msg["yes_label"] if enable_overlay else msg["no_label"])
+        if enable_overlay is not None
+        else msg["overlay_windows_only"]
+    )
+    rows: list[tuple[str, Any]] = [
+        (msg["label_ip"], destination_ip),
+        (msg["label_style"], dash_style),
+        (msg["label_overlay"], overlay_val),
+    ]
+    if enable_leds is not None:
+        rows.append(
+            (msg["label_leds"], msg["yes_label"] if enable_leds else msg["no_label"])
+        )
+    rows.append((msg["label_port"], str(DEFAULT_PORT)))
+
+    xml_cell: Any
+    if game_config is None:
+        xml_cell = (
+            Text(msg["summary_xml_missing"], style="yellow")
+            if Text is not None
+            else msg["summary_xml_missing"]
+        )
+    else:
+        xml_cell = str(game_config)
+    rows.append((msg["label_xml"], xml_cell))
+
+    ui.table(
+        title=msg["summary_title"],
+        headers=[msg["table_setting"], msg["table_value"]],
+        rows=rows,
+        col_styles=["dim", "bold"],
+    )
+
+
+def _print_next_steps(ui: CliUI, msg: dict[str, str], is_windows: bool) -> None:
+    """Print completion status and highlighted post-setup commands."""
+    ui.blank()
+    ui.status("ok", msg["completion_banner"])
+    ui.blank()
+    suffix = "win" if is_windows else "unix"
+    ui.status("info", msg["next_steps_header"])
+    for key in ("telemetry", "mock", "theme", "launch"):
+        ui.command_hint(msg[f"step_hint_{key}"], msg[f"cmd_{key}_{suffix}"])
 
 
 def run_setup(
@@ -427,112 +508,142 @@ def run_setup(
     input_fn: InputFunction = input,
     output_fn: OutputFunction = print,
     lang: str | None = None,
+    platform: str | None = None,
 ) -> int:
     """Run the interactive setup flow and return a process exit code."""
     project_root = project_root or Path(__file__).resolve().parent.parent
     config_path = project_root / "config.py"
-
-    if lang is None:
-        selected_lang = _ask_language(input_fn, output_fn)
-    else:
-        selected_lang = "tr" if lang.lower().startswith("tr") else "en"
-
-    msg = MESSAGES[selected_lang]
-
-    output_fn(f"\n{msg['banner_title']}")
-    output_fn(msg["banner_note"])
+    active_platform = platform if platform is not None else sys.platform
+    is_windows = active_platform == "win32"
+    ui = CliUI(input_fn=input_fn, output_fn=output_fn)
 
     try:
-        current_config = read_config_defaults(config_path)
-    except (OSError, SetupError) as error:
-        output_fn(msg["config_read_error"].format(error=error))
-        return 1
+        if lang is None:
+            selected_lang = _ask_language(input_fn, output_fn, ui=ui)
+        else:
+            selected_lang = "tr" if lang.lower().startswith("tr") else "en"
 
-    destination_ip = _ask_ip(
-        input_fn,
-        output_fn,
-        str(current_config["LISTEN_IP"]),
-        lang=selected_lang,
-    )
-    dash_style = _ask_choice(
-        msg["prompt_dash_style"],
-        ("digital", "analog"),
-        str(current_config["DASH_STYLE"]),
-        input_fn,
-        output_fn,
-        lang=selected_lang,
-    )
-    enable_overlay = _ask_yes_no(
-        msg["prompt_overlay"],
-        bool(current_config["ENABLE_OVERLAY"]),
-        input_fn,
-        output_fn,
-        lang=selected_lang,
-    )
+        msg = MESSAGES[selected_lang]
+        ui.banner(msg["banner_title"], msg["banner_note"])
 
-    game_config = find_game_config()
-    if game_config is not None:
         try:
-            _validate_game_config(game_config)
-        except SetupError as error:
-            output_fn(msg["game_xml_invalid"].format(error=error))
+            current_config = read_config_defaults(config_path)
+        except (OSError, SetupError) as error:
+            ui.status("err", msg["config_read_error"].format(error=error))
             return 1
 
-    output_fn(msg["summary_title"])
-    output_fn(msg["summary_ip"].format(ip=destination_ip))
-    output_fn(msg["summary_style"].format(style=dash_style))
-    overlay_text = msg["yes_label"] if enable_overlay else msg["no_label"]
-    output_fn(msg["summary_overlay"].format(overlay=overlay_text))
-    output_fn(msg["summary_port"].format(port=DEFAULT_PORT))
-    if game_config is None:
-        output_fn(msg["summary_xml_missing"])
-    else:
-        output_fn(msg["summary_xml_found"].format(path=game_config))
+        has_leds_key = not is_windows and _config_has_key(config_path, "ENABLE_LEDS")
+        has_platform_step = is_windows or has_leds_key
+        total_steps = 4 if has_platform_step else 3
 
-    output_fn("")
-    if not _ask_yes_no(
-        msg["prompt_confirm"],
-        True,
-        input_fn,
-        output_fn,
-        lang=selected_lang,
-    ):
-        output_fn(msg["setup_cancelled"])
+        ui.step(1, total_steps, msg["step_network"])
+        destination_ip = _ask_ip(ui, str(current_config["LISTEN_IP"]), selected_lang)
+
+        ui.step(2, total_steps, msg["step_style"])
+        current_style = str(current_config["DASH_STYLE"])
+        style_choices = [
+            ChoiceItem("digital", msg["style_digital"]),
+            ChoiceItem("analog", msg["style_analog"]),
+        ]
+        dash_style = ui.ask_select(
+            msg["prompt_dash_style"],
+            choices=style_choices,
+            default=current_style,
+            invalid_message=msg["invalid_choice"].format(choices="digital/analog"),
+        )
+
+        updates: dict[str, object] = {
+            "LISTEN_IP": destination_ip,
+            "DASH_STYLE": dash_style,
+        }
+        enable_overlay: bool | None = None
+        enable_leds: bool | None = None
+
+        if is_windows:
+            ui.step(3, total_steps, msg["step_overlay"])
+            enable_overlay = _ask_yes_no(
+                ui,
+                msg["prompt_overlay"],
+                bool(current_config["ENABLE_OVERLAY"]),
+                selected_lang,
+            )
+            updates["ENABLE_OVERLAY"] = enable_overlay
+        elif has_leds_key:
+            ui.step(3, total_steps, msg["step_leds"])
+            enable_leds = _ask_yes_no(
+                ui,
+                msg["prompt_leds"],
+                bool(current_config["ENABLE_LEDS"]),
+                selected_lang,
+            )
+            updates["ENABLE_LEDS"] = enable_leds
+
+        game_config = find_game_config()
+        if game_config is not None:
+            try:
+                _validate_game_config(game_config)
+            except SetupError as error:
+                ui.status("err", msg["game_xml_invalid"].format(error=error))
+                return 1
+
+        ui.step(total_steps, total_steps, msg["step_confirm"])
+        _print_summary(
+            ui, msg, destination_ip, dash_style, enable_overlay, enable_leds, game_config
+        )
+
+        if not _ask_yes_no(ui, msg["prompt_confirm"], True, selected_lang):
+            ui.status("warn", msg["setup_cancelled"])
+            return 0
+    except UserCancelled:
+        cancel_msg = MESSAGES["en"]["setup_cancelled"]
+        ui.status("warn", cancel_msg)
         return 0
 
     try:
-        config_backup = update_config_file(
-            config_path,
-            {
-                "LISTEN_IP": destination_ip,
-                "DASH_STYLE": dash_style,
-                "ENABLE_OVERLAY": enable_overlay,
-            },
-        )
+        config_backup = update_config_file(config_path, updates)
     except (OSError, SetupError) as error:
-        output_fn(msg["config_update_error"].format(error=error))
+        ui.status("err", msg["config_update_error"].format(error=error))
         return 1
 
+    ui.blank()
+    ui.status(
+        "ok",
+        msg["config_updated"],
+        msg["backup_detail"].format(path=config_backup.name),
+    )
+
     if game_config is None:
-        output_fn(f"\n{msg['game_xml_not_found_header']}")
-        output_fn(msg["game_xml_expected_location"])
-        output_fn(
-            msg["game_xml_manual_instruction"].format(
-                ip=destination_ip, port=DEFAULT_PORT
-            )
+        ui.blank()
+        ui.status("warn", msg["game_xml_not_found_header"])
+        ui.bullet(msg["game_xml_expected_location"])
+        ui.bullet(msg["game_xml_manual_prefix"])
+        xml_snippet = (
+            f'<udp enabled="true" extradata="3" '
+            f'ip="{destination_ip}" port="{DEFAULT_PORT}" delay="1" />'
         )
+        ui.command_hint("   ", xml_snippet)
     else:
         try:
             game_backup = configure_game_xml(game_config, destination_ip)
         except (OSError, SetupError) as error:
-            output_fn(msg["game_xml_update_error"].format(error=error))
-            output_fn(msg["config_backup_info"].format(path=config_backup))
+            ui.status("err", msg["game_xml_update_error"].format(error=error))
+            ui.status("info", msg["config_backup_info"].format(path=config_backup))
             return 1
-        output_fn(msg["game_xml_updated"].format(path=game_backup))
+        ui.status(
+            "ok",
+            msg["game_xml_updated"],
+            msg["backup_detail"].format(path=game_backup.name),
+        )
 
-    output_fn(msg["config_updated"].format(path=config_backup))
-    output_fn(msg["completion_banner"])
-    output_fn(msg["completion_instructions"])
+    _print_next_steps(ui, msg, is_windows)
+
+    if (
+        updates.get("ENABLE_LEDS") is True
+        and importlib.util.find_spec("gpiozero") is None
+    ):
+        ui.blank()
+        ui.status("warn", msg["leds_missing_gpiozero"])
+        ui.command_hint(msg["leds_install_hint"], msg["leds_install_cmd"])
     return 0
 
 
