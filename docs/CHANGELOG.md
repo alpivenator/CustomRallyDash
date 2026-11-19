@@ -1,215 +1,193 @@
 # Changelog
 
-All notable changes to this project are documented in this file in reverse chronological order.
-For planned milestones, see `ROADMAP.md`. For technical architecture, see `ARCHITECTURE.md`.
+[Türkçe](CHANGELOG_TR.md) | **English**
+
+Notable changes to this project are listed in reverse chronological order. For planned work, see [ROADMAP.md](ROADMAP.md); for technical design, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## [v0.1.1] - 2026-09-09
 
 ### Changed
-- `pyproject.toml`: Bumped version to `0.1.1`.
+- `pyproject.toml`: Bumped package version to `0.1.1`.
 
 ### Fixed
-- `install.bat`: Resolved an issue where Python version detection failed on systems without Python 3.13 due to signed `errorlevel` handling in Windows Batch, and added a fallback to default `python` on PATH.
+- `install.bat`: Fixed Python version detection failing on systems without Python 3.13 due to signed `errorlevel` handling in Windows Batch, and added a fallback to the default `python` on `PATH`.
 
 ## [v0.1.0] - 2026-09-08
 
 ### Added
-- `.github/workflows/ci.yml`: Added `pip-audit` step to automate dependency vulnerability scanning in CI/CD pipeline.
-- `pyproject.toml`: Added Ruff security rules (`"S"`) to `lint.select` and configured `per-file-ignores` for test assert statements and XML parses (`tests/* = ["S101", "S314"]`).
+- `.github/workflows/ci.yml`: Added a `pip-audit` step to scan dependencies in CI.
+- `pyproject.toml`: Enabled Ruff security rules (`"S"`) in `lint.select` and added `per-file-ignores` for test assertions and test XML parsing (`tests/* = ["S101", "S314"]`).
 
 ### Security
-- `core/udp_listener.py` & `tools/mock_telemetry.py`: Updated socket binding suppressions to Ruff `# noqa: S104` format.
-- `tools/setup_wizard.py`: Annotated local game configuration XML parsing with `# noqa: S314`.
+- `core/udp_listener.py` and `tools/mock_telemetry.py`: Updated socket bind suppressions to `# noqa: S104`.
+- `tools/setup_wizard.py`: Annotated local game XML parsing with `# noqa: S314`.
 
 ### Note
-- Evaluated Python 3.14 compatibility; support is currently deferred due to Pygame 2.6.1 prebuilt wheel availability constraints on PyPI. Python runtime requirement remains locked to `>=3.11,<3.14`.
+- Evaluated Python 3.14 support and deferred it because Pygame 2.6.1 prebuilt wheels are not available on PyPI yet. Runtime requirement remains `>=3.11,<3.14`.
 
-## 2026-09-03
+## [2026-09-03]
 
 ### Added
-- `README_TR.md`: Added comprehensive Turkish translation of project overview and quick-start guide with cross-language navigation.
-- `docs/CONFIGURATION_TR.md`: Added full Turkish translation of configuration reference with clear technical terminology.
-- `docs/ARCHITECTURE_TR.md`: Added full Turkish translation of technical architecture and runtime/data flow specifications.
+- `README_TR.md`: Added a Turkish version of the project overview and quick-start guide with language switcher links.
+- `docs/CONFIGURATION_TR.md`: Added a Turkish configuration reference.
+- `docs/ARCHITECTURE_TR.md`: Added a Turkish architecture and data-flow reference.
 
 ### Changed
-- `docs/CONFIGURATION.md`: Restructured and streamlined configuration reference with a high-priority "Quick Configuration" table upfront, logical categorization of settings, and objective technical phrasing.
-- `README.md` & `docs/ARCHITECTURE.md`: Added header language switcher links and replaced promotional wording with precise technical descriptions.
-- `AGENTS.md`: Updated developer guidelines to maintain full synchronization across all English and Turkish documentation counterparts.
-- Renamed project to **CustomRallyDash** and updated `pyproject.toml` package metadata (`name = "custom-rally-dash"`, `version = "0.1.0"`).
-- Updated CLI setup wizard banner headers in `tools/setup_wizard.py`.
-- Updated project license from GPL-3.0 to MIT in `LICENSE`, `README.md`, and `pyproject.toml`.
+- `docs/CONFIGURATION.md`: Moved common settings into a "Quick Configuration" table at the top and reorganized the remaining options by scope.
+- `README.md` and `docs/ARCHITECTURE.md`: Added language switcher links at the top and tightened technical descriptions.
+- `AGENTS.md`: Updated contributor guidelines to keep English and Turkish docs synchronized.
+- Renamed the project to **CustomRallyDash** and updated `pyproject.toml` metadata (`name = "custom-rally-dash"`, `version = "0.1.0"`).
+- Updated CLI banner headers in `tools/setup_wizard.py`.
+- Changed project license from GPL-3.0 to MIT in `LICENSE`, `README.md`, and `pyproject.toml`.
 
 ## [2026-09-02]
 
 ### Added
-- `README.md`: Added in-game transparent digital hood HUD screenshot as the primary hero preview banner.
-- `images/`: Converted and optimized screenshot assets to high-compression WebP format, reducing asset footprint by over 90%.
+- `README.md`: Added an in-game transparent digital hood HUD screenshot as the main preview image.
+- `images/`: Converted screenshot assets to WebP, reducing asset size by over 90%.
 
 ### Changed
-- `pyproject.toml`, `README.md`, `install.bat`, `.github/workflows/ci.yml`, `docs/ARCHITECTURE.md`: Updated Python runtime requirements to support Python 3.11, 3.12, and 3.13 (`>=3.11,<3.14`), set default CI target to Python 3.13, and updated `install.bat` to detect and use Python 3.13, 3.12, or 3.11.
+- `pyproject.toml`, `README.md`, `install.bat`, `.github/workflows/ci.yml`, `docs/ARCHITECTURE.md`: Updated Python support to `>=3.11,<3.14` (3.11, 3.12, and 3.13), set CI default to Python 3.13, and updated `install.bat` to detect Python 3.13, 3.12, or 3.11.
 
 ## [2026-09-01]
 
 ### Added
-- `dashboards/digital_dash.py` & `dashboards/analog_dash.py`: Added high-contrast dark text outline strokes (`draw_text_outlined`, `draw_text_outlined_center`) across all gauge readouts, labels, and markings for crystal-clear readability over bright in-game stages in transparent overlay HUD mode.
-- `settings.py`: Added `COLOR_TEXT_OUTLINE` setting (default `(0, 0, 0)`) for customising text outline contrast.
-- `README.md`: Added note specifying DiRT Rally 2.0 must run in Windowed or Borderless Windowed mode for the Windows click-through overlay to remain visible.
-- `tests/test_themes_and_mock.py`: Added unit tests verifying overlay settings structure and text outline rendering.
+- `dashboards/digital_dash.py` and `dashboards/analog_dash.py`: Added dark text outlines (`draw_text_outlined`, `draw_text_outlined_center`) on gauge readouts and labels to improve legibility over bright stages in transparent overlay mode.
+- `settings.py`: Added `COLOR_TEXT_OUTLINE` (default `(0, 0, 0)`) to configure text outline color.
+- `README.md`: Noted that DiRT Rally 2.0 must run in Windowed or Borderless Windowed mode for the Windows overlay to remain visible.
+- `tests/test_themes_and_mock.py`: Added unit tests for overlay settings and outlined text rendering.
 
 ### Changed
-- `config.py` & `settings.py`: Refactored overlay configuration architecture by keeping only `ENABLE_OVERLAY` toggle in `config.py` and migrating all visual/window positioning settings (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_MARGIN`, `OVERLAY_ALPHA`, `OVERLAY_CHROMA_KEY`) into `settings.py`.
-- `settings.py`: Set default `OVERLAY_MODE` to `"chroma"` and `OVERLAY_POSITION` to `"bottom-right"`, dynamically aliasing `OVERLAY_CHROMA_KEY = COLOR_BG` for automatic synchronization with active color themes.
-- `settings.py` & `dashboards/themes.py`: Updated `COLOR_REDLINE` default to a brighter, soft rose-red tone (`(255, 65, 105, 110)`) distinct from the warning needle color.
-- `core/overlay_win.py`: Updated default argument values for `apply_overlay` (`mode="chroma"`) and `position_window` (`position="bottom-right"`).
-- `dashboards/analog_dash.py` & `dashboards/digital_dash.py`: Simplified RPM warning threshold lookup to direct `settings.RPM_WARNING_THRESHOLD` attribute access.
-- `tools/setup_wizard.py`: Expanded setup completion next-steps instructions (EN & TR) to include offline preview (`run_mock.bat` / `--mock`) and theme selector (`select_theme.bat`).
-- `README.md`: Refactored documentation with a clean, engineering-focused structure featuring concise Quick Start tables, clear CLI workflows, and zero boilerplate.
-- `config.py`: Set default `DASH_STYLE` to `"digital"` as the recommended compact horizontal bar HUD layout.
-- `docs/CONFIGURATION.md`: Added dedicated quick-start guidance and documentation for `select_theme.bat` and `run_mock.bat`, added dashboard style section detailing digital HUD as default, and moved overlay settings to the visual settings table.
-- `docs/ARCHITECTURE.md`: Updated Windows overlay architecture documentation to reflect `settings.py` parameter ownership.
+- `config.py` and `settings.py`: Kept only `ENABLE_OVERLAY` in `config.py` and moved visual and placement settings (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_MARGIN`, `OVERLAY_ALPHA`, `OVERLAY_CHROMA_KEY`) to `settings.py`.
+- `settings.py`: Set default `OVERLAY_MODE` to `"chroma"` and `OVERLAY_POSITION` to `"bottom-right"`, and aliased `OVERLAY_CHROMA_KEY = COLOR_BG` so it tracks the active theme.
+- `settings.py` and `dashboards/themes.py`: Changed default `COLOR_REDLINE` to `(255, 65, 105, 110)` so the redline sector stays distinct from the warning needle color.
+- `core/overlay_win.py`: Updated default parameters for `apply_overlay` (`mode="chroma"`) and `position_window` (`position="bottom-right"`).
+- `dashboards/analog_dash.py` and `dashboards/digital_dash.py`: Simplified RPM warning lookup to read `settings.RPM_WARNING_THRESHOLD` directly.
+- `tools/setup_wizard.py`: Added offline preview (`run_mock.bat` / `--mock`) and theme selector (`select_theme.bat`) steps to the setup completion summary (EN and TR).
+- `README.md`: Rewrote the README with compact quick-start tables and CLI commands.
+- `config.py`: Set default `DASH_STYLE` to `"digital"`.
+- `docs/CONFIGURATION.md`: Documented `select_theme.bat` and `run_mock.bat`, added dashboard style options, and moved overlay settings into the visual settings table.
+- `docs/ARCHITECTURE.md`: Updated Windows overlay notes to match `settings.py` ownership.
 
 ### Fixed
-- `dashboards/analog_dash.py`: Replaced `pygame.draw.arc` with a smooth trigonometric pie-sector polygon fill (`pygame.draw.polygon`) in `draw_redline_zone`, eliminating rasterization gaps, moiré patterns, and black pixel artifacts.
-
-
----
+- `dashboards/analog_dash.py`: Replaced `pygame.draw.arc` with a trigonometric polygon fill (`pygame.draw.polygon`) in `draw_redline_zone` to fix rasterization gaps, moiré patterns, and dark pixel artifacts.
 
 ## [2026-08-31]
 
 ### Added
-- `settings.py`: Added `RPM_WARNING_THRESHOLD` configuration setting (default `0.90`) to centrally configure the threshold at which tachometers shift to warning colour.
-- `tests/test_themes_and_mock.py`: Added unit test verifying the `settings.RPM_WARNING_THRESHOLD` configuration value.
+- `settings.py`: Added `RPM_WARNING_THRESHOLD` (default `0.90`) to control when tachometers switch to the warning color.
+- `tests/test_themes_and_mock.py`: Added a unit test verifying `settings.RPM_WARNING_THRESHOLD`.
 
 ### Changed
-- `dashboards/analog_dash.py`: Updated needle warning colour trigger to switch to `RPM_WARNING` when engine RPM reaches `max_rpm * RPM_WARNING_THRESHOLD` rather than only at 100% redline.
-- `dashboards/analog_dash.py`: Increased stroke width of the central gear housing accent ring for enhanced contrast and visual prominence.
-- `dashboards/digital_dash.py`: Standardised the RPM bar warning color transition against `settings.RPM_WARNING_THRESHOLD`.
-- `README.md` & `docs/CONFIGURATION.md`: Added Windows installation instructions on unblocking downloaded ZIP archives before extracting and running batch scripts.
+- `dashboards/analog_dash.py`: Switched the needle warning color trigger from 100% redline to `max_rpm * RPM_WARNING_THRESHOLD`.
+- `dashboards/analog_dash.py`: Increased stroke width of the central gear housing accent ring.
+- `dashboards/digital_dash.py`: Switched the RPM bar warning color trigger to `settings.RPM_WARNING_THRESHOLD`.
+- `README.md` and `docs/CONFIGURATION.md`: Added Windows instructions for unblocking downloaded ZIP archives before extracting them.
 
 ### Fixed
-- `pyproject.toml`: Added `[tool.pytest.ini_options]` configuration defining `pythonpath = ["."]` and `testpaths = ["tests"]` to resolve module imports (`tools`, `dashboards`, `core`) seamlessly across local and CI test environments.
-- `.github/workflows/ci.yml`: Standardized test execution to `python -m pytest` ensuring consistent runner execution.
-
----
+- `pyproject.toml`: Added `[tool.pytest.ini_options]` with `pythonpath = ["."]` and `testpaths = ["tests"]` so imports (`tools`, `dashboards`, `core`) resolve in both local and CI runs.
+- `.github/workflows/ci.yml`: Standardized test execution to `python -m pytest`.
 
 ## [2026-08-29]
 
 ### Changed
-- `tools/mock_telemetry.py`: Tuned telemetry simulation loop to a 15-second cycle matching modern WRC acceleration dynamics; shifts through gears 1 to 6 in 9 seconds (~1.5s per gear) reaching a top speed of 205 km/h.
-- `tools/mock_telemetry.py`: Modeled close-ratio sequential transmission dynamics; launch starts at 2500 RPM in 1st gear, with subsequent upshifts dropping engine speed to ~5800 RPM.
-- `tools/mock_telemetry.py`: Added progressive downshifting (6->1), simulated ECU auto-blip throttle pulses (~50%), and rev-matching dynamics (~6800 RPM spikes with engine braking decay) across the 9-15s braking phase.
+- `tools/mock_telemetry.py`: Tuned the mock telemetry loop to a 15-second WRC acceleration cycle, shifting gears 1 to 6 over 9 seconds (~1.5s per gear) up to 205 km/h.
+- `tools/mock_telemetry.py`: Modeled close-ratio sequential gearing starting at 2500 RPM in 1st gear with upshifts dropping to ~5800 RPM.
+- `tools/mock_telemetry.py`: Added progressive downshifting (6 to 1) with simulated ~50% throttle auto-blip pulses and ~6800 RPM rev-matching spikes across the 9-15s braking phase.
 
 ### Fixed
-- `tools/mock_telemetry.py`: Extended deceleration phase down to 1st gear and idle/stop, eliminating abrupt gear/RPM jumps when the 15-second loop restarts.
-
----
+- `tools/mock_telemetry.py`: Extended deceleration down to 1st gear and idle/stop so the 15-second loop restarts without abrupt gear or RPM jumps.
 
 ## [2026-08-28]
 
 ### Added
-- `dashboards/themes.py`: Added 5 curated motorsport-inspired color themes (`modern_dark`, `subaru_classic`, `gt3_racing`, `night_neon`, `retro_amber`).
-- `tools/theme_selector.py` & `select_theme.bat`: Added bilingual (EN/TR) interactive CLI tool and Windows launcher to switch presets safely without breaking `settings.py`.
-- `tools/mock_telemetry.py` & `run_mock.bat`: Added lightweight synthetic 60 Hz Extradata=3 UDP generator simulating acceleration, sequential gear shifts, hard braking, and corner exits.
-- `main.py`: Added `--mock` flag to run dashboard and synthetic telemetry generator concurrently (`python main.py --mock`).
-- `.github/ISSUE_TEMPLATE/`: Added `bug_report.yml` and `feature_request.yml` issue forms for GitHub.
-- `tests/test_themes_and_mock.py`: Added unit tests verifying synthetic packet generation and theme application logic.
+- `dashboards/themes.py`: Added five color themes (`modern_dark`, `subaru_classic`, `gt3_racing`, `night_neon`, `retro_amber`).
+- `tools/theme_selector.py` and `select_theme.bat`: Added a bilingual (EN/TR) CLI theme switcher and Windows launcher that backs up and updates `settings.py`.
+- `tools/mock_telemetry.py` and `run_mock.bat`: Added a 60 Hz Extradata=3 synthetic UDP generator simulating acceleration, sequential shifts, braking, and corner exits.
+- `main.py`: Added `--mock` flag to run the dashboard and mock telemetry generator together (`python main.py --mock`).
+- `.github/ISSUE_TEMPLATE/`: Added `bug_report.yml` and `feature_request.yml` issue templates.
+- `tests/test_themes_and_mock.py`: Added unit tests for mock packet generation and theme switching.
 
 ### Changed
-- `dashboards/analog_dash.py`: Modernized analog gauge rendering hierarchy including needle, center pivot, and gear indicator housing.
-- `README.md`, `ARCHITECTURE.md`, `ROADMAP.md`: Updated documentation to reflect theme architecture, mock preview utilities, and modular structure.
-
----
+- `dashboards/analog_dash.py`: Updated drawing order for the needle, center pivot, and gear dial.
+- `README.md`, `ARCHITECTURE.md`, and `ROADMAP.md`: Updated docs for the theme system, mock preview tools, and package structure.
 
 ## [2026-08-20]
 
 ### Refactored
-- `core/`: Moved telemetry decoder, overlay, and hardware drivers into `core/` package (`core/udp_listener.py`, `core/overlay_win.py`, `core/led_controller.py`) with clean package exports in `core/__init__.py`.
-- `dashboards/`: Moved digital and analog dashboard implementations into `dashboards/` package (`dashboards/digital_dash.py`, `dashboards/analog_dash.py`); normalized `analogdash.py` to `analog_dash.py`.
-- `tools/`: Moved setup wizard and diagnostic utilities into `tools/` package (`tools/setup_wizard.py`, `tools/telemetry_check.py`); enabled dynamic root path resolution in `setup_wizard.py` and `telemetry_check.py`.
-- `main.py`: Updated imports to new package paths `dashboards.digital_dash` and `dashboards.analog_dash`.
-- `install.bat` & `check_telemetry.bat`: Updated batch targets to `tools\setup_wizard.py` and `tools\telemetry_check.py`.
-- `tests/test_setup_wizard.py`: Updated unit tests for `tools.setup_wizard` and `tools.telemetry_check`.
-- Documentation (`ARCHITECTURE.md`, `CONFIGURATION.md`, `README.md`): Updated all references to reflect the modular package structure.
-
----
+- `core/`: Moved UDP listener, Windows overlay, and GPIO LED driver into `core/` (`udp_listener.py`, `overlay_win.py`, `led_controller.py`) with exports in `core/__init__.py`.
+- `dashboards/`: Moved digital and analog dashboards into `dashboards/` (`digital_dash.py`, `analog_dash.py`) and renamed `analogdash.py` to `analog_dash.py`.
+- `tools/`: Moved setup and diagnostic scripts into `tools/` (`setup_wizard.py`, `telemetry_check.py`) with dynamic project root path resolution.
+- `main.py`: Updated imports to `dashboards.digital_dash` and `dashboards.analog_dash`.
+- `install.bat` and `check_telemetry.bat`: Updated paths to `tools\setup_wizard.py` and `tools\telemetry_check.py`.
+- `tests/test_setup_wizard.py`: Updated tests for `tools.setup_wizard` and `tools.telemetry_check`.
+- `ARCHITECTURE.md`, `CONFIGURATION.md`, and `README.md`: Updated file paths and commands for the package layout.
 
 ## [2026-08-18]
 
 ### Added
-- `.gitattributes`: Added repository attribute ensuring `.bat` and `.cmd` files retain CRLF line endings across Git and ZIP archives.
+- `.gitattributes`: Enforced CRLF line endings for `.bat` and `.cmd` files in Git and ZIP archives.
 
 ### Fixed
-- `install.bat`, `run_dash.bat`, `check_telemetry.bat`: Replaced multiline `if (...)` parenthesis blocks with `goto` and label-based branching to prevent `cmd.exe` crashes under Unix LF line endings.
+- `install.bat`, `run_dash.bat`, and `check_telemetry.bat`: Replaced multiline `if (...)` blocks with `goto` label branching to avoid `cmd.exe` crashes under Unix LF line endings.
 
----
-
-## [2026-08-16 – 2026-08-17]
+## [2026-08-16 - 2026-08-17]
 
 ### Added
-- `setup_wizard.py`: Added bilingual setup wizard supporting English and Turkish CLI flows.
-- `check_telemetry.bat`: Added one-click diagnostic launcher for Windows.
+- `setup_wizard.py`: Added bilingual (EN/TR) first-run setup flow.
+- `check_telemetry.bat`: Added a Windows launcher for `telemetry_check.py`.
 
 ### Changed
-- `install.bat` & `run_dash.bat`: Standardized terminal output into structured `[1/3]`, `[2/3]`, `[3/3]` installation steps in English.
-- `telemetry_check.py`: Standardized console status and diagnostic messages to English.
-
----
+- `install.bat` and `run_dash.bat`: Standardized English terminal output into `[1/3]`, `[2/3]`, and `[3/3]` steps.
+- `telemetry_check.py`: Standardized console messages to English.
+- Highlighted `telemetry_check` and virtual environment commands in the setup summary.
 
 ## [2026-08-15]
 
 ### Added
-- Added `install.bat` for automated Python 3.12 virtual environment setup on Windows and `run_dash.bat` launcher.
-- Added `setup_wizard.py` to configure `config.py` and patch DiRT Rally 2.0 telemetry XML with automatic timestamped backups.
-- Added `AGENTS.md` local development guideline.
+- Added `install.bat` (Python 3.12 virtual environment setup on Windows) and `run_dash.bat`.
+- Added `setup_wizard.py` to back up and patch `config.py` and DiRT Rally 2.0's telemetry XML.
+- Added `AGENTS.md` local contributor guide.
 
 ### Changed
-- Moved project documentation under `docs/` directory.
-- Separated Windows and Raspberry Pi dependencies; restricted supported runtime to Python 3.12.
-- Updated `README.md`, `CONFIGURATION.md`, and `ARCHITECTURE.md` to reflect new setup flows.
-
----
+- Moved project documentation into `docs/`.
+- Split Windows and Raspberry Pi dependencies and restricted runtime to Python 3.12.
+- Updated `README.md`, `CONFIGURATION.md`, and `ARCHITECTURE.md` for the new setup scripts.
 
 ## [2026-08-13]
 
 ### Changed
-- Repository history cleanup via `git filter-repo`: Purged historical `venv/` commits, standardized commit author/committer identity to `alpivenator`, updated remote origin (repo size reduced ~14 MiB → ~353 KiB).
-- `ROADMAP.md`: Removed completed sensitive data scan task; refined notes.
-
----
+- Cleaned repository history with `git filter-repo`: purged old `venv/` commits, standardized author/committer metadata to `alpivenator`, and updated `origin` (reducing repo size from ~14 MiB to ~353 KiB).
+- `ROADMAP.md`: Removed the completed sensitive-data scan item and updated notes.
 
 ## [2026-08-05]
 
 ### Added
 - `LICENSE`: Added GPL-3.0 license (Copyright Alperen / alpivenator, 2026).
-- `pyproject.toml`: Added project metadata (`name = "dirtdash"`, `version = "0.1.0a1"`, `license = "GPL-3.0-only"`, `requires-python = ">=3.12"`).
+- `pyproject.toml`: Added package metadata (`name = "dirtdash"`, `version = "0.1.0a1"`, `license = "GPL-3.0-only"`, `requires-python = ">=3.12"`).
 
 ### Changed
-- `settings.py` / `digital_dash.py` / `analog_dash.py`: Bound window dimensions dynamically to `settings.py` parameters (`DIGITAL_WIDTH/HEIGHT`, `ANALOG_WIDTH/HEIGHT`).
-- `CONFIG.md` → `CONFIGURATION.md`: Renamed and expanded with comprehensive configuration references, `0.0.0.0` binding notes, and security considerations.
-- `README.md`: Expanded with feature matrix, system requirements, quick-start guide, and configuration summaries.
+- `settings.py`, `digital_dash.py`, and `analog_dash.py`: Bound window dimensions to `DIGITAL_WIDTH/HEIGHT` and `ANALOG_WIDTH/HEIGHT` in `settings.py`.
+- Renamed `CONFIG.md` to `CONFIGURATION.md` and expanded it with `config.py`, `settings.py`, `0.0.0.0` binding, and security notes.
+- Expanded `README.md` with features, requirements, quick start, configuration, and license sections.
 
----
-
-## [2026-07-14 – 2026-07-31]
+## [2026-07-14 - 2026-07-31]
 
 ### Added
 - Added `ARCHITECTURE.md`, `CHANGELOG.md`, and `ROADMAP.md`.
-- Added `pyproject.toml` with `black` and `ruff` linting/formatting configuration.
+- Added `pyproject.toml` with Black and Ruff lint/format configuration.
 
 ### Changed
-- `udp_listener.py`: Added inline documentation for socket timeout handling, buffer drain loop, and telemetry conversion maths.
-- `ROADMAP.md`: Consolidated early alpha phases into five structured milestone categories.
+- `udp_listener.py`: Documented socket timeout, packet drain loop, and telemetry unit conversions inline.
+- `ROADMAP.md`: Grouped early alpha items into five milestone sections.
 
----
+## [Early Development Phase (2026-02 - 2026-06)]
 
-## [Early Development Phase (2026-02 – 2026-06)]
+Initial prototype and alpha milestones:
 
-Summary of initial prototype and alpha development milestones:
-
-- **Telemetry & UDP Listener (`core/udp_listener.py`):** Built raw 264-byte UDP socket listener and `struct.unpack` parser for DiRT Rally 2.0 Extradata=3 format with packet drain mechanism to eliminate latency.
-- **Digital Dashboard (`dashboards/digital_dash.py`):** Implemented compact dark-themed digital UI with dynamic RPM bar, tire slip traction warning, throttle/brake pedal bars, and WRC/F1-inspired layout.
-- **Analog Dashboard (`dashboards/analog_dash.py`):** Implemented analog gauge with trigonometric needle rendering, linear interpolation smoothing, 9000 RPM dial, and dynamic redline scaling.
-- **Raspberry Pi Shift Lights (`core/led_controller.py`):** Implemented Green → Blue → Red shift-light sequence on GPIO pins via `gpiozero`.
-- **Windows Transparent Overlay (`core/overlay_win.py`):** Implemented Win32 API (`ctypes`) integration for borderless, click-through (`WS_EX_TRANSPARENT`), layered (`alpha` / `chroma`), always-on-top (`HWND_TOPMOST`) overlay mode.
-- **Configuration & Theming (`config.py` & `settings.py`):** Decoupled system hardware settings from visual styling parameters with automatic proportional scaling.
-
+- Telemetry and UDP listener (`core/udp_listener.py`): Built a 264-byte UDP socket listener and `struct.unpack` parser for DiRT Rally 2.0 Extradata=3 packets with a drain loop to drop stale frames.
+- Digital dashboard (`dashboards/digital_dash.py`): Implemented dark-themed digital HUD with RPM bar, tire-slip warning, throttle/brake bars, and gear/speed readouts.
+- Analog dashboard (`dashboards/analog_dash.py`): Implemented a 9000 RPM analog dial with trigonometric needle rendering, linear smoothing, and dynamic redline zone.
+- Raspberry Pi shift lights (`core/led_controller.py`): Added Green -> Blue -> Red GPIO shift lights via `gpiozero`.
+- Windows transparent overlay (`core/overlay_win.py`): Integrated Win32 `ctypes` calls for borderless, click-through (`WS_EX_TRANSPARENT`), layered (`alpha` / `chroma`), always-on-top (`HWND_TOPMOST`) windows.
+- Configuration and scaling (`config.py`, `settings.py`): Separated system settings from visual layout options with proportional scaling (`TARGET_WIDTH`) and `DASH_STYLE` switching.

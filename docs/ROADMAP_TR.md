@@ -1,29 +1,14 @@
-# Yol Haritası (Roadmap)
+# Yol haritası
 
-Bu dosya tamamlanmamış veya yakın zamanda tamamlanmış hedefleri içerir. Tamamlanan çalışmaların tam günlüğü
-`CHANGELOG.md` içinde, mimari bilgi ise `ARCHITECTURE.md` içindedir.
+[English](ROADMAP.md) | **Türkçe**
 
-## Yayın & Güvenlik
+Bu belge yalnızca planlanan gelecek hedefleri içerir. Geçmiş değişiklikler ve sürümler için [CHANGELOG_TR.md](CHANGELOG_TR.md), mimari ayrıntılar için [ARCHITECTURE_TR.md](ARCHITECTURE_TR.md) dosyasına bakın.
 
-- [x] **GitHub Releases:** v0.1.0-alpha yayınla (tag + kaynak zip yeterli).
-- [x] **Güvenlik:** Programın güvenlik testleri (planlanacak).
-- [x] **GitHub'da public yap** — son adım.
-- [x] **CI:** GitHub Actions ile otomatik ruff + pytest iş akışı.
+## Arayüz ve özelleştirme
 
-## Kullanım Kolaylığı
+- [ ] Linux overlay desteği: X11 ve Wayland üzerinde şeffaf, tıklama geçirgen overlay (düşük öncelik).
 
-- [x] **Windows Başlangıç Betiği:** `run_dash.bat` ile tek tıkla çalıştırma ve `install.bat` ile sanal ortam kurulumu tamamlandı.
-- [x] **Kurulum Sihirbazı:** İlk çalıştırmada `config.py` ve oyun telemetry XML’i yedeklenerek yapılandırılıyor.
+## Veri ve performans
 
-## Arayüz & Özelleştirme
-
-- [x] **Görsel İyileştirme (analogdash):** Estetik pivot noktası, geliştirilmiş renk paleti ve merkezi vites dairesi.
-- [x] **Tema Sistemi:** Hazır tema paketleri (`dashboards/themes.py` altında Subaru Classic, GT3, Neon, Retro Amber, Modern Dark).
-- [x] **Tema ve Özelleştirme CLI Aracı:** Hazır temaları seçme ve kullanıcı görsel ayarlarını kolayca düzenleme (`tools/theme_selector.py`, `select_theme.bat`).
-- [x] **Mock / Canlı Önizleme Sistemi:** Oyunu açmadan 60 Hz UDP simülasyonu ile canlı önizleme (`tools/mock_telemetry.py`, `main.py --mock`, `run_mock.bat`).
-- [ ] **Linux Overlay Desteği:** X11/Wayland üzerinde saydam overlay penceresi (ileri dönem). **[Öncelik: düşük]**
-
-## Veri & Performans
-
-- [ ] **Günlükleme Sistemi:** Analiz için telemetri verilerinin CSV/JSON formatında kaydedilmesi. **[Öncelik: düşük]**
-- [ ] **Performans & Optimizasyon:** Programın daha verimli çalışması için yapılacak düzenlemeler.
+- [ ] Telemetri kaydı: Etap sonrası inceleme için verilerin CSV/JSON formatında kaydedilmesi (düşük öncelik).
+- [ ] Performans iyileştirmesi: Düşük donanımlı gömülü sistemler için kare süresi ve bellek optimizasyonu.

@@ -1,4 +1,4 @@
-# CustomRallyDash — DiRT Rally 2.0 Telemetri Göstergesi
+# CustomRallyDash: DiRT Rally 2.0 Telemetri Göstergesi
 
 [English](README.md) | **Türkçe**
 
@@ -6,127 +6,113 @@
 [![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
 [![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-green.svg)](LICENSE)
 
-**CustomRallyDash**, **DiRT Rally 2.0** için geliştirilmiş gerçek zamanlı bir telemetri gösterge panelidir (HUD). Oyunun fizik motorundan gelen 60 Hz UDP (`Extradata=3`) paketlerini çözümler ve son derece düşük gecikmeli görsel enstrümantasyon sunar. Kompakt dijital HUD, dairesel analog devir saati, Windows için çerçevesiz ve tıklama geçirgen kaplama modu ile Raspberry Pi GPIO ile yakılan vites ışıklarını destekler.
+CustomRallyDash, DiRT Rally 2.0 için hazırlanmış bir telemetri göstergesi ve oyun içi HUD aracıdır. Oyundan 60 Hz'de gelen UDP (`Extradata=3`) paketlerini okuyup düşük gecikmeyle ekrana çizer. Yatay dijital bar, dairesel analog devir saati, Windows üzerinde tıklama geçiren şeffaf overlay ve Raspberry Pi GPIO vites ışıklarını destekler.
 
-![DiRT Rally 2.0 Telemetri Kaplama Önizlemesi](images/digital_hood_chroma.webp)
-
----
+![DiRT Rally 2.0 Telemetri Overlay Önizlemesi](images/digital_hood_chroma.webp)
 
 ## Özellikler
 
-- **Gösterge Düzenleri**: Modern yatay dijital çubuk HUD ve dinamik dairesel analog kadran.
-- **Windows Pencere Kaplaması (Overlay)**: Oyun sırasında daima üstte kalan, `alpha` (yarı saydam) ve `chroma` (renk anahtarlı tam şeffaf) kompozitleme modlarına sahip tıklama geçirgen pencere.
-- **Motor Sporları Temaları**: Seçilmiş renk paletlerini içeren etkileşimli tema seçici (`Modern Dark`, `Subaru WRC`, `GT3 Racing`, `Night Neon`, `Retro Amber`).
-- **Simüle Telemetri Yayıncısı (Mock Broadcaster)**: Oyunu açmadan çevrimdışı test ve görsel ayar yapabilmeniz için WRC hızlanma, sıralı vites geçişleri ve sol ayak frenajını taklit eden 60 Hz bağımsız sentetik paket üreteci.
-- **Donanımsal Vites Işıkları**: Raspberry Pi GPIO (`gpiozero`) üzerinden fiziksel LED entegrasyonu.
-- **Doğrudan Python Yapılandırması**: Harici dosya ayrıştırıcı yükü olmaksızın doğrudan standart Python dosyaları (`config.py` çalışma zamanı ve sistem için, `settings.py` arayüz ve stil için) üzerinden yapılandırma.
-
----
+- Yatay dijital HUD ve araca göre redline belirleyen dairesel analog devir saati
+- Windows'ta oyun üzerinde kalan, `chroma` (arka planı tamamen şeffaf) ve `alpha` (yarı saydam) modlu çerçevesiz tıklama geçirgen overlay
+- Beş hazır palet içeren etkileşimli tema seçici: `Modern Dark (Default)`, `Subaru Classic WRC`, `GT3 Competition`, `Night Stage Neon (Cyberpunk)` ve `Retro 90s Amber`
+- Oyunu açmadan test ve görsel ayar yapabilmek için WRC hızlanma, sıralı vites geçişi ve frenleme üreten 60 Hz mock telemetri yayıncısı
+- Raspberry Pi üzerinde `gpiozero` ile fiziksel GPIO vites ışığı desteği
+- Ek dosya ayrıştırıcısı kullanmadan doğrudan `config.py` (sistem ve ağ) ile `settings.py` (arayüz ve renk) üzerinden yapılandırma
 
 ## Gereksinimler
 
-- **Python**: `3.11.x`, `3.12.x` veya `3.13.x` (Python 3.14+ şu an için desteklenmemektedir)
-- **Bağımlılıklar**: `pygame==2.6.1`, `gpiozero==2.0.1` (isteğe bağlı, yalnızca Raspberry Pi için)
+- Python `3.11.x`, `3.12.x` veya `3.13.x` (Python 3.14+ henüz desteklenmiyor)
+- `pygame==2.6.1`, Raspberry Pi üzerinde LED kullanılacaksa ek olarak `gpiozero==2.0.1`
 
----
+## Hızlı başlangıç
 
-## Hızlı Başlangıç
+### 1. Projeyi edinin
 
-### 1. Projeyi Edinin
+Depoyu klonlayın veya sürüm arşivini indirin:
 
-Depoyu klonlayabilir veya sürüm kaynak kodu arşivini indirebilirsiniz:
+```sh
+git clone https://github.com/alpivenator/CustomRallyDash.git
+cd CustomRallyDash
+```
 
-- **Git ile Klonlama:**
-  ```sh
-  git clone https://github.com/alpivenator/CustomRallyDash.git
-  cd CustomRallyDash
-  ```
-- **Sürüm Arşivi:** [GitHub Releases](https://github.com/alpivenator/CustomRallyDash/releases/latest) sayfasından `.zip` dosyasını indirip bir klasöre çıkartın.
-  > **ZIP olarak indirenler için Windows notu:** Arşiv dosyasına sağ tıklayıp *Özellikler → "Engellemeyi Kaldır" (Unblock) → Uygula* adımlarını uyguladıktan sonra çıkartın.
+Windows'ta [GitHub Releases](https://github.com/alpivenator/CustomRallyDash/releases/latest) sayfasından `.zip` arşivi indirirseniz dosyayı açmadan önce sağ tıklayıp **Özellikler → Engellemeyi Kaldır → Uygula** adımlarını izleyin.
 
-### 2. Kurulum ve Çalıştırma
+### 2. Kurulum ve çalıştırma
 
 #### Windows
 
-1. **Kurulum:** `install.bat` dosyasına çift tıklayın. Bu işlem otomatik olarak `.venv` sanal ortamını oluşturur, bağımlılıkları yükler ve etkileşimli DiRT Rally 2.0 yapılandırma sihirbazını başlatır.
-2. **Çalıştırma:** DiRT Rally 2.0'ın açık olduğundan emin olun (kaplama modunun görünür kalması için oyun **Pencereli** veya **Çerçevesiz Pencereli** modda olmalıdır), ardından `run_dash.bat` dosyasına çift tıklayın.
+1. `.venv` sanal ortamını oluşturmak, bağımlılıkları kurmak ve DiRT Rally 2.0 kurulum sihirbazını açmak için `install.bat` dosyasına çift tıklayın.
+2. DiRT Rally 2.0'ı **Pencereli** veya **Çerçevesiz Pencereli** moda alın, ardından `run_dash.bat` dosyasını çalıştırın.
 
-##### Yardımcı Betikler
-
-Windows kullanıcılarının kolaylığı için depo kök dizininde hazır toplu işlem (.bat) betikleri yer almaktadır:
+Depo kökündeki hazır `.bat` betikleri:
 
 | Betik | Amaç | Açıklama |
 | :--- | :--- | :--- |
-| `install.bat` | **İlk Kurulum** | `.venv` sanal ortamını oluşturur, bağımlılıkları yükler ve kurulum sihirbazını başlatır. |
-| `run_dash.bat` | **Göstergeyi Başlat** | Telemetri gösterge panelini çalıştırır. |
-| `select_theme.bat` | **Tema Seçici** | Motor sporları renk paletlerini uygulamak için etkileşimli terminal arayüzü. |
-| `run_mock.bat` | **Çevrimdışı Önizleme** | Test amaçlı 60 Hz simüle telemetri yayını yapar. |
-| `check_telemetry.bat` | **Tanılama** | Oyundan UDP paketlerinin gelip gelmediğini dinler ve bağlantıyı doğrular. |
+| `install.bat` | İlk kurulum | `.venv` ortamını kurar, bağımlılıkları yükler ve kurulum sihirbazını başlatır. |
+| `run_dash.bat` | Göstergeyi başlatma | Telemetri göstergesini açar. |
+| `select_theme.bat` | Tema seçimi | Hazır renk paletlerini `settings.py` dosyasına uygular. |
+| `run_mock.bat` | Mock yayını | 60 Hz test verisi gönderir (`run_dash.bat` ile birlikte kullanılır). |
+| `check_telemetry.bat` | Bağlantı testi | Oyundan 264 baytlık UDP paketlerinin gelip gelmediğini kontrol eder. |
 
-#### Linux ve Komut Satırı
+#### Linux ve komut satırı
+
+`.venv` ortamını kurmak, bağımlılıkları yüklemek ve kurulum sihirbazını açmak için `install.sh` betiğini çalıştırın:
 
 ```sh
-# 1. Ortam Kurulumu
+./install.sh          # standart kurulum
+./install.sh --pi     # Raspberry Pi GPIO bağımlılığını da kurar
+./install.sh --dev    # geliştirici araçlarını da kurar (pytest, ruff, black, pip-audit)
+```
+
+Kurulumu elle yapmak isterseniz:
+
+```sh
 python3 -m venv .venv
 source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
-
-# 2. Etkileşimli Kurulum Sihirbazı (config.py ve oyun XML dosyasını yapılandırır)
 python tools/setup_wizard.py
 
-# 3. Göstergeyi Başlat
+# Göstergeyi başlat (mock telemetri ile önizleme için --mock ekleyin)
 python main.py
 
-# İsteğe bağlı: Göstergeyi simüle (mock) telemetri ile aç
-python main.py --mock
-
-# İsteğe bağlı: Görsel temayı değiştir
+# Renk temasını değiştir
 python tools/theme_selector.py
 ```
 
----
+## Oyun UDP ve ekran ayarları
 
-## Oyun UDP ve Ekran Yapılandırması
-
-DiRT Rally 2.0'ın UDP telemetrisi yayını yapabilmesi için `hardware_settings_config.xml` dosyasında yapılandırılması gerekir:
+DiRT Rally 2.0'ın UDP telemetrisi göndermesi için `hardware_settings_config.xml` dosyasını düzenleyin:
 
 ```text
 Belgeler\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml
 ```
 
-`<motion_platform>` bölümünün aşağıdaki girdiyi içerdiğinden emin olun:
+`<motion_platform>` bölümünde şu satırın bulunduğunu doğrulayın:
 
 ```xml
 <udp enabled="true" extradata="3" ip="127.0.0.1" port="20777" delay="1" />
 ```
 
-*Çoklu makine kurulumlarında (gösterge paneli ayrı bir bilgisayarda veya Raspberry Pi'de çalışıyorsa), `ip` değerini göstergenin çalıştığı cihazın yerel ağ (LAN) IPv4 adresi olarak ayarlayın.*
+Gösterge ayrı bir bilgisayarda veya Raspberry Pi'de çalışıyorsa `ip` alanına o cihazın yerel ağ IPv4 adresini yazın. Windows'ta overlay'in oyunun üstünde kalması için görüntü ayarını **Pencereli (Windowed)** veya **Çerçevesiz Pencereli (Borderless Windowed)** olarak seçin.
 
-> **Önemli (Windows Kaplama Modu)**: Tıklama geçirgen kaplama penceresinin oyun sırasında daima en üstte kalabilmesi için DiRT Rally 2.0 görüntü ayarlarını **Pencereli (Windowed)** veya **Çerçevesiz Pencereli (Borderless Windowed)** moda getirin.
+## Mimari ve yapılandırma
 
----
+- `config.py`: Ağ arayüzü (`LISTEN_IP`, `LISTEN_PORT`), gösterge stili (`DASH_STYLE`), overlay anahtarı (`ENABLE_OVERLAY`) ve LED anahtarı (`ENABLE_LEDS`).
+- `settings.py`: Pencere boyutları, ölçekleme (`TARGET_SCALE`), overlay konumu ve saydamlık ayarları (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_CHROMA_KEY`), renk paleti ve yazı boyutları.
+- `core/`: UDP paket çözücüsü (`udp_listener.py`), Windows Win32 overlay yardımcıları (`overlay_win.py`) ve GPIO LED sürücüsü (`led_controller.py`).
+- `dashboards/`: Pygame çizim modülleri (`digital_dash.py`, `analog_dash.py`) ve hazır temalar (`themes.py`).
+- `tools/`: Kurulum sihirbazı (`setup_wizard.py`), paket kontrol aracı (`telemetry_check.py`), mock telemetri üreteci (`mock_telemetry.py`) ve tema seçici (`theme_selector.py`).
 
-## Mimari ve Yapılandırma
-
-- `config.py` — Sistem ayarları: Ağ arayüzü (`LISTEN_IP`, `LISTEN_PORT`), gösterge stili (`DASH_STYLE`), kaplama anahtarı (`ENABLE_OVERLAY`) ve donanım bayrakları.
-- `settings.py` — Görsel ve kaplama ayarları: Pencere boyutları, ölçekleme (`TARGET_SCALE`), kaplama konumu ve saydamlık modu (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_CHROMA_KEY`), renk paletleri ve yazı tipi boyutları.
-- `core/` — Telemetri paket ayrıştırıcısı (`udp_listener.py`), Windows saydam kaplama kancaları (`overlay_win.py`) ve GPIO LED sürücüsü (`led_controller.py`).
-- `dashboards/` — Pygame çizim modülleri (`digital_dash.py`, `analog_dash.py`) ve tema tanımları (`themes.py`).
-- `tools/` — İlk çalıştırma sihirbazı (`setup_wizard.py`), paket tanılama aracı (`telemetry_check.py`), simüle telemetri üreteci (`mock_telemetry.py`) ve tema komut satırı aracı (`theme_selector.py`).
-
-Ayrıntılı yapılandırma seçenekleri ve güvenlik yönergeleri için [docs/CONFIGURATION_TR.md](docs/CONFIGURATION_TR.md) belgesine göz atın.
-
----
+Tüm ayarlar ve ağ notları için [docs/CONFIGURATION_TR.md](docs/CONFIGURATION_TR.md) dosyasına bakın.
 
 ## Dokümantasyon
 
-- [Mimari ve Veri Akışı](docs/ARCHITECTURE_TR.md) ([English](docs/ARCHITECTURE.md))
-- [Yapılandırma Kılavuzu](docs/CONFIGURATION_TR.md) ([English](docs/CONFIGURATION.md))
-- [Sürüm Geçmişi (Changelog)](docs/CHANGELOG_TR.md) ([English](docs/CHANGELOG.md))
-- [Yol Haritası (Roadmap)](docs/ROADMAP_TR.md) ([English](docs/ROADMAP.md))
-
----
+- [Mimari ve veri akışı](docs/ARCHITECTURE_TR.md) ([English](docs/ARCHITECTURE.md))
+- [Yapılandırma kılavuzu](docs/CONFIGURATION_TR.md) ([English](docs/CONFIGURATION.md))
+- [Sürüm geçmişi](docs/CHANGELOG_TR.md) ([English](docs/CHANGELOG.md))
+- [Yol haritası](docs/ROADMAP_TR.md) ([English](docs/ROADMAP.md))
 
 ## Lisans
 
-Bu proje **MIT** lisansı ile lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakabilirsiniz.
+Bu proje MIT lisansı altındadır. Ayrıntılar için [LICENSE](LICENSE) dosyasına bakabilirsiniz.

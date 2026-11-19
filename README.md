@@ -1,4 +1,4 @@
-# CustomRallyDash — Telemetry Dashboard for DiRT Rally 2.0
+# CustomRallyDash: Telemetry Dashboard for DiRT Rally 2.0
 
 [Türkçe](README_TR.md) | **English**
 
@@ -6,128 +6,113 @@
 [![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**CustomRallyDash** is a real-time telemetry dashboard and HUD for **DiRT Rally 2.0**. It decodes 60 Hz UDP (`Extradata=3`) packets from the game's physics engine and renders low-latency visual instrumentation — supporting compact digital HUDs, circular analog tachometers, borderless Windows click-through overlays, and Raspberry Pi GPIO shift lights.
+CustomRallyDash is a real-time telemetry dashboard and overlay for DiRT Rally 2.0. It reads 60 Hz UDP (`Extradata=3`) packets from the game and renders a compact digital HUD or a circular analog tachometer, with optional Windows click-through overlay support and Raspberry Pi GPIO shift lights.
 
 ![DiRT Rally 2.0 Telemetry Overlay Preview](images/digital_hood_chroma.webp)
 
----
-
 ## Features
 
-- **Dashboard Layouts**: Modern horizontal digital bar HUD and circular analog gauge with dynamic redline detection.
-- **Windows Overlay**: Transparent, click-through overlay with `alpha` and `chroma` compositing modes that stays on top during gameplay.
-- **Motorsport Themes**: Interactive theme selector with a number of presets (`Modern Dark`, `Subaru WRC`, `GT3 Racing`, `Night Neon`, `Retro Amber`).
-- **Mock Telemetry Broadcaster**: Standalone 60 Hz synthetic packet generator modeling WRC acceleration, sequential shifts, and trail-braking for offline testing and tuning.
-- **Hardware Shift Lights**: Physical LED integration via Raspberry Pi GPIO (`gpiozero`).
-- **Direct Python Configuration**: Configured directly through standard Python files (`config.py` for system/runtime, `settings.py` for UI/styling) without extra configuration parsers.
-
----
+- Horizontal digital bar HUD and circular analog tachometer with dynamic redline detection
+- Borderless, click-through Windows overlay supporting `chroma` (transparent background) and `alpha` (semi-transparent) modes
+- Interactive theme selector with five presets: `Modern Dark (Default)`, `Subaru Classic WRC`, `GT3 Competition`, `Night Stage Neon (Cyberpunk)`, and `Retro 90s Amber`
+- Standalone 60 Hz mock telemetry broadcaster modeling WRC acceleration, sequential shifts, and braking for offline testing
+- Physical GPIO shift-light support on Raspberry Pi via `gpiozero`
+- Plain Python configuration in `config.py` (system and runtime) and `settings.py` (layout and colors)
 
 ## Requirements
 
-- **Python**: `3.11.x`, `3.12.x`, or `3.13.x` (Python 3.14+ is currently not supported)
-- **Dependencies**: `pygame==2.6.1`, `gpiozero==2.0.1` (optional, Raspberry Pi only)
+- Python `3.11.x`, `3.12.x`, or `3.13.x` (Python 3.14+ is not supported yet)
+- `pygame==2.6.1`, plus `gpiozero==2.0.1` on Raspberry Pi if physical LEDs are enabled
 
----
+## Quick start
 
-## Quick Start
+### 1. Get the code
 
-### 1. Get the Code
+Clone the repository or download a release archive:
 
-Clone the repository or download the release source archive:
+```sh
+git clone https://github.com/alpivenator/CustomRallyDash.git
+cd CustomRallyDash
+```
 
-- **Git Clone:**
-  ```sh
-  git clone https://github.com/alpivenator/CustomRallyDash.git
-  cd CustomRallyDash
-  ```
-- **Release Archive:** Download the `.zip` from [GitHub Releases](https://github.com/alpivenator/CustomRallyDash/releases/latest) and extract it.
-  > **Windows note for ZIP archives:** Right-click the `.zip` file → *Properties* → check **"Unblock"** → *Apply* before extracting.
+If you download the `.zip` archive from [GitHub Releases](https://github.com/alpivenator/CustomRallyDash/releases/latest) on Windows, right-click the file, open **Properties**, check **Unblock**, and click **Apply** before extracting.
 
-### 2. Setup & Launch
+### 2. Setup and launch
 
 #### Windows
 
-1. **Setup:** Double-click `install.bat`. This automatically creates the virtual environment, installs dependencies, and launches the interactive DiRT Rally 2.0 configuration wizard.
-2. **Launch:** Ensure DiRT Rally 2.0 is running (in **Windowed** or **Borderless Windowed** mode for the click-through overlay to stay visible), then double-click `run_dash.bat`.
+1. Double-click `install.bat` to create `.venv`, install dependencies, and run the DiRT Rally 2.0 setup wizard.
+2. Start DiRT Rally 2.0 in **Windowed** or **Borderless Windowed** mode so the overlay stays on top, then double-click `run_dash.bat`.
 
-##### Utility Scripts
-
-Ready-to-use batch scripts are available in the repository root:
+Available batch scripts in the repository root:
 
 | Script | Purpose | Description |
 | :--- | :--- | :--- |
-| `install.bat` | **First-Time Setup** | Creates `.venv`, installs dependencies, and launches setup wizard. |
-| `run_dash.bat` | **Launch Dashboard** | Starts the telemetry dashboard. |
-| `select_theme.bat` | **Theme Switcher** | Interactive CLI to apply motorsport colour palettes. |
-| `run_mock.bat` | **Offline Preview** | Broadcasts simulated 60 Hz telemetry for offline testing. |
-| `check_telemetry.bat` | **Diagnostics** | Listens for active UDP broadcast packets and verifies connection. |
+| `install.bat` | First-time setup | Creates `.venv`, installs dependencies, and runs the setup wizard. |
+| `run_dash.bat` | Launch dashboard | Starts the telemetry dashboard. |
+| `select_theme.bat` | Theme switcher | Interactive CLI to apply color presets to `settings.py`. |
+| `run_mock.bat` | Mock broadcaster | Sends simulated 60 Hz UDP telemetry (run alongside `run_dash.bat`). |
+| `check_telemetry.bat` | Diagnostics | Listens for incoming 264-byte UDP packets and checks connectivity. |
 
-#### Linux & CLI
+#### Linux and CLI
+
+Run the installer script to create `.venv`, install dependencies, and launch the setup wizard:
 
 ```sh
-# 1. Environment Setup
+./install.sh          # standard setup
+./install.sh --pi     # also install Raspberry Pi GPIO dependencies
+./install.sh --dev    # also install dev tools (pytest, ruff, black, pip-audit)
+```
+
+If you prefer manual setup, or want to run the dashboard and tools directly:
+
+```sh
 python3 -m venv .venv
 source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
-
-# 2. Interactive Setup Wizard (configures config.py & game XML)
 python tools/setup_wizard.py
 
-# 3. Launch Dashboard
+# Launch dashboard (add --mock to preview with synthetic telemetry)
 python main.py
 
-# Optional: Launch dashboard with synthetic mock telemetry
-python main.py --mock
-
-# Optional: Switch visual theme
+# Switch color theme
 python tools/theme_selector.py
 ```
 
----
+## Game UDP and display configuration
 
-## Game UDP & Display Configuration
-
-DiRT Rally 2.0 outputs telemetry via UDP when configured in `hardware_settings_config.xml`:
+DiRT Rally 2.0 sends UDP telemetry when configured in `hardware_settings_config.xml`:
 
 ```text
 Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml
 ```
 
-Ensure the `<motion_platform>` section contains the following entry:
+Make sure the `<motion_platform>` section includes this entry:
 
 ```xml
 <udp enabled="true" extradata="3" ip="127.0.0.1" port="20777" delay="1" />
 ```
 
-*For multi-machine setups (dashboard running on a separate machine or Raspberry Pi), set `ip` to the dashboard machine's local LAN IPv4 address.*
+When running the dashboard on another PC or a Raspberry Pi, set `ip` to that device's local LAN IPv4 address. On Windows, keep the game in **Windowed** or **Borderless Windowed** mode if you use the click-through overlay.
 
-> **Important (Windows Overlay)**: To allow the click-through overlay to stay rendered on top of gameplay, configure DiRT Rally 2.0 video settings to **Windowed** or **Borderless Windowed** mode.
+## Architecture and configuration
 
----
+- `config.py`: System settings including network interface (`LISTEN_IP`, `LISTEN_PORT`), dashboard style (`DASH_STYLE`), overlay toggle (`ENABLE_OVERLAY`), and LED toggle (`ENABLE_LEDS`).
+- `settings.py`: Visual settings including window size, scaling (`TARGET_SCALE`), overlay placement and transparency (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_CHROMA_KEY`), colors, and font sizes.
+- `core/`: UDP packet parser (`udp_listener.py`), Win32 overlay helpers (`overlay_win.py`), and GPIO LED driver (`led_controller.py`).
+- `dashboards/`: Pygame renderers (`digital_dash.py`, `analog_dash.py`) and theme presets (`themes.py`).
+- `tools/`: Setup wizard (`setup_wizard.py`), packet checker (`telemetry_check.py`), mock telemetry generator (`mock_telemetry.py`), and theme CLI (`theme_selector.py`).
 
-## Architecture & Configuration
-
-- `config.py` — System settings: Network interface (`LISTEN_IP`, `LISTEN_PORT`), dashboard style (`DASH_STYLE`), overlay toggle (`ENABLE_OVERLAY`), and hardware flags.
-- `settings.py` — Visual & overlay settings: Window dimensions, scaling (`TARGET_SCALE`), overlay positioning & transparency mode (`OVERLAY_MODE`, `OVERLAY_POSITION`, `OVERLAY_CHROMA_KEY`), color palettes, and font sizes.
-- `core/` — Telemetry packet parser (`udp_listener.py`), Windows overlay hooks (`overlay_win.py`), and GPIO LED controller (`led_controller.py`).
-- `dashboards/` — Pygame renderers (`digital_dash.py`, `analog_dash.py`) with theme definitions (`themes.py`).
-- `tools/` — First-run wizard (`setup_wizard.py`), packet diagnostics (`telemetry_check.py`), synthetic telemetry generator (`mock_telemetry.py`), and theme CLI (`theme_selector.py`).
-
-For full configuration options and firewall guidelines, see [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
-
-
----
+See [docs/CONFIGURATION.md](docs/CONFIGURATION.md) for all configuration options and network notes.
 
 ## Documentation
 
-- [Architecture & Data Flow](docs/ARCHITECTURE.md) ([Türkçe](docs/ARCHITECTURE_TR.md))
-- [Configuration Reference](docs/CONFIGURATION.md) ([Türkçe](docs/CONFIGURATION_TR.md))
+- [Architecture and data flow](docs/ARCHITECTURE.md) ([Türkçe](docs/ARCHITECTURE_TR.md))
+- [Configuration reference](docs/CONFIGURATION.md) ([Türkçe](docs/CONFIGURATION_TR.md))
 - [Changelog](docs/CHANGELOG.md) ([Türkçe](docs/CHANGELOG_TR.md))
 - [Roadmap](docs/ROADMAP.md) ([Türkçe](docs/ROADMAP_TR.md))
 
----
-
 ## License
 
-This project is licensed under the **MIT** license. See [LICENSE](LICENSE).
+This project is licensed under the MIT license. See [LICENSE](LICENSE) for details.

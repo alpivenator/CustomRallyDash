@@ -1,119 +1,107 @@
-# Configuration Reference — CustomRallyDash
+# Configuration Reference: CustomRallyDash
 
 [Türkçe](CONFIGURATION_TR.md) | **English**
 
-CustomRallyDash uses standard Python files for straightforward configuration without external parser overhead. Changes take effect the next time you start the application (no hot-reload).
+CustomRallyDash reads its configuration directly from two Python files. Changes take effect the next time you start the application (there is no hot-reload).
 
-- **`config.py`** — Runtime & hardware settings (network, dashboard style, Windows overlay toggle, Raspberry Pi LEDs).
-- **`settings.py`** — Visual styling (dimensions, scale, colors, fonts, overlay positioning & transparency).
+- `config.py`: Runtime and hardware settings (network, dashboard style, Windows overlay toggle, Raspberry Pi LEDs).
+- `settings.py`: Visual styling (dimensions, scale, colors, fonts, overlay position, and transparency).
 
-> **Tip**: You rarely need to edit code manually. First-time setup can be done with `install.bat` (or `python tools/setup_wizard.py`), and visual themes can be swapped with `select_theme.bat` (or `python tools/theme_selector.py`).
+You rarely need to edit these files by hand. Run `install.bat` (or `python tools/setup_wizard.py`) for first-time setup, and `select_theme.bat` (or `python tools/theme_selector.py`) to switch color themes.
 
----
+## Quick configuration
 
-## Quick Configuration (Most Common Settings)
+Most users only need to adjust the options below:
 
-Most users only ever need to configure these core options:
-
-| Goal | File | Setting | Default / Recommended |
+| Goal | File | Setting | Default / options |
 | :--- | :--- | :--- | :--- |
-| **Switch HUD style** | `config.py` | `DASH_STYLE` | `"digital"` (horizontal bar HUD) or `"analog"` (circular gauge) |
-| **Scale dashboard size** | `settings.py` | `TARGET_SCALE` | `None` (native size), `1.25` (+25%), `0.8` (-20%) |
-| **Toggle Windows overlay** | `config.py` | `ENABLE_OVERLAY` | `True` (transparent click-through overlay on Windows) |
-| **Change overlay position** | `settings.py` | `OVERLAY_POSITION` | `"bottom-right"`, `"bottom-center"`, or `"bottom-left"` |
-| **Switch color theme** | `settings.py` | *(Automated)* | Run `select_theme.bat` to apply motorsport presets |
-| **Telemetry IP address** | `config.py` | `LISTEN_IP` | `"127.0.0.1"` (same PC) or dashboard LAN IP (multi-machine) |
+| Switch HUD style | `config.py` | `DASH_STYLE` | `"digital"` (horizontal bar HUD) or `"analog"` (circular gauge) |
+| Scale dashboard size | `settings.py` | `TARGET_SCALE` | `None` (native size), `1.25` (+25%), `0.8` (-20%) |
+| Toggle Windows overlay | `config.py` | `ENABLE_OVERLAY` | `True` (borderless click-through overlay on Windows) |
+| Change overlay position | `settings.py` | `OVERLAY_POSITION` | `"bottom-right"`, `"bottom-center"`, or `"bottom-left"` |
+| Switch color theme | `settings.py` | *(via CLI)* | Run `select_theme.bat` to apply motorsport presets |
+| Telemetry IP address | `config.py` | `LISTEN_IP` | `"127.0.0.1"` (same PC) or dashboard LAN IP (separate device) |
 
----
+## Game setup (DiRT Rally 2.0)
 
-## Game Setup (DiRT Rally 2.0 Telemetry)
-
-To enable 60 Hz UDP telemetry output in DiRT Rally 2.0, edit the game configuration file:
+To enable 60 Hz UDP telemetry in DiRT Rally 2.0, open the game's hardware config file:
 
 ```text
 Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml
 ```
 
-Locate the `<motion_platform>` section and verify/update the `<udp>` tag:
+Find `<motion_platform>` and add or update the `<udp>` tag:
 
 ```xml
 <udp enabled="true" extradata="3" ip="127.0.0.1" port="20777" delay="1" />
 ```
 
-- **Single PC**: Set `ip="127.0.0.1"`.
-- **Dual PC / Raspberry Pi**: Set `ip` to the local LAN IPv4 address of the computer running CustomRallyDash (e.g., `192.168.1.50`).
+- Single PC: keep `ip="127.0.0.1"`.
+- Separate PC or Raspberry Pi: set `ip` to the local LAN IPv4 address of the device running CustomRallyDash (for example, `192.168.1.50`).
 
-> **Important for Overlay Users**: Set the game's display mode to **Borderless Windowed** or **Windowed** in DiRT Rally 2.0 graphics settings so the dashboard overlay stays on top.
+If you use the Windows overlay, set DiRT Rally 2.0's video mode to **Windowed** or **Borderless Windowed** so the overlay stays visible on top of the game.
 
----
+## Testing and verification tools
 
-## Testing & Verification Tools
+Run these scripts from the project root:
 
-Run these scripts from the project root without modifying any files:
+- Connection test: Run `check_telemetry.bat` (or `python tools/telemetry_check.py`) to listen for incoming 264-byte UDP packets from the game.
+- Offline preview: Run `python main.py --mock`, or launch `run_mock.bat` together with `run_dash.bat`. Both send simulated 60 Hz WRC acceleration and braking telemetry without the game running.
+- Theme switcher: Run `select_theme.bat` (or `python tools/theme_selector.py`) to write presets such as `Subaru Classic WRC`, `GT3 Competition`, or `Night Stage Neon (Cyberpunk)` to `settings.py`.
 
-- **Connection Test**: Run `check_telemetry.bat` (or `python tools/telemetry_check.py`). Verifies if active 264-byte UDP packets are arriving from the game.
-- **Offline Preview**: Run `python main.py --mock` (or launch `run_mock.bat` and `run_dash.bat`). Generates realistic synthetic WRC telemetry without needing the game running.
-- **Theme Switcher**: Run `select_theme.bat` (or `python tools/theme_selector.py`). Interactively updates `settings.py` with presets like *Subaru WRC*, *GT3 Racing*, or *Night Neon*.
-
----
-
-## Detailed System Settings (`config.py`)
+## System settings (`config.py`)
 
 | Setting | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `DASH_STYLE` | `str` | `"digital"` | Dashboard variant: `"digital"` (600×200 px bar HUD) or `"analog"` (600×350 px circular tachometer). |
-| `LISTEN_IP` | `str` | `"127.0.0.1"` | Interface to bind UDP socket. Use `"127.0.0.1"` for local play, or LAN IP / `"0.0.0.0"` for remote. |
-| `LISTEN_PORT` | `int` | `20777` | UDP port matching the port defined in the game XML. |
-| `ENABLE_OVERLAY` | `bool` | `True` | Enables borderless transparent click-through window (Windows only; ignored on Linux). |
-| `ENABLE_LEDS` | `bool` | `False` | Enables physical shift-light GPIO LEDs on Raspberry Pi (requires `gpiozero`). |
+| `DASH_STYLE` | `str` | `"digital"` | Dashboard layout: `"digital"` (600x200 px bar HUD) or `"analog"` (600x350 px circular tachometer). |
+| `LISTEN_IP` | `str` | `"127.0.0.1"` | Network interface for the UDP socket. Use `"127.0.0.1"` for local play, or a LAN IP / `"0.0.0.0"` for remote telemetry. |
+| `LISTEN_PORT` | `int` | `20777` | UDP listening port; must match `port` in the game XML. |
+| `ENABLE_OVERLAY` | `bool` | `True` | Enables the borderless, transparent, click-through overlay (Windows only; ignored on Linux). |
+| `ENABLE_LEDS` | `bool` | `False` | Enables physical GPIO shift lights on Raspberry Pi (requires `gpiozero`). |
 
----
+## Visual and overlay settings (`settings.py`)
 
-## Detailed Visual & Overlay Settings (`settings.py`)
-
-### Display & Overlay Positioning
+### Display and overlay placement
 
 | Setting | Default | Description |
 | :--- | :--- | :--- |
-| `TARGET_SCALE` | `None` | Proportional scaling multiplier (e.g. `1.5` increases digital HUD from 600×200 to 900×300 px; fonts scale automatically). `None` retains default resolution. |
-| `DIGITAL_WIDTH` / `HEIGHT` | `600` / `200` | Native resolution of digital HUD. |
-| `ANALOG_WIDTH` / `HEIGHT` | `600` / `350` | Native resolution of analog tachometer. |
-| `OVERLAY_POSITION` | `"bottom-right"` | Screen placement on Windows: `"bottom-right"`, `"bottom-center"`, `"bottom-left"`. |
-| `OVERLAY_MARGIN` | `20` | Distance in pixels from screen edges. |
-| `OVERLAY_MODE` | `"chroma"` | Window compositing mode: `"chroma"` (background is made 100% transparent HUD) or `"alpha"` (semi-transparent panel). |
-| `OVERLAY_ALPHA` | `220` | Window opacity when `OVERLAY_MODE = "alpha"` (`0` = invisible, `255` = solid). |
-| `OVERLAY_CHROMA_KEY` | `COLOR_BG` | Color made transparent in `"chroma"` mode. Defaults dynamically to `COLOR_BG`. |
+| `TARGET_SCALE` | `None` | Proportional multiplier (for example, `1.5` scales the digital HUD from 600x200 to 900x300 px and scales fonts along with it). `None` keeps base dimensions. |
+| `DIGITAL_WIDTH` / `HEIGHT` | `600` / `200` | Base resolution of the digital HUD in pixels. |
+| `ANALOG_WIDTH` / `HEIGHT` | `600` / `350` | Base resolution of the analog tachometer in pixels. |
+| `OVERLAY_POSITION` | `"bottom-right"` | Placement on Windows: `"bottom-right"`, `"bottom-center"`, or `"bottom-left"`. |
+| `OVERLAY_MARGIN` | `20` | Pixel margin from the left or right screen edge. |
+| `OVERLAY_MODE` | `"chroma"` | Transparency mode: `"chroma"` (makes the background color fully transparent) or `"alpha"` (semi-transparent window). |
+| `OVERLAY_ALPHA` | `220` | Window opacity when `OVERLAY_MODE = "alpha"` (`0` = invisible, `255` = opaque). |
+| `OVERLAY_CHROMA_KEY` | `COLOR_BG` | Color treated as transparent in `"chroma"` mode. Follows `COLOR_BG` by default. |
 
-### Colors & Redline
+### Colors and redline threshold
 
 | Setting | Default | Description |
 | :--- | :--- | :--- |
-| `RPM_WARNING_THRESHOLD` | `0.90` | Fraction of engine redline (0.0–1.0) where warning colors/flash trigger. |
+| `RPM_WARNING_THRESHOLD` | `0.90` | Fraction of `max_rpm` (`0.0-1.0`) where the RPM bar or needle switches to the warning color. |
 | `COLOR_BG` | `(25, 25, 30)` | Background color (RGB). |
-| `COLOR_RPM_NORMAL` | `(0, 150, 255)` | RPM bar / needle color during normal operation. |
-| `COLOR_RPM_WARNING` | `(255, 40, 40)` | RPM bar / needle color when approaching or exceeding redline. |
-| `COLOR_THROTTLE` | `(40, 220, 100)` | Throttle pedal indicator color. |
-| `COLOR_BRAKE` | `(255, 60, 60)` | Brake pedal indicator color. |
-| `COLOR_TEXT_MAIN` | `(240, 240, 240)` | Primary high-contrast text color. |
-| `COLOR_TEXT_DIM` | `(180, 180, 180)` | Secondary / dimmed label text color. |
-| `COLOR_TEXT_OUTLINE` | `(0, 0, 0)` | Drop-shadow / contrast outline around text. |
-| `COLOR_FRAME` | `(80, 80, 90)` | Borders, divider lines, and gauge bezels. |
-| `COLOR_REDLINE` | `(255, 65, 105, 110)` | RGBA redline marker on analog gauge (4th value is alpha opacity). |
+| `COLOR_RPM_NORMAL` | `(0, 150, 255)` | RPM bar and needle color below the warning threshold. |
+| `COLOR_RPM_WARNING` | `(255, 40, 40)` | RPM bar and needle color at or above the warning threshold. |
+| `COLOR_THROTTLE` | `(40, 220, 100)` | Throttle pedal bar color. |
+| `COLOR_BRAKE` | `(255, 60, 60)` | Brake pedal bar color. |
+| `COLOR_TEXT_MAIN` | `(240, 240, 240)` | Primary text color. |
+| `COLOR_TEXT_DIM` | `(180, 180, 180)` | Secondary label color. |
+| `COLOR_TEXT_OUTLINE` | `(0, 0, 0)` | Dark outline around text for contrast on bright stages. |
+| `COLOR_FRAME` | `(80, 80, 90)` | Borders, gauge ring, and bar outlines. |
+| `COLOR_REDLINE` | `(255, 65, 105, 110)` | RGBA redline sector color on the analog gauge (fourth value sets alpha). |
 
-### Typography (Base Font Sizes in Pixels)
+### Font sizes
 
-Font sizes are automatically multiplied by `TARGET_SCALE`:
+All base font sizes are in pixels and scale with `TARGET_SCALE`:
 
-| Setting | Default | Used For |
+| Setting | Default | Used for |
 | :--- | :--- | :--- |
-| `FONT_HUGE_SIZE` | `82` | Gear indicator readout |
-| `FONT_LARGE_SIZE` | `50` | Primary speed readout (km/h) |
-| `FONT_MEDIUM_SIZE` | `22` | RPM numerical readout in digital HUD |
-| `FONT_SMALL_SIZE` | `18` | Auxiliary telemetry labels (KM/H, RPM, Gear labels) |
-| `FONT_TINY_SIZE` | `14` | Dial numbers and pedal bar labels (THR / BRK) |
+| `FONT_HUGE_SIZE` | `82` | Gear indicator |
+| `FONT_LARGE_SIZE` | `50` | Speed readout (`km/h`) |
+| `FONT_MEDIUM_SIZE` | `22` | Numeric RPM readout in the digital HUD |
+| `FONT_SMALL_SIZE` | `18` | `SPEED` and `GEAR` labels in digital HUD; `KM/H`, `THR`, and `BRK` labels in analog gauge |
+| `FONT_TINY_SIZE` | `14` | `THR` and `BRK` labels in digital HUD; dial numbers on the analog gauge |
 
----
+## Network and security notes
 
-## Security & Network Notes
-
-The telemetry stream is unauthenticated UDP broadcast on the local network. Only run the program on trusted networks. If multiple network adapters are present, specify the exact machine IPv4 address in `LISTEN_IP` rather than `0.0.0.0` to restrict UDP listening.
+DiRT Rally 2.0 broadcasts UDP telemetry over the local network without encryption or authentication. Run the listener only on trusted networks. On machines with multiple network adapters, set `LISTEN_IP` to the specific LAN IPv4 address instead of `"0.0.0.0"` to limit which interface accepts packets.
