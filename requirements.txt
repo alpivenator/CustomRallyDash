@@ -3,3 +3,5 @@
 # pip install -r requirements.txt
 # gpiozero is optional and is listed in requirements-pi.txt.
 pygame==2.6.1
+rich>=13.9,<16
+questionary>=2.0,<3

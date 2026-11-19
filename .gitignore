@@ -1,9 +1,23 @@
+# Python bytecode and caches
 __pycache__/
-venv/
-.ruff_cache/
+*.py[cod]
+*$py.class
 .pytest_cache/
-local
-.kilo
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
 .venv
+
+# Local environment secrets and backups
+.env
+.env.*
+!.env.example
 *.bak*
-AGENTS.md
+local
+
+# OS artifacts
+Thumbs.db
+.DS_Store

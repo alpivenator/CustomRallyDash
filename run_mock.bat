@@ -2,14 +2,26 @@
 setlocal
 cd /d "%~dp0"
 
-if not exist ".venv\Scripts\python.exe" (
-    echo Error: Virtual environment not found. Please run install.bat first.
-    pause
-    exit /b 1
-)
+if not exist ".venv\Scripts\python.exe" goto :no_venv
 
 echo Starting Mock Telemetry Broadcaster...
 echo Keep this window open and start your dashboard with run_dash.bat
 echo.
 ".venv\Scripts\python.exe" tools\mock_telemetry.py
+set "exit_code=%ERRORLEVEL%"
+
+if not "%exit_code%"=="0" goto :run_error
 pause
+exit /b 0
+
+:no_venv
+echo Virtual environment not found (.venv\Scripts\python.exe).
+echo Please run install.bat first.
+pause
+exit /b 1
+
+:run_error
+echo.
+echo Mock telemetry exited with error code: %exit_code%
+pause
+exit /b %exit_code%

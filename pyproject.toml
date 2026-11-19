@@ -6,10 +6,17 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11,<3.14"
 authors = [{ name = "Alperen (alpivenator)" }]
-dependencies = ["pygame==2.6.1"]
+dependencies = [
+    "pygame==2.6.1",
+    "rich>=13.9,<16",
+    "questionary>=2.0,<3",
+]
 
 [project.optional-dependencies]
 pi = ["gpiozero==2.0.1"]
+
+[dependency-groups]
+dev = ["pytest", "ruff", "black", "pip-audit"]
 
 # Black tool configuration
 [tool.black]
